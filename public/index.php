@@ -7,6 +7,21 @@ if (
     header("");
     exit;
 }
+
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user = trim($_POST['user'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    // validación campos vacíos
+    if (empty($user) || empty($password)) {
+        $error = "Por favor, rellene todos los campos.";
+    } else {
+        // validación de datos incorrectos
+        $error = "Usuario o contraseña incorrectos";
+    }
+}
+
 ?>
 
 
@@ -15,6 +30,7 @@ if (
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <title>Inicio de sesión</title>
 </head>
 
@@ -22,16 +38,21 @@ if (
 <body>
     <h1>Introduzca sus credenciales</h1><br><br>
 
-    <form action="" method="post">
-        <label for="user">Usuario</label>
-        <input type="text" name="user" required><br><br>
+    <?php if (!empty($error)): ?>
+      <div class="error"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
 
-        <label for="password">Contraseña:</label>
-        <input type="password" name="password" required>
-        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i><br><br>
+    <label for="user">Usuario</label>
+    <input type="text" id="user" name="user"
+      value="<?= htmlspecialchars($_POST['user'] ?? '') ?>" required><br><br>
 
-        <button type="submit">Iniciar sesión</button>
-    </form>
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password"
+      value="<?= htmlspecialchars($_POST['password'] ?? '') ?>" required>
+    <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i><br><br>
+
+    <button type="submit">Iniciar sesión</button>
+  </form>
 
     <script>
     const togglePassword = document.getElementById('togglePassword');
