@@ -1,7 +1,7 @@
 # Proyecto-IAW
 #
 #
-# Este proyecto ha sido realido por;
+# Este proyecto ha sido realizado por;
 # - Javier Muñoz Conesa
 # - Mark Blázquez Riera
 # - Alejandro Aledo García
