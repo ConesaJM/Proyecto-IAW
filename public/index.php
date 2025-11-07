@@ -38,7 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <!--Formulario -->
   <body>
-      <h1>Introduzca sus credenciales</h1><br><br>
+      <h1>Bienvenido a</h1> 
+      
+      <img src="media/LOGOSUPERJAM.jpeg">
+
+      <h2>Introduzca sus credenciales</h2><br><br>
 
       <form action="" method="post">
         <?php if (!empty($error)): ?>
