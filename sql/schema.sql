@@ -28,3 +28,16 @@ CREATE TABLE productos (
     stock INT NOT NULL DEFAULT 0,
     precio DECIMAL(10, 2) NOT NULL DEFAULT 0.00
 );
+
+-- USUARIOS
+-- --------------------------------------------------------
+-- Creación de usuario ADMIN (COMPLETO)
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'Admin_IAW_super';
+    GRANT ALL PRIVILEGES ON supermercado.* TO 'admin'@'localhost';
+    FLUSH PRIVILEGES;
+-- --------------------------------------------------------
+
+-- --------------------------------------------------------
+-- Creación de usuario básico (FALTA AÑADIR PRIVILEGIOS)
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'Usuario_IAW_super';
+-- --------------------------------------------------------
