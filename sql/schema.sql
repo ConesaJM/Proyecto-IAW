@@ -19,15 +19,25 @@ CREATE DATABASE IF NOT EXISTS supermercado_db
 USE supermercado_db;
 
 -- --------------------------------------------------------
--- 3. Tabla de Productos (Inventario)
+-- 3. Tabla de Producto (Inventario)
 -- --------------------------------------------------------
-CREATE TABLE productos (
+CREATE TABLE producto (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    categoria VARCHAR(100),
+    nombre VARCHAR(50) NOT NULL,
+    categoria ENUM ('Bebidas','Congelados','Frutas','Verduras','Carnes','Pescado','Marisco','Panadería','Bollería','No perecederos','Snacks','Limpieza','Otros')
     stock INT NOT NULL DEFAULT 0,
     precio DECIMAL(10, 2) NOT NULL DEFAULT 0.00
 );
+
+-- --------------------------------------------------------
+-- 3. Tabla de Usuario (Inventario)
+-- --------------------------------------------------------
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre  VARCHAR UNIQUE NOT NULL (50)
+    contrasenhia VARCHAR NOT NULL(100)
+    rol ENUM ('Administrador', 'Usuario')
+)
 
 -- USUARIOS
 -- --------------------------------------------------------
