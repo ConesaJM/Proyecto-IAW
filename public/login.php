@@ -1,12 +1,4 @@
 <?php
-// Si ya tengo cookies, 
-if (
-    isset($_COOKIE['name']) &&
-    isset($_COOKIE['password'])
-) {
-    header("");
-    exit;
-}
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -54,8 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           value="<?= htmlspecialchars($_POST['user'] ?? '') ?>" required><br><br>
 
         <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password"
-          value="<?= htmlspecialchars($_POST['password'] ?? '') ?>" required>
+        <input type="password" id="password" name="password" value="" required autocomplete="current-password">
         <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i><br><br>
 
         <button type="submit">Iniciar sesión</button>
