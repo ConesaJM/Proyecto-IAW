@@ -1,0 +1,20 @@
+mark
+-readme
+-seed
+- item_delete
+-item_form
+-item_show
+
+
+javi
+-index
+-logout
+-item_list
+
+ale
+
+-auth.php
+-pdo
+-utils
+-csrf
+-preferencuias php
