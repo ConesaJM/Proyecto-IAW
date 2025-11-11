@@ -55,6 +55,17 @@ function h($str)
     return htmlspecialchars($str ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+// --- Funciones de Base de Datos para Usuarios --- */
+// Busqueda de usuario por nombre de usuario en BD
+// Esta función se usará en login.php
+function buscarUsuarioPorNombre(PDO $pdo, string $nombre_usuario): ?array {
+    $sql = "SELECT * FROM usuario WHERE nombre_usuario = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$nombre_usuario]);
+    $fila = $stmt->fetch();
+    return $fila ?: null; // Devuelve el array del usuario o null si no lo encuentra
+}
+
 // -----------------------------------------------------------------------------------------------------------------------------------------
 // --- CREACIÓN ESTRUCTURA CSS Y HTML ---
 /**
