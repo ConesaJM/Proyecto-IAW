@@ -15,7 +15,7 @@ function require_login() {
         
         // Si no existe un ID, el usuario no está logueado.
         // Lo redirigimos a la página de login.
-        header('Location: login.php');
+        header('Location: public/login.php');
         
         // Detenemos la ejecución del script actual
         // para que no muestre nada de la página protegida.
@@ -35,7 +35,7 @@ function require_admin() {
         
         // Si no es admin, lo echamos al panel principal.
         // No debería estar aquí.
-        header('Location: index.php');
+        header('Location: public/index.php');
         exit;
     }
 }
