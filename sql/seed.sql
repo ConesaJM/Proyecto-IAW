@@ -68,3 +68,21 @@ INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID
 ('Jabón Antibacterial', 'Cuidado personal', FALSE, 2.60, 500, 4),
 ('Báscula de Cocina', 'Otros', FALSE, 20.00, 50, 4),
 ('Monitor de Presión Arterial', 'Otros', FALSE, 80.00, 20, 4);
+
+-----------------------------------------------------------------
+--- CREACION CARRITO
+-----------------------------------------------------------------
+
+INSERT INTO CARRITO (ID_USUARIO, ID_PRODUCTO, TOTAL_COMPRA) VALUES
+(1, 1, 5.50),  
+(1, 3, 6.00),  
+(2, 7, 10.00), 
+(2, 14, 4.00), 
+(3, 22, 25.00), 
+(3, 5, 9.99),  
+(1, 18, 7.90), 
+(2, 8, 22.00), 
+(1, 6, 15.50), 
+(3, 12, 11.50); 
+
+
