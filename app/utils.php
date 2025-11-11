@@ -5,7 +5,7 @@
 
 /* CREATE: insertar producto */
 function crearProducto(PDO $pdo, string $nombre, string $categoria, int $stock, float $precio): int {
-    $sql = "INSERT INTO productos (nombre, categoria, stock, precio) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO producto (nombre, categoria, stock, precio) VALUES (?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$nombre, $categoria, $stock, $precio]);
     return (int)$pdo->lastInsertId();
@@ -13,7 +13,7 @@ function crearProducto(PDO $pdo, string $nombre, string $categoria, int $stock, 
 
 /* READ-1: leer un producto por id */
 function leerProductoPorId(PDO $pdo, int $id): ?array {
-    $sql = "SELECT * FROM productos WHERE id = ?";
+    $sql = "SELECT * FROM producto WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     $fila = $stmt->fetch();
@@ -23,11 +23,11 @@ function leerProductoPorId(PDO $pdo, int $id): ?array {
 /* READ-N: listar productos con búsqueda y paginación */
 function listarProductos(PDO $pdo, ?string $buscar = null, int $limit = 10, int $offset = 0): array {
     if ($buscar) {
-        $sql = "SELECT * FROM productos WHERE nombre LIKE ? ORDER BY id DESC LIMIT ? OFFSET ?";
+        $sql = "SELECT * FROM producto WHERE nombre LIKE ? ORDER BY id DESC LIMIT ? OFFSET ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(["%{$buscar}%", $limit, $offset]);
     } else {
-        $sql = "SELECT * FROM productos ORDER BY id DESC LIMIT ? OFFSET ?";
+        $sql = "SELECT * FROM producto ORDER BY id DESC LIMIT ? OFFSET ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$limit, $offset]);
     }
@@ -36,14 +36,14 @@ function listarProductos(PDO $pdo, ?string $buscar = null, int $limit = 10, int 
 
 /* UPDATE: actualizar producto */
 function actualizarProducto(PDO $pdo, int $id, string $nombre, string $categoria, int $stock, float $precio): bool {
-    $sql = "UPDATE productos SET nombre = ?, categoria = ?, stock = ?, precio = ? WHERE id = ?";
+    $sql = "UPDATE producto SET nombre = ?, categoria = ?, stock = ?, precio = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$nombre, $categoria, $stock, $precio, $id]);
     return $stmt->rowCount() > 0;
 }
 /* DELETE: borrar producto */
 function borrarProducto(PDO $pdo, int $id): bool {
-    $sql = "DELETE FROM productos WHERE id = ?";
+    $sql = "DELETE FROM producto WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     return $stmt->rowCount() > 0;
@@ -187,3 +187,49 @@ function headerHtml($title = 'Supermercado')
             }
           </style>";
     echo "</head><body>";
+
+    // --- BARRA DE NAVEGACIÓN ---
+    // Esta parte se adaptará a NUESTRA lógica de sesión 
+    // Se mostrará u ocultará enlaces según si el usuario está logueado y su rol
+    echo "<div class='topnav'>";
+    
+    // Parte izquierda: Enlaces de la App
+    echo "<div class='topnav-left'>";
+    if ($is_logged_in) {
+        // --- Panel de un usuario normal ---
+        echo "<a href='index.php'>Panel</a>";
+        echo "<a href='items_list.php'>Listado</a>";
+        
+        // Estos enlaces solo lo ven los admins
+        if ($is_admin) {
+            echo "<a href='items_form.php'>Nuevo producto</a>";
+            // echo "<a href='auditoria_list.php'>Auditoría</a>"; // (Para cuando se introduzca la función de Auditorias)
+        }
+        echo "<a href='preferencias.php'>Preferencias</a>";
+    }
+    echo "</div>";
+
+    // Parte derecha: Login/Logout
+    echo "<div class='topnav-right'>";
+    if ($is_logged_in) {
+        // Mostramos el nombre de usuario, se guardará en sesión en login.php
+        $nombre_usuario = h($_SESSION['user_nombre_usuario'] ?? 'Usuario');
+        echo "<span>Hola, $nombre_usuario</span>";
+        echo "&nbsp; <a href='logout.php'>Logout</a>";
+    } else {
+        // --- Usuario Desconectado ---
+        echo "<a href='login.php'>Login</a>";
+    }
+    echo "</div>";
+    
+    echo "</div>"; // Cierre de barra de navegación
+    echo "<h1>" . h($title) . "</h1>"; // Título principal de la página
+}
+
+// Esta función imprime el pie de página y cierra el HTML
+function footerHtml()
+{
+    echo "<hr><small>Proyecto IAW - Supermercado</small>"; // Texto personalizado 
+    echo "</body></html>";
+}
+// -----------------------------------------------------------------------------------------------------------------------------------------
