@@ -1,9 +1,9 @@
 <?php
 // Credenciales admin
 $host = "localhost";
-$db   = "supermercado";
-$user = "admin";
-$pass = "Admin_IAW_super";
+$db   = "pharmasphere_db";
+$user = "admin_pharma";
+$pass = "Admin_IAW_pharma";
 $dsn  = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 
 try {

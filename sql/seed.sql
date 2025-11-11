@@ -1,6 +1,6 @@
 
 -------------------------------------------------------------------
--- INSERTS MARCA
+-- INSERTAR MARCA
 -------------------------------------------------------------------
 INSERT INTO MARCA (NOMBRE) VALUES
 ('Medicinis forte')
@@ -9,7 +9,7 @@ INSERT INTO MARCA (NOMBRE) VALUES
 ('Cuidate')
 
 -------------------------------------------------------------------
--- INSERTS PRODUCTOS 
+-- INSERTAR PRODUCTO
 -------------------------------------------------------------------
 
 INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
@@ -69,8 +69,17 @@ INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID
 ('Báscula de Cocina', 'Otros', FALSE, 20.00, 50, 4),
 ('Monitor de Presión Arterial', 'Otros', FALSE, 80.00, 20, 4);
 
+----------------------------------------------------------------
+-- INSERTAR USUARIO
+----------------------------------------------------------------
+
+INSERT INTO USUARIO (NOMBRE, CONTRASENHIA, ROL) VALUES
+('Mark','1234','Administrador'), 
+('Alejandro', '5678','Administrador'), 
+('Javier','9090','Administrador')
+
 -----------------------------------------------------------------
---- CREACION CARRITO
+--- INSERTAR CARRITO
 -----------------------------------------------------------------
 
 INSERT INTO CARRITO (ID_USUARIO, ID_PRODUCTO, TOTAL_COMPRA) VALUES

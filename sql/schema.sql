@@ -18,26 +18,29 @@ CREATE DATABASE IF NOT EXISTS pharmasphere_db
 -- Establecemos que esta base de datos va a ser nuestro esquema principal.
 USE pharmasphere_db;
 
--- --------------------------------------------------------
--- 3. Tabla de Producto (Inventario)
--- --------------------------------------------------------
 
 -- --------------------------------------------------------
--- 3. Tabla de Usuario (Inventario)
+-- 3. CREACIÓN DE TABLAS
 -- --------------------------------------------------------
+
+
+-- TABLA USUARIO
+
 CREATE TABLE USUARIO (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre  VARCHAR UNIQUE NOT NULL (50)
-    contrasenhia VARCHAR NOT NULL(100)
-    rol ENUM ('Administrador', 'Usuario')
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOMBRE  VARCHAR UNIQUE NOT NULL (50)
+    CONTRASENHIA VARCHAR NOT NULL(255)
+    ROL ENUM ('Administrador', 'Usuario')
 )
 
+-- TABLA MARCA
 
 CREATE TABLE MARCA (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     NOMBRE NOT NULL,
--- ESTA POR VER AUN
 )
+
+-- TABLA PRODUCTO
 
 CREATE TABLE PRODUCTO (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,8 +50,10 @@ CREATE TABLE PRODUCTO (
     PRECIO DECIMAL (10,2) NOT NULL
     STOCK_DISPONIBLE INT NOT NULL DEFAULT 0.00,
     MARCA_ID INT NOT NULL
-FOREIGN KEY (MARCA_ID) REFERENCES MARCA(ID) ON DELETE SET NULL
+FOREIGN KEY (MARCA_ID) REFERENCES MARCA(ID) ON DELETE RESTRIC
 );
+
+-- TABLA CARRITO
 
 CREATE TABLE CARRITO
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -56,8 +61,8 @@ CREATE TABLE CARRITO
     ID_USUARIO INT NULL
     ID_PRODUCTO INT NOT NULL
     TOTAL_COMPRA DECIMAL (10,2) NOT NULL DEFAULT 0.00,
-FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID) ON DELETE SET NULL 
-FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID) ON DELETE SET NULL
+FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID) ON DELETE RESTRIC 
+FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID) ON DELETE SET NULL 
 
 -----------------------------------------------------------
 -- CREACION USUARIOS

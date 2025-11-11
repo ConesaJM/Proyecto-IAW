@@ -1,6 +1,7 @@
 mark
 -readme
--seed
+-seed ---------------> OK
+- schema.sql --------> OK
 - item_delete
 -item_form
 -item_show
