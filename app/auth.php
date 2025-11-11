@@ -22,3 +22,20 @@ function require_login() {
         exit;
     }
 }
+
+// FUNCIÓN ADMIN : require_admin()
+// Esta función unicamente se llamará en páginas que SÓLO los administradores pueden usar.
+function require_admin() {
+    // 1. Primero, nos aseguramos de que el usuario esté logueado (sea quien sea)
+    require_login();
+
+    // 2. Si está logueado, comprobamos su rol.
+    // Esta variable "user_rol" también se creará en "login.php")
+    if ($_SESSION['user_rol'] != 'admin') {
+        
+        // Si no es admin, lo echamos al panel principal.
+        // No debería estar aquí.
+        header('Location: index.php');
+        exit;
+    }
+}
