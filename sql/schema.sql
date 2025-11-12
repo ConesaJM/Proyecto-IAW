@@ -8,6 +8,8 @@
 -- --------------------------------------------------------
 -- Creamos la base de datos si no existe.
 -- Usamos utf8mb4 para soportar emojis y caracteres especiales.
+DROP DATABASE IF EXISTS pharmasphere_db;
+
 CREATE DATABASE IF NOT EXISTS pharmasphere_db 
     CHARACTER SET utf8mb4 
     COLLATE utf8mb4_unicode_ci;
@@ -18,6 +20,14 @@ CREATE DATABASE IF NOT EXISTS pharmasphere_db
 -- Establecemos que esta base de datos va a ser nuestro esquema principal.
 USE pharmasphere_db;
 
+-----------------------------------------------------------
+-- 2.1 ELIMINAR TABLAS SI EXISTEN.
+-----------------------------------------------------------
+
+DROP TABLE IF EXISTS CARRITO;
+DROP TABLE IF EXISTS PRODUCTO;
+DROP TABLE IF EXISTS MARCA;
+DROP TABLE IF EXISTS USUARIO;
 
 -- --------------------------------------------------------
 -- 3. CREACIÓN DE TABLAS
@@ -26,7 +36,7 @@ USE pharmasphere_db;
 
 -- TABLA USUARIO
 
-CREATE TABLE USUARIO (
+CREATE TABLE IF NO EXISTS USUARIO (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     NOMBRE VARCHAR (150) UNIQUE NOT NULL,
     CONTRASENHIA VARCHAR (255) NOT NULL,
@@ -35,14 +45,14 @@ CREATE TABLE USUARIO (
 
 -- TABLA MARCA
 
-CREATE TABLE MARCA (
+CREATE TABLE IF NO EXISTS MARCA (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     NOMBRE VARCHAR(150) NOT NULL UNIQUE
 );
 
 -- TABLA PRODUCTO
 
-CREATE TABLE PRODUCTO (
+CREATE TABLE IF NO EXISTS PRODUCTO (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     NOMBRE VARCHAR(150) NOT NULL,
     ACTIVO ENUM ('Medicamento', 'Antibiótico','Cuidado personal','Vitaminas','Otros') NOT NULL,
@@ -55,7 +65,7 @@ FOREIGN KEY (MARCA_ID) REFERENCES MARCA(ID) ON DELETE RESTRICT
 
 -- TABLA CARRITO
 
-CREATE TABLE CARRITO (
+CREATE TABLE IF NO EXISTS CARRITO (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     F_COMPRA DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     ID_USUARIO INT NULL,
@@ -67,6 +77,11 @@ FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID) ON DELETE SET NULL
 -- ---------------------------------------------------------
 -- CREACION USUARIOS
 -- --------------------------------------------------------
+
+-- ELIMINAR SI EXISTE USUARIO 
+
+DROP USER IF EXISTS 'admin_pharma'@'localhost';
+
 -- Creación de usuarios ADMIN (COMPLETO)
 CREATE USER 'admin_pharma'@'localhost' IDENTIFIED BY 'Admin_IAW_pharma';  
     GRANT ALL PRIVILEGES ON pharmasphere_db.* TO 'admin_pharma'@'localhost';
