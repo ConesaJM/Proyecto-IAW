@@ -19,9 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
         // validar contraseña
         if ($u && (
-            (isset($u['password_hash']) && password_verify($password, $u['password_hash'])) ||
-            (isset($u['password']) && $u['password'] === $password)
-        )) {           //mantener sesión
+            password_verify($password, $u['CONTRASENHIA']) || 
+            $password === $u['CONTRASENHIA']                  
+        )) {
+                 //mantener sesión
             $_SESSION['user_id'] = $u['ID'];
             $_SESSION['user_rol'] = $u['ROL'];
             $_SESSION['user_nombre_usuario'] = $u['NOMBRE'];
