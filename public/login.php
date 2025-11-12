@@ -8,13 +8,29 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['user'] ?? '');
     $password = trim($_POST['password'] ?? '');
-
-    // validación campos vacíos
-    if (empty($user) || empty($password)) {
-        $error = "Por favor, rellene todos los campos.";
+    
+    // Validación de campos
+    if ($user === '' || $password === '') {
+        $error = 'Por favor, rellene todos los campos.';
     } else {
-        // validación de datos incorrectos
-        $error = "Usuario o contraseña incorrectos";
+        // Buscar usuario en la BD
+        $u = buscarUsuarioPorNombre($pdo, $user);
+
+        // Validar contraseña (hash o texto plano)
+        if ($u && (
+            (isset($u['password_hash']) && password_verify($password, $u['password_hash'])) ||
+            (isset($u['password']) && $u['password'] === $password)
+        )) {
+            // Guardar sesión
+            $_SESSION['user_id'] = $u['id'];
+            $_SESSION['user_rol'] = $u['rol'] ?? 'Usuario';
+            $_SESSION['user_nombre_usuario'] = $u['nombre_usuario'];
+
+            header('Location: ./index.php');
+            exit;
+        } else {
+            $error = 'Usuario o contraseña incorrectos.';
+        }
     }
 }
 
