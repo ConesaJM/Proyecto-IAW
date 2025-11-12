@@ -68,8 +68,8 @@ FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID) ON DELETE SET NULL
 -- CREACION USUARIOS
 -- --------------------------------------------------------
 -- Creación de usuarios ADMIN (COMPLETO)
-CREATE USER 'admin_pharma'@'localhost' IDENTIFIED BY 'AdminAdmin_IAW_pharma_IAW_super';  
-    GRANT ALL PRIVILEGES ON pharmasphere_db.* TO 'admin'@'localhost';
+CREATE USER 'admin_pharma'@'localhost' IDENTIFIED BY 'Admin_IAW_pharma';  
+    GRANT ALL PRIVILEGES ON pharmasphere_db.* TO 'admin_pharma'@'localhost';
     FLUSH PRIVILEGES;
 -- --------------------------------------------------------
 
