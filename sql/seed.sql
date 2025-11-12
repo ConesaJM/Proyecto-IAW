@@ -3,10 +3,10 @@
 -- INSERTAR MARCA
 -------------------------------------------------------------------
 INSERT INTO MARCA (NOMBRE) VALUES
-('Medicinis forte')
-('Vitaminic pro')
-('Abiotic')
-('Cuidate')
+('Medicinis forte'),
+('Vitaminic pro'),
+('Abiotic'),
+('Cuidate');
 
 -------------------------------------------------------------------
 -- INSERTAR PRODUCTO
