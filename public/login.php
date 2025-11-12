@@ -1,27 +1,27 @@
 <?php
 
-require_once __DIR__ . '../app/auth.php';
-require_once __DIR__ . '../app/pdo.php';
-require_once __DIR__ . '../app/utils.php';
+// ---- Comentadas las llamadas a otros archivos ----
+// require_once __DIR__ . '/../app/auth.php';
+// require_once __DIR__ . '/../app/pdo.php';
+// require_once __DIR__ . '/../app/utils.php';
 
 $error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['user'] ?? '');
     $password = trim($_POST['password'] ?? '');
     
-    // Validación de campos
     if ($user === '' || $password === '') {
         $error = 'Por favor, rellene todos los campos.';
     } else {
-        // Buscar usuario en la BD
+        // --- Parte real de login (comentada hasta tener BD) ---
+        /*
         $u = buscarUsuarioPorNombre($pdo, $user);
 
-        // Validar contraseña (hash o texto plano)
         if ($u && (
             (isset($u['password_hash']) && password_verify($password, $u['password_hash'])) ||
             (isset($u['password']) && $u['password'] === $password)
         )) {
-            // Guardar sesión
             $_SESSION['user_id'] = $u['id'];
             $_SESSION['user_rol'] = $u['rol'] ?? 'Usuario';
             $_SESSION['user_nombre_usuario'] = $u['nombre_usuario'];
@@ -30,6 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             $error = 'Usuario o contraseña incorrectos.';
+        }
+        */
+
+        // --- Simulación temporal para que funcione el botón ---
+        if ($user === 'admin' && $password === '1234') {
+            header('Location: ./index.php');
+            exit;
+        } else {
+            $error = 'Modo sin BD: usa admin / 1234';
         }
     }
 }
