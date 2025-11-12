@@ -1,5 +1,9 @@
 <?php
 
+require_once __DIR__ . '../app/auth.php';
+require_once __DIR__ . '../app/pdo.php';
+require_once __DIR__ . '../app/utils.php';
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['user'] ?? '');
