@@ -1,9 +1,15 @@
 <?php 
 /*
 
+
+
+require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
+require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
+require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
+
 -- ESTA PENDIENTE ESTE ARCHIVO
 
-require_once 'utils.php';
+
 
 // 1. Obtención y validación de parámetros de entrada
 $producto_id = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);

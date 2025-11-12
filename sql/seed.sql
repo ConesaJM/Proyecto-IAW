@@ -69,9 +69,9 @@ INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID
 ('Báscula de Cocina', 'Otros', FALSE, 20.00, 50, 4),
 ('Monitor de Presión Arterial', 'Otros', FALSE, 80.00, 20, 4);
 
-----------------------------------------------------------------
+-- -------------------------------------------------------------
 -- INSERTAR USUARIO
-----------------------------------------------------------------
+-- -------------------------------------------------------------
 
 INSERT INTO USUARIO (NOMBRE, CONTRASENHIA, ROL) VALUES
 ('Mark','1234','Administrador'), 
