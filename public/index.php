@@ -26,5 +26,6 @@ headerHtml('Panel Principal - Pharmasphere');
 // 5. CIERRE DE LA PÁGINA
 // Llamamos a la otra función para cerrar </body></html>
 // También dentro de utils.php
+// 
 footerHtml(); 
 ?>
