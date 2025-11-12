@@ -22,9 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             (isset($u['password_hash']) && password_verify($password, $u['password_hash'])) ||
             (isset($u['password']) && $u['password'] === $password)
         )) {           //mantener sesión
-            $_SESSION['user_id'] = $u['id'];
-            $_SESSION['user_rol'] = $u['rol'] ?? 'Usuario';
-            $_SESSION['user_nombre_usuario'] = $u['nombre_usuario'];
+            $_SESSION['user_id'] = $u['ID'];
+            $_SESSION['user_rol'] = $u['ROL'];
+            $_SESSION['user_nombre_usuario'] = $u['NOMBRE'];
 
             //redirección a index
             header('Location: ./index.php');
