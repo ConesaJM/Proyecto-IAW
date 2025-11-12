@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
       <link rel="stylesheet" href="style.css">
-      <link rel="icon" href="media/favicon.png" type="image/png" sizes="512x512">
+      <link rel="icon" href="media/pharmasphere.png" type="image/png" sizes="512x512">
       <title>Inicio de sesión</title> 
   </head>
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <body>
       <h1>Bienvenido a</h1> 
       
-      <img src="media/LOGOSUPERJAM.jpeg">
+      <img src="media/pharmasphere.png">
 
       <h2>Introduzca sus credenciales</h2><br><br>
 
@@ -52,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">Iniciar sesión</button>
     </form>
 
-      <script>
+        <!-- Script para ver/ocultar contraseña -->
+      <script> 
       const togglePassword = document.getElementById('togglePassword');
       const passwordInput = document.getElementById('password');
 
