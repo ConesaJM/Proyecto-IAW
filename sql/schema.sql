@@ -64,7 +64,7 @@ CREATE TABLE CARRITO (
 FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID) ON DELETE RESTRICT, 
 FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO(ID) ON DELETE SET NULL
 );
------------------------------------------------------------
+-- ---------------------------------------------------------
 -- CREACION USUARIOS
 -- --------------------------------------------------------
 -- Creación de usuarios ADMIN (COMPLETO)
