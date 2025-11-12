@@ -5,7 +5,7 @@
 // Tras generar el hash, elimina este archivo por seguridad.
 
 // Se introduce la contraseña que se quiere para el usuario admin 
-$contrasena_plana = 'Admin_IAW_super';
+$contrasena_plana = 'Admin_IAW_pharma';
 
 // Generamos el hash
 $hash = password_hash($contrasena_plana, PASSWORD_DEFAULT);
