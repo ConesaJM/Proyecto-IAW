@@ -27,8 +27,11 @@ require_admin();
         footerHtml();
         return;
     }
+}
+?>
 
-    echo "<form method='post' action='?action=edit_save'>
+
+     <form method='post' action='?action=edit_save'>
             <input type='hidden' name='ID' value='" . h($producto['ID']) . "'>
             <p>
                 <label>Nombre:<br>
@@ -39,6 +42,11 @@ require_admin();
                 <label>Activo:<br>
                 <input type='text' name='ACTIVO' value='" . h($producto['ACTIVO']) . "' required></label>
             </p>
+
+             <form>
+               <label>Receta</label>
+               <input type="checkbox" name="RECETA" value='" . h($producto['RECETA']) . "' required>>
+            </form>
 
             <p>
                 <label>Precio(€):<br>
@@ -59,31 +67,8 @@ require_admin();
                 <button type='submit'>Guardar cambios</button>
                 <a href='?action=list'>Cancelar</a>
             </p>
-          </form>";
-
+          </form>;
+<?php 
     footerHtml();
-}
-
-
-// VERIFICACION MODO EDICION
-
-
-$producto_carga = leerProductoPorId($pdo,$producto_id);
-
-$producto = $producto_carga;
-
-$producto_id = filter_input(INPUT_GET, 'ID',FILTER_VALIDATE_INT);
-if ($producto_id) {
-    // SI HAY ID ESTAMOS EN EDICION
-    $producto_carga = leerProductoPorId($pdo,$producto_id);
-     // SI NO HAY, REDIRIGE
-    if (!$producto_carga){
-        header ('Location: index.php?error=no_existe');
-        exit;
-    }
-}
-
-
-
-
 ?>
+
