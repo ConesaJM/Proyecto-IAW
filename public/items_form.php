@@ -9,66 +9,50 @@ require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
 
 require_admin();
 
+// VALIDACION ESTADO Y ERRORES
 
-{
-    $id = $_GET['ID'] ?? 0;
+$errores= [];
+$modo_edicion = false;
+$producto = [
+    'ID' => null,
+    'NOMBRE' => '',
+    'ACTIVO' => '',
+    'RECETA' => false,
+    'PRECIO' => 0.0,
+    'STOCK_DISPONIBLE' => 0,
+    'MARCA_ID' => null
+];
 
-    // Obtener datos actuales del producto
-    $sql = "SELECT ID, NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID  FROM PRODUCTO WHERE ID = ?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id]);
-    $producto = $stmt->fetch();
+$marcas = listarMarcas($pdo);
 
-    headerHtml("Editar producto");
+// 3. VERIFICAR SI ESTAMOS EN MODO EDICIÓN (leyendo la URL)
+$producto_id = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
 
-    if (!$producto) {
-        echo "<p>Producto no encontrado.</p>";
-        echo "<p><a href='?action=list'>Volver</a></p>";
-        footerHtml();
-        return;
+if ($producto_id) {
+    // SI HAY ID, intentamos cargar el producto
+    $producto_carga = leerProductoPorId($pdo, $producto_id); //
+    
+    if ($producto_carga){
+        // Si lo encontramos, cambiamos a modo edición
+        $producto = $producto_carga;
+        $modo_edicion = true;
+    } else {
+        // Si el ID es inválido, redirigimos
+        header ('Location: items_list.php?error=no_existe');
+        exit;
     }
 }
+
+// 4. (LÓGICA DE GUARDADO - POST)
+// ... (Esto lo haremos más adelante) ...
+
+// 5. MOSTRAR LA VISTA
+// El título cambia si estamos editando o creando
+$titulo_pagina = $modo_edicion ? "Editar Producto: " . h($producto['NOMBRE']) : "Crear Nuevo Producto";
+headerHtml($titulo_pagina); 
 ?>
 
 
-     <form method='post' action='?action=edit_save'>
-            <input type='hidden' name='ID' value='" . h($producto['ID']) . "'>
-            <p>
-                <label>Nombre:<br>
-                <input type='text' name='NOMBRE' value='" . h($producto['NOMBRE']) . "' required></label>
-            </p>
-
-            <p>
-                <label>Activo:<br>
-                <input type='text' name='ACTIVO' value='" . h($producto['ACTIVO']) . "' required></label>
-            </p>
-
-             <form>
-               <label>Receta</label>
-               <input type="checkbox" name="RECETA" value='" . h($producto['RECETA']) . "' required>>
-            </form>
-
-            <p>
-                <label>Precio(€):<br>
-                <input type='number' step='0.01' name='PRECIO' value='" . h($producto['PRECIO']) . "' required></label>
-            </p>
-
-            <p>
-                <label>Stock Disponible:<br>
-                <input type='text' name='STOCK_DISPONIBLE' value='" . h($producto['STOCK_DISPONIBLE']) . "' required></label>
-            </p>
-
-            <p>
-                <label>Marca:<br>
-                <input type='text' name='MARCA_ID' value='" . h($producto['MARCA_ID']) . "' required></label>
-            </p>
-
-            <p>
-                <button type='submit'>Guardar cambios</button>
-                <a href='?action=list'>Cancelar</a>
-            </p>
-          </form>;
-<?php 
-    footerHtml();
+<?php
+footerHtml();
 ?>
-
