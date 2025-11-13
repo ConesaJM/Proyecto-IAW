@@ -140,17 +140,52 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             th, td { border: 1px solid var(--color-borde); padding: 10px 12px; text-align: left; }
             th { background: #eee; font-weight: 600; }
             .topnav { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid var(--color-borde); margin-bottom: 20px; }
-            .topnav-left a { margin-right: 1rem; text-decoration: none; font-weight: 500; color: var(--color-primario); }
-            .topnav-left a:hover { text-decoration: underline; }
+            .topnav-left a { 
+            margin-right: 0.5rem; /* Reducimos el margen para compensar el padding */
+            text-decoration: none;
+            font-weight: 500;
+            color: var(--color-primario);
+            padding: 8px 12px;
+            border-radius: var(--radio-borde); 
+            transition: background-color 0.3s ease, color 0.3s ease; 
+            }
+            .topnav-left a:hover { 
+            background-color: var(--color-primario); 
+            color: white; 
+            }
             .topnav-right { text-align: right; font-size: 0.9rem; }
             .topnav-right a { color: var(--color-peligro); }
+            .topnav i[class*=fa-] {
+                font-size: 1.80em;
+                vertical-align: middle; 
+                transition: transform 0.2s ease; 
+            }
+            .topnav i[class*=fa-gear], 
+            .topnav i[class*=fa-right-from-bracket] {
+                margin-right: 6px; 
+            }
+            .topnav i[class*=fa-circle-user] {
+                margin-left: 6px; 
+            }
+            a.logout-link {
+                color: var(--color-primario); 
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+            a.logout-link:hover, a.logout-link:hover i {
+                color: var(--color-peligro); 
+                transform: scale(1.15);
+            }
+            .topnav a:not(.logout-link):hover i, .topnav span i:hover {
+                transform: scale(1.15); 
+            }
             form.inline { display:inline; margin:0; padding:0; }
             .pagination a, .pagination strong { margin-right:8px; text-decoration: none; }
             .pagination strong { font-weight: bold; }
             form p { margin-bottom: 15px; }
             label { display: block; margin-bottom: 5px; font-weight: 500; }
             input[type=text], input[type=number], input[type=password], select { width: 100%; padding: 8px 10px; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); box-sizing: border-box; }
-            button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; }
+            button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease; }
             button:hover { background-color: var(--color-primario-hover); }
             button.danger { background-color: var(--color-peligro); padding: 4px 8px; font-size: 0.9rem; }
             button.danger:hover { background-color: var(--color-peligro-hover); }
@@ -180,8 +215,10 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
     echo "<div class='topnav-right'>";
     if ($is_logged_in) {
         $nombre_usuario = h($_SESSION['user_nombre_usuario'] ?? 'Usuario');
-        echo "<span>Hola, $nombre_usuario</span>";
-        echo "&nbsp; <a href='logout.php'>Logout</a>";
+    // Muestra el nombre y el icono de usuario
+    echo "<span><strong>" . $nombre_usuario . "</strong> <i class=\"fa-solid fa-circle-user fa-xl\"></i></span>"; 
+    
+    echo "&nbsp; <a href='logout.php' class='logout-link'><i class=\"fa-solid fa-right-from-bracket fa-xl\"></i></a>";
     } else {
         echo "<a href='login.php'>Login</a>";
     }
