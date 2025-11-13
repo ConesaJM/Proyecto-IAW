@@ -41,3 +41,31 @@ $tema_actual = $_COOKIE['user_theme'] ?? 'claro';
 // 5. MOSTRAR LA PAGINA A TRAVÉS DE FUNCION HTML DE UTILS.PHP:
 headerHtml('Preferencias de Usuario');
 ?>
+
+<!-- 6. FORMULARIO DE PREFERENCIAS -->
+<!------------------------------------------------------------------------------------------------------------------------------------->
+<p>Aquí puedes cambiar el tema visual de la aplicación Pharmasphere.</p>
+
+<form action="preferencias.php" method="POST">
+    <p>
+        <label for="tema">Tema de la interfaz:</label>
+        <select name="tema" id="tema">
+            <option value="claro" <?php if ($tema_actual == 'claro') echo 'selected'; ?>>
+                Tema Claro
+            </option>
+            <option value="oscuro" <?php if ($tema_actual == 'oscuro') echo 'selected'; ?>>
+                Tema Oscuro
+            </option>
+        </select>
+    </p>
+    
+    <p>
+        <button type="submit">Guardar Preferencias</button>
+    </p>
+</form>
+<!------------------------------------------------------------------------------------------------------------------------------------->
+
+<!-- 7. CIERRE DE LA PÁGINA CON FUNCION DE UTILS.PHP -->
+<?php
+footerHtml(); 
+?>
