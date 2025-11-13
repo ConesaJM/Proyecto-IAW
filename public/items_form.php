@@ -52,8 +52,6 @@ $titulo_pagina = $modo_edicion ? "Editar Producto: " . h($producto['NOMBRE']) : 
 headerHtml($titulo_pagina); 
 ?>
 
-?>
-
 <form method="post" action="">
     
     <?php if ($modo_edicion): ?>
