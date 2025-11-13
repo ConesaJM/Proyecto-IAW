@@ -14,8 +14,8 @@ javi
 
 ale
 
--auth.php
--pdo
+-auth.php -----------> OK
+-pdo ----------------> OK
 -utils
 -csrf
 -preferencuias php
