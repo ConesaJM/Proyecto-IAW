@@ -13,10 +13,91 @@ require_login();
 // Si el script llega aquí, el usuario SÍ está logueado.
 // Con la función headerHtml() mostramos el HTML creado dentro de utils.php
 headerHtml('Panel Principal - Pharmasphere');
-
 ?>
 
 
+<?php
+$q = trim($_GET['q'] ?? '');
+$page = (int)($_GET['page'] ?? 1);
+if ($page < 1) {
+    $page = 1;
+}
+
+// Productos por página
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+// Si no hay texto de busqueda, pasamos null a listarProductos
+$buscar = ($q === '') ? null : $q;
+
+// Llamamos productos con función utils.php
+$productos = listarProductos($pdo, $buscar, $limit, $offset);
+
+?>
+
+    <h2>Listado de productos</h2>
+
+    <!-- Buscador -->
+<form method="get" style="margin-bottom:1rem;">
+    <label>Buscar por nombre:</label>
+    <input type="text" name="q" value="<?= h($q) ?>">
+    <br><br>
+    <button type="submit">Buscar</button>
+</form>
+
+<!-- Tabla productos -->
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Activo</th>
+            <th>Receta</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Marca</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if (empty($productos)): ?>
+        <tr>
+            <td colspan="7">No se han encontrado productos.</td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($productos as $p): ?>
+            <tr>
+                <td><?= h($p['ID']) ?></td>
+                <td><?= h($p['NOMBRE']) ?></td>
+                <td><?= h($p['ACTIVO']) ?></td>
+                <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
+                <td><?= h($p['PRECIO']) ?></td>
+                <td><?= h($p['STOCK_DISPONIBLE']) ?></td>
+                <td><?= h($p['MARCA_ID']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </tbody>
+</table>
+
+<!-- Paginación -->
+
+<div class="pagination" style="margin-top:1rem;">
+    <?php
+    echo "Páginas: ";
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $isCurrent = ($i === $page);
+
+ 
+        $link = "items_list.php?page=$i&q=" . urlencode($q);
+
+        if ($isCurrent) {
+            echo "<strong>[$i]</strong> ";
+        } else {
+            echo "<a href='$link'>$i</a> ";
+        }
+    }
+    ?>
+</div>
 
 
 
