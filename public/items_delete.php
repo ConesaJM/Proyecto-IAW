@@ -1,14 +1,8 @@
 <?php 
-/*
-
-
 
 require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
 require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
 require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
-
--- ESTA PENDIENTE ESTE ARCHIVO
-
 
 
 // 1. Obtención y validación de parámetros de entrada
@@ -31,7 +25,7 @@ try {
     // 3. Registrar auditoría (Se espera que lance una Exception si falla)
     // Se asume que registra_auditoria y borrar_producto lanzan excepciones al fallar,
     // que es el patrón más limpio en transacciones.
-    registra_auditoria($pdo, $producto_id, 'PRODUCTO', 'BORRADO');
+   // registraAuditoria($pdo, $id, 'PRODUCTO', 'BORRADO');
 
     // 4. Simulación de fallo
     if ($fallo){
@@ -40,7 +34,7 @@ try {
     }
 
     // 5. Borrar producto (Se espera que lance una Exception si falla)
-    borrar_producto($pdo, $producto_id);
+    borrarProducto($pdo, $id);
     
     // CONFIRMAMOS (COMMIT) sólo si todas las operaciones fueron exitosas
     $pdo->commit();
@@ -63,5 +57,8 @@ if ($exito) {
     header('Location: index.php?error=' . $error_msg);
 }
 exit; // Aseguramos que el script termine después de la redirección
-*/
+
+// FORMULARIO
+
+
 ?>

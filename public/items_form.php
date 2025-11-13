@@ -52,6 +52,69 @@ $titulo_pagina = $modo_edicion ? "Editar Producto: " . h($producto['NOMBRE']) : 
 headerHtml($titulo_pagina); 
 ?>
 
+?>
+
+<form method="post" action="">
+    
+    <?php if ($modo_edicion): ?>
+        <input type='hidden' name='ID' value='<?php echo h($producto['ID']); ?>'>
+    <?php endif; ?>
+
+    <p>
+        <label>Nombre:</label>
+        <input type='text' name='NOMBRE' value='<?php echo h($producto['NOMBRE']); ?>' required>
+    </p>
+
+    <p>
+        <label>Categoría (Activo):</label>
+        <select name="ACTIVO">
+            <?php 
+            // Lista de categorías de tu ENUM
+            $categorias = ['Medicamento', 'Antibiótico','Cuidado personal','Vitaminas','Otros'];
+            foreach ($categorias as $cat):
+                // Marcamos como 'selected' la categoría del producto
+                $selected = ($cat === $producto['ACTIVO']) ? 'selected' : '';
+                echo "<option value='" . h($cat) . "' $selected>" . h($cat) . "</option>";
+            endforeach;
+            ?>
+        </select>
+    </p>
+    
+    <p>
+        <label>Marca:</label>
+        <select name="MARCA_ID">
+            <option value="">-- Seleccione una marca --</option>
+            <?php foreach ($marcas as $marca):
+                // Marcamos como 'selected' la marca del producto
+                $selected = ($marca['ID'] == $producto['MARCA_ID']) ? 'selected' : '';
+                echo "<option value='" . h($marca['ID']) . "' $selected>" . h($marca['NOMBRE']) . "</option>";
+            endforeach;
+            ?>
+        </select>
+    </p>
+
+    <p>
+        <label>Precio (€):</label>
+        <input type='number' step='0.01' name='PRECIO' value='<?php echo h($producto['PRECIO']); ?>' required>
+    </p>
+
+    <p>
+        <label>Stock Disponible:</label>
+        <input type='number' name='STOCK_DISPONIBLE' value='<?php echo h($producto['STOCK_DISPONIBLE']); ?>' required>
+    </p>
+
+    <p>
+        <label>
+            <input type="checkbox" name="RECETA" value="1" <?php if ($producto['RECETA']) echo 'checked'; ?>>
+            ¿Necesita receta?
+        </label>
+    </p>
+
+    <p>
+        <button type='submit'>Guardar Cambios</button>
+        <a href='items_list.php'>Cancelar</a>
+    </p>
+</form>
 
 <?php
 footerHtml();

@@ -3,7 +3,7 @@ mark
 -seed ---------------> OK
 - schema.sql --------> OK
 - item_delete
--item_form
+-item_form ----------> OK
 -item_show
 
 
