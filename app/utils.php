@@ -112,7 +112,8 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
     $is_admin = $is_logged_in && isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'Administrador';
 
     echo "<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'><title>" . h($title) . "</title>";
-    
+    echo "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\"/>";
+
     // CSS 
     echo "<style>
             :root {

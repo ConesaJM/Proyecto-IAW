@@ -39,8 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $tema_actual = $_COOKIE['user_theme'] ?? 'claro'; 
 
 // 5. MOSTRAR LA PAGINA A TRAVÉS DE FUNCION HTML DE UTILS.PHP:
-headerHtml('Preferencias de Usuario');
+headerHtml(''); 
 ?>
+
+<h1><i class="fa-solid fa-gear"></i> Preferencias de Usuario</h1>
 
 <!-- 6. FORMULARIO DE PREFERENCIAS -->
 <!------------------------------------------------------------------------------------------------------------------------------------->
@@ -51,10 +53,10 @@ headerHtml('Preferencias de Usuario');
         <label for="tema">Tema de la interfaz:</label>
         <select name="tema" id="tema">
             <option value="claro" <?php if ($tema_actual == 'claro') echo 'selected'; ?>>
-                Tema Claro
+                Claro
             </option>
             <option value="oscuro" <?php if ($tema_actual == 'oscuro') echo 'selected'; ?>>
-                Tema Oscuro
+                Oscuro
             </option>
         </select>
     </p>
