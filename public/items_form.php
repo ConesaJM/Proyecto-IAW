@@ -5,52 +5,72 @@ require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
 require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
 require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
 
-// VARIABLES
+// $marcas = 'listar_marcas'($pdo); ---> items_list 
+
+require_admin();
+
+
+{
+    $id = $_GET['ID'] ?? 0;
+
+    // Obtener datos actuales del producto
+    $sql = "SELECT ID, NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID  FROM PRODUCTO WHERE ID = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    $producto = $stmt->fetch();
+
+    headerHtml("Editar producto");
+
+    if (!$producto) {
+        echo "<p>Producto no encontrado.</p>";
+        echo "<p><a href='?action=list'>Volver</a></p>";
+        footerHtml();
+        return;
+    }
+
+    echo "<form method='post' action='?action=edit_save'>
+            <input type='hidden' name='ID' value='" . h($producto['ID']) . "'>
+            <p>
+                <label>Nombre:<br>
+                <input type='text' name='NOMBRE' value='" . h($producto['NOMBRE']) . "' required></label>
+            </p>
+
+            <p>
+                <label>Activo:<br>
+                <input type='text' name='ACTIVO' value='" . h($producto['ACTIVO']) . "' required></label>
+            </p>
+
+            <p>
+                <label>Precio(€):<br>
+                <input type='number' step='0.01' name='PRECIO' value='" . h($producto['PRECIO']) . "' required></label>
+            </p>
+
+            <p>
+                <label>Stock Disponible:<br>
+                <input type='text' name='STOCK_DISPONIBLE' value='" . h($producto['STOCK_DISPONIBLE']) . "' required></label>
+            </p>
+
+            <p>
+                <label>Marca:<br>
+                <input type='text' name='MARCA_ID' value='" . h($producto['MARCA_ID']) . "' required></label>
+            </p>
+
+            <p>
+                <button type='submit'>Guardar cambios</button>
+                <a href='?action=list'>Cancelar</a>
+            </p>
+          </form>";
+
+    footerHtml();
+}
+
+
+// VERIFICACION MODO EDICION
 
 
 $producto_carga = leerProductoPorId($pdo,$producto_id);
 
 $producto = $producto_carga;
-$modo_edicion = true;
-
-// $marcas = 'listar_marcas'($pdo); ---> items_list
-
-// FORMULARIO
-
-
-require_login();  
-
-
-// 3. MOSTRAR LA PÁGINA
-// Si el script llega aquí, el usuario SÍ está logueado.
-// Con la función headerHtml() mostramos el HTML creado dentro de utils.php
-headerHtml('Panel Principal - Pharmasphere');
-
-
-
-
-// 5. CIERRE DE LA PÁGINA
-// Llamamos a la otra función para cerrar </body></html>
-// También dentro de utils.php
-// 
-footerHtml(); 
-
-
-// VALIDACION ESTADO Y ERRORES
-
-$errores= [];
-$modo_edicion = false;
-$producto = [
-    'ID' => null,
-    'NOMBRE' => '',
-    'ACTIVO' => false,
-    'RECETA' => false,
-    'PRECIO' => 0.0,
-    'STOCK_DISPONIBLE' => 0,
-    'MARCA_ID' => null
-];
-
-// VERIFICACION MODO EDICION
 
 $producto_id = filter_input(INPUT_GET, 'ID',FILTER_VALIDATE_INT);
 if ($producto_id) {
@@ -61,7 +81,6 @@ if ($producto_id) {
         header ('Location: index.php?error=no_existe');
         exit;
     }
-
 }
 
 
