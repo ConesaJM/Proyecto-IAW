@@ -74,6 +74,16 @@ $total_pages = ($total > 0 && $limit > 0)
             <th>Precio</th>
             <th>Stock</th>
             <th>Marca</th>
+
+
+            <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
+                <th>Acciones</th>
+            <?php endif; ?>
+
+            <?php if ($_SESSION['user_rol'] !== 'Administrador'): ?>
+                <th>Compra</th>
+            <?php endif; ?>
+
         </tr>
     </thead>
     <tbody>
@@ -91,6 +101,30 @@ $total_pages = ($total > 0 && $limit > 0)
                 <td><?= h($p['PRECIO']) ?></td>
                 <td><?= h($p['STOCK_DISPONIBLE']) ?></td>
                 <td><?= h($p['MARCA_ID']) ?></td>
+
+
+                  <!-- Acciones solo para admin -->
+                    <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
+                        <td>
+                            <!-- Editar -->
+                            <a href="items_form.php?ID=<?= h($p['ID']) ?>" class="btn-edit">Editar</a>
+                            &nbsp;|&nbsp;
+
+                            <!-- Borrar -->
+                            <form class="inline" method="post" action="items_delete.php"
+                                  onsubmit="return confirm('¿Estás seguro de que quieres borrar este producto?');">
+                                <input type="hidden" name="ID" value="<?= h($p['ID']) ?>">
+                                <button class="danger" type="submit">Borrar</button>
+                            </form>
+                        </td>
+                    <?php endif; ?>
+
+                     <!-- Si NO es admin → columna "Compra" -->
+                    <?php if ($_SESSION['user_rol'] !== 'Administrador'): ?>
+                        <td>
+                            <button>Comprar</button>
+                        </td>
+                    <?php endif; ?>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
