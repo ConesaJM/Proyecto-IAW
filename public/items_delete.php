@@ -5,60 +5,66 @@ require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
 require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
 
 
-// 1. Obtención y validación de parámetros de entrada
-$producto_id = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
-$fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT); 
+// SOLO EL ADMIN ACCEDE
+require_admin();
 
-// 2. Si NO hay ID, redirigir
-if (!$producto_id) { 
-    header('Location: index.php?error=no_id');
+// VARIABLES NECESARIAS 
+$errores = [];
+$producto_id_get = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
+$producto_id_post = $_POST['ID'] ?? null;
+$producto_id = $producto_id_get ?: $producto_id_post;
+
+
+// 2. LÓGICA DE BORRADO (POST)
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CONFIRMA BORRAR
+    
+    if ($producto_id_post) {
+        try {
+          
+            borrarProducto($pdo, $producto_id_post);
+            
+            // REDIRIGIR PRG
+            header('Location: items_list.php?exito=borrado');
+            exit;
+
+        } catch (PDOException $e) {
+            // MENSAJE ERROR PRODUCTO ESTA
+            $errores[] = "Error al borrar el producto. Es posible que esté asociado a otros registros. (" . $e->getMessage() . ")";
+
+        }
+    } else {
+        // REDIRIGE SI NO HAY ID
+        header('Location: items_list.php?error=generico');
+        exit;
+    }
+}
+
+// 3. LÓGICA DE CARGA (GET o si hay error POST)
+
+
+if (!$producto_id) {
+    // SI NO HAY ID
+    header('Location: items_list.php?error=no_id');
     exit;
 }
 
-// INICIO TRANSACCION
-// NOTA: Se asume que $pdo es una conexión PDO válida disponible.
-$pdo->beginTransaction();
-$exito = false;
-$mensaje_error = null;
+// CARGAR PRODUCTO
+$producto = leerProductoPorId($pdo, $producto_id);
 
-try {
-    // 3. Registrar auditoría (Se espera que lance una Exception si falla)
-    // Se asume que registra_auditoria y borrar_producto lanzan excepciones al fallar,
-    // que es el patrón más limpio en transacciones.
-   // registraAuditoria($pdo, $id, 'PRODUCTO', 'BORRADO');
-
-    // 4. Simulación de fallo
-    if ($fallo){
-        // ¡CORRECCIÓN CLAVE!: Se elimina "message:" del mensaje de la excepción.
-        throw new Exception("Fallo simulado, ¡el borrado no se ejecutará!"); 
-    }
-
-    // 5. Borrar producto (Se espera que lance una Exception si falla)
-    borrarProducto($pdo, $id);
-    
-    // CONFIRMAMOS (COMMIT) sólo si todas las operaciones fueron exitosas
-    $pdo->commit();
-    $exito = true;
-
-} catch (Exception $e) { // BLOQUE CATCH
-    // ROLLBACK si ocurre cualquier excepción
-    $pdo->rollBack();
-    $mensaje_error = $e->getMessage(); 
-    $exito = false; 
+if (!$producto) {
+    // REDIRIGIR ID INVALIDO
+    header('Location: items_list.php?error=no_existe');
+    exit;
 }
 
-// REDIRIGIR 
-if ($exito) {
-    // Redirige al éxito
-    header('Location: index.php?msg=producto_borrado_ok!');
-} else {
-    // Redirige al error, codificando el mensaje para la URL
-    $error_msg = urlencode($mensaje_error ?? "Error desconocido al intentar borrar el producto");
-    header('Location: index.php?error=' . $error_msg);
-}
-exit; // Aseguramos que el script termine después de la redirección
 
-// FORMULARIO
+$marcas = listarMarcas($pdo);
 
 
+// 4. MOSTRAR LA VISTA
+$titulo_pagina = "Confirmar Borrado: " . h($producto['NOMBRE']);
+headerHtml($titulo_pagina);
 ?>
+
