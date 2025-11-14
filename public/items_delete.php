@@ -126,7 +126,7 @@ endif;
 </div>
 
 
-<form method="post" action="items_delete.php">
+<form method="post" action="items_delete.php?<?php echo h($_SERVER['QUERY_STRING']); ?>">
     
     <input type='hidden' name='ID' value='<?php echo h($producto['ID']); ?>'>
 
