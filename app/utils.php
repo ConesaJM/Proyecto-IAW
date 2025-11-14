@@ -65,7 +65,7 @@ function listarProductos(PDO $pdo, ?string $buscar = null, int $limit = 10, int 
 }
 
 // UPDATE: Para actualizar un producto ya existente
-function actualizarProducto(PDO $pdo, int $id, string $nombre, string $activo, bool $receta, float $precio, int $stock, int $marca_id): bool {
+function actualizarProducto(PDO $pdo, int $id, string $nombre, string $activo, int $receta, float $precio, int $stock, int $marca_id): bool {
     $sql = "UPDATE PRODUCTO SET 
                 NOMBRE = ?, 
                 ACTIVO = ?, 
