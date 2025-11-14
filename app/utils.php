@@ -136,6 +136,19 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 color: var(--color-texto);
                 padding: 0 15px;
             }
+            body.tema-oscuro { 
+                background-color: #222; color: #eee; 
+                --color-fondo: #222; --color-borde: #555; --color-texto: #eee;
+            }
+            body.tema-oscuro table { background-color: #333; }
+            body.tema-oscuro th { background-color: #444; }
+            body.tema-oscuro input, body.tema-oscuro select { 
+                background-color: #555; color: #eee; border-color: #777; 
+            }
+            body.tema-oscuro .topnav-left a { color: #8af; }
+            body.tema-oscuro .topnav-left a:hover {
+            color: white; 
+            }
             table { border-collapse: collapse; width: 100%; margin-top: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
             th, td { border: 1px solid var(--color-borde); padding: 10px 12px; text-align: left; }
             th { background: #eee; font-weight: 600; }
@@ -191,7 +204,11 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             button.danger:hover { background-color: var(--color-peligro-hover); }
             .error { color: var(--color-peligro); background-color: #fdd; border: 1px solid var(--color-peligro); padding: 10px; border-radius: var(--radio-borde); margin-bottom: 15px; }
           </style>";
-    echo "</head><body>";
+    // 1. Leemos la cookie que guardamos en preferencias.php
+    $tema_cookie = $_COOKIE['user_theme'] ?? 'claro'; // 'claro' u 'oscuro'
+
+    // 2. Imprimimos el </head> y el <body> con preferencia del usuario
+    echo "</head><body class='tema-" . h($tema_cookie) . "'>";
 
     // --- BARRA DE NAVEGACIÓN ---
     echo "<div class='topnav'>";
