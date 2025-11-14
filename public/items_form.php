@@ -32,7 +32,7 @@ $producto_id = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
 
 if ($producto_id) {
     // SI HAY ID, intentamos cargar el producto
-    $producto_carga = leerProductoPorId($pdo, $producto_id); //
+    $producto_carga = leerProductoPorId($pdo, $producto_id); 
     
     if ($producto_carga){
         // Si lo encontramos, cambiamos a modo edición
@@ -41,7 +41,6 @@ if ($producto_id) {
     } else {
         // Si el ID es inválido, redirigimos
         header ('Location: items_list.php?error=no_existe');
-        echo "El producto no existe.";
         exit;
     }
 }
@@ -102,13 +101,13 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
             header('Location: items_list.php?exito=guardado');
             exit;
             
-        } catch (PDOException $e) {
+        }   catch (PDOException $e) {
             $errores[] = "Error al guardar en la base de datos: " . $e->getMessage();
-        }
+            }
 
     }
 
-}
+
 
 
     // VALIDACION ERROR PRODUCTO
@@ -124,7 +123,7 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
         'MARCA_ID' => $marca_id
     ];
 
-
+}
 // 5. MOSTRAR LA VISTA
 // El título cambia si estamos editando o creando
 $titulo_pagina = $modo_edicion ? "Editar Producto: " . h($producto['NOMBRE']) : "Crear Nuevo Producto";
