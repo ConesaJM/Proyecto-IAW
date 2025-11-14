@@ -59,7 +59,9 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
     $marca_id = (int)($_POST['MARCA_ID'] ?? 0);
 
     // VALIDACIONES PRODUCTOS
-
+    if (empty($receta)) {
+        $receta = 0;
+    }
     // VALIDACION DATOS METIDOS
 
     if (empty($nombre)) {
@@ -180,8 +182,8 @@ headerHtml($titulo_pagina);
     </p>
 
     <p>
-        <label>
-            <input type="checkbox" name="RECETA" value="1" <?php if ($producto['RECETA']) echo 'checked'; ?>>
+       <label>
+            <input type="checkbox" name="RECETA" value='' <?php if ($producto['RECETA']) echo 'checked'; ?>>
             ¿Necesita receta?
         </label>
     </p>

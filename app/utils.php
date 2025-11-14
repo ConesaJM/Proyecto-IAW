@@ -29,13 +29,16 @@ function crearUsuario(PDO $pdo, string $nombre_usuario, string $password_hash, s
 /* ========= 2. FUNCIONES DE PRODUCTO =========== */
 
 // Crea un nuevo producto 
-function crearProducto(PDO $pdo, string $nombre, string $activo, bool $receta, float $precio, int $stock, int $marca_id): int {
+function crearProducto(PDO $pdo, string $nombre, string $activo, int $receta, float $precio, int $stock, int $marca_id): int {
     // Tabla y columnas actualizadas
-    $sql = "INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) 
+
+        $sql = "INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) 
             VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$nombre, $activo, $receta, $precio, $stock, $marca_id]);
     return (int)$pdo->lastInsertId();
+
+    
 }
 
 // Sistema de busqueda de producto por id
