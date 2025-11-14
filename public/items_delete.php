@@ -48,7 +48,7 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
             headerHtml($titulo_pagina); 
 
             // ESPERA 10 SEGUNDOS PARA BORRAR
-            echo '<meta http-equiv="refresh" content="10;url=items_list.php">';
+            echo '<meta http-equiv="refresh" content="10;url=items_list.php?exito=borrado">';
 
             // Mensaje de éxito
             echo "<div class='success' style='text-align: center; padding: 20px;'>";
@@ -56,7 +56,7 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
             echo "<p>El producto ha sido eliminado permanentemente.</p>";
             echo "<p>Serás redirigido al listado en 10 segundos...</p>";
             echo "<hr>";
-            echo "<a href='items_list.php'>Volver al listado ahora</a>";
+            echo "<a href='items_list.php?exito=borrado'>Volver al listado ahora</a>";
             echo "</div>";
 
             footerHtml(); 

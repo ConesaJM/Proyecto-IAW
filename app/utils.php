@@ -152,6 +152,21 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             body.tema-oscuro .topnav-left a:hover {
             color: white; 
             }
+            tbody tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            body.tema-oscuro tbody tr:nth-child(even) {
+                background-color: #3f3f3fff; /* Un gris un poco más oscuro */
+            }
+            tbody tr {
+                transition: background-color 0.2s ease;
+            }
+            tbody tr:hover {
+                background-color: #d8ecff; /* Un azul muy claro */
+            }
+            body.tema-oscuro tbody tr:hover {
+                background-color: #505050; /* Un gris más claro */
+            }
             table { border-collapse: collapse; width: 100%; margin-top: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
             th, td { border: 1px solid var(--color-borde); padding: 10px 12px; text-align: left; }
             th { background: #eee; font-weight: 600; }
@@ -201,10 +216,26 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
               background-color: var(--color-primario);
               border-radius: var(--radio-borde);
               text-decoration: none;
-              transition: background-color 0.3s ease;
+              transition: background-color 0.3s ease, transform 0.2s ease;
             }
             a.btn-edit:hover {
               background-color: var(--color-primario-hover);
+              text-decoration: none;
+              color: white;
+            }
+            a.btn-buy {
+              display: inline-block;
+              padding: 4px 8px;
+              font-size: 0.9rem;
+              font-weight: 500;
+              color: white;
+              background-color: #28a745; 
+              border-radius: var(--radio-borde);
+              text-decoration: none;
+              transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+            a.btn-buy:hover {
+              background-color: #218838;
               text-decoration: none;
               color: white;
             }
@@ -227,11 +258,48 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 box-shadow: 0 0 10px rgba(0,123,255, 0.6); /* Resplandor azul */
                 outline: none; /* Quita el borde feo por defecto */
             }
-            button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease; }
+            button:active, 
+            a.btn-edit:active, 
+            a.btn-buy:active {
+                transform: scale(0.97); /* Ligeramente más pequeño */
+                filter: brightness(0.9); /* Ligeramente más oscuro */
+            }
+            button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease, transform 0.2s ease; }
             button:hover { background-color: var(--color-primario-hover); }
             button.danger { background-color: var(--color-peligro); padding: 4px 8px; font-size: 0.9rem; }
             button.danger:hover { background-color: var(--color-peligro-hover); }
             .error { color: var(--color-peligro); background-color: #fdd; border: 1px solid var(--color-peligro); padding: 10px; border-radius: var(--radio-borde); margin-bottom: 15px; }
+            /* --- Alertas de Feedback (con Iconos) --- */
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: var(--radio-borde);
+                font-weight: 500;
+                animation: fadeIn 0.5s ease-out forwards; /* Reutiliza tu anim. */
+            }
+            .alert.success {
+                color: #155724; 
+                background-color: #d4edda;
+                border: 1px solid #c3e6cb;
+            }
+            .alert.error {
+                color: var(--color-peligro);
+                background-color: #fdd;
+                border: 1px solid var(--color-peligro);
+            }
+            /* Iconos para las alertas */
+            .alert.success::before {
+                font-family: Font Awesome 6 Free;
+                font-weight: 900;
+                content: \f00c; /* Icono: fa-check */
+                margin-right: 10px;
+            }
+            .alert.error::before {
+                font-family: Font Awesome 6 Free;
+                font-weight: 900;
+                content: \f071; /* Icono: fa-exclamation-triangle */
+                margin-right: 10px;
+            }
             /* --- Animación de Keyframes --- */
             @keyframes fadeIn {
                 from { 

@@ -9,6 +9,20 @@ require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
 // Si no la hay, redirige a login.php y el script muere aquí.
 require_login(); 
 
+// Mostrar mensaje de éxito si viene en la URL
+if (isset($_GET['exito'])) { // 1. Primero, comprueba si 'exito' existe
+
+    // 2. Si existe, comprueba qué valor tiene
+    if ($_GET['exito'] === 'guardado') {
+        echo '<div class="alert success">Producto guardado correctamente.</div>';
+    } elseif ($_GET['exito'] === 'borrado') {
+        // Ahora sí compara el valor de 'exito' con 'borrado'
+        echo '<div class="alert error">Producto borrado correctamente.</div>';
+    }
+}
+?>
+
+<?php
 // 3. MOSTRAR LA PÁGINA
 // Si el script llega aquí, el usuario SÍ está logueado.
 // Con la función headerHtml() mostramos el HTML creado dentro de utils.php
@@ -110,7 +124,14 @@ $total_pages = ($total > 0 && $limit > 0)
                     <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
                     <button class='danger' type='submit'>Borrar</button>
                 </form>
+
+                <?php else: ?>
+                
+                    <a href="carrito_add.php?ID=<?php echo h($p['ID']); ?>" class="btn-buy">
+                        <i class="fa-solid fa-cart-plus fa-lg"></i> Añadir
+                    </a>
                   <?php endif; ?>
+                </td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
