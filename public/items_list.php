@@ -33,6 +33,24 @@ $buscar = ($q === '') ? null : $q;
 // Llamamos productos con función utils.php
 $productos = listarProductos($pdo, $buscar, $limit, $offset);
 
+// Contar cuántos hay en total (para la paginación)
+if ($buscar !== null) {
+    $sqlCount = "SELECT COUNT(*) AS total FROM PRODUCTO WHERE NOMBRE LIKE ?";
+    $stmtCount = $pdo->prepare($sqlCount);
+    $stmtCount->execute(["%{$buscar}%"]);
+} else {
+    $sqlCount = "SELECT COUNT(*) AS total FROM PRODUCTO";
+    $stmtCount = $pdo->query($sqlCount);
+}
+
+$filaCount = $stmtCount->fetch();
+$total = (int)($filaCount['total'] ?? 0);
+
+$total_pages = ($total > 0 && $limit > 0)
+    ? (int)ceil($total / $limit)
+    : 1;
+
+
 ?>
 
     <h2>Listado de productos</h2>
