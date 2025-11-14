@@ -189,6 +189,22 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 color: var(--color-peligro); 
                 transform: scale(1.15);
             }
+            a.btn-edit {
+              display: inline-block;
+              padding: 4px 8px;
+              font-size: 0.9rem;
+              font-weight: 500;
+              color: white;
+              background-color: var(--color-primario);
+              border-radius: var(--radio-borde);
+              text-decoration: none;
+              transition: background-color 0.3s ease;
+          }
+        
+          a.btn-edit:hover {
+              background-color: var(--color-primario-hover);
+              text-decoration: none;
+              color: white;
             .topnav a:not(.logout-link):hover i, .topnav span i:hover {
                 transform: scale(1.15); 
             }
