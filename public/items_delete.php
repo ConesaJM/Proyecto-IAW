@@ -68,3 +68,87 @@ $titulo_pagina = "Confirmar Borrado: " . h($producto['NOMBRE']);
 headerHtml($titulo_pagina);
 ?>
 
+
+<?php
+// MOSTRAR ERROR
+if (!empty($errores)):
+    echo "<div class'error'><ul>";
+    foreach ($errores as $error) {
+        echo "<li>" . h($error) . "</li>";
+    }
+    echo "</ul></div>";
+endif;
+?>
+
+<div class='error' style="background-color: #fdd; border-color: var(--color-peligro);">
+    <h2><i class="fa-solid fa-triangle-exclamation"></i> ¡Atención!</h2>
+    <p>Estás a punto de borrar permanentemente el siguiente producto...
+        <strong>¡¡Esta acción no se puede deshacer!!.</strong></p>
+    <p>¿Estás seguro de que quieres continuar?</p>
+</div>
+
+
+<form method="post" action="items_delete.php">
+    
+    <input type='hidden' name='ID' value='<?php echo h($producto['ID']); ?>'>
+
+    <p>
+        <label>Nombre:</label>
+        <input type='text' value='<?php echo h($producto['NOMBRE']); ?>' disabled>
+    </p>
+
+    <p>
+        <label>Categoría:</label>
+        <select disabled>
+            <?php
+            //  ENUM
+            $categorias = ['Medicamento', 'Antibiótico','Cuidado personal','Vitaminas','Otros'];
+            foreach ($categorias as $cat):
+                // SELECCION ACTIVO
+                $selected = ($cat === $producto['ACTIVO']) ? 'selected' : '';
+                echo "<option value='" . h($cat) . "' $selected>" . h($cat) . "</option>";
+            endforeach;
+            ?>
+        </select>
+    </p>
+    
+    <p>
+        <label>Marca:</label>
+        <select disabled>
+            <option value="">-- Seleccione una marca --</option>
+            <?php foreach ($marcas as $marca):
+                // SELECT MARCA
+                $selected = ($marca['ID'] == $producto['MARCA_ID']) ? 'selected' : '';
+                echo "<option value='" . h($marca['ID']) . "' $selected>" . h($marca['NOMBRE']) . "</option>";
+            endforeach;
+            ?>
+        </select>
+    </p>
+
+    <p>
+        <label>Precio (€):</label>
+        <input type='number' value='<?php echo h($producto['PRECIO']); ?>' disabled>
+    </p>
+
+    <p>
+        <label>Stock Disponible:</label>
+        <input type='number' value='<?php echo h($producto['STOCK_DISPONIBLE']); ?>' disabled>
+    </p>
+
+    <p>
+        <label>
+            <input type="checkbox" <?php if ($producto['RECETA']) echo 'checked'; ?> disabled>
+            ¿Necesita receta?
+        </label>
+    </p>
+
+    <p>
+        <button type='submit' class="danger">Sí, Borrar Permanentemente</button>
+        <a href='items_list.php'>Cancelar</a>
+    </p>
+</form>
+
+<?php
+footerHtml();
+?>
+
