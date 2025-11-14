@@ -1,16 +1,15 @@
 <?php 
 
 // 1. INCLUIR LAS VALIDACIONES Y CONEXIONES A BD
-require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
-require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
-require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/auth.php'; // (1º:  INICIA SESION)
+require_once __DIR__ . '/../app/pdo.php';   // (2º: CONEXION DB)
+require_once __DIR__ . '/../app/utils.php'; // (3º: CARGAR FUNCIONES)
 
-// $marcas = 'listar_marcas'($pdo); ---> items_list 
-
+//FUNCION DE auth.php QUE PROTEGE LA PÁG
+// ONLY EL ADMIN ACCEDE
 require_admin();
 
-// VALIDACION ESTADO Y ERRORES
-
+// 2. DEFINIR MODO EDICION Y DATOS INICIALES
 $errores= [];
 $modo_edicion = false;
 $producto = [
@@ -22,6 +21,9 @@ $producto = [
     'STOCK_DISPONIBLE' => 0,
     'MARCA_ID' => null
 ];
+
+
+//LISTAR MARCAS
 
 $marcas = listarMarcas($pdo);
 
@@ -39,12 +41,89 @@ if ($producto_id) {
     } else {
         // Si el ID es inválido, redirigimos
         header ('Location: items_list.php?error=no_existe');
+        echo "El producto no existe.";
         exit;
     }
 }
 
 // 4. (LÓGICA DE GUARDADO - POST)
-// ... (Esto lo haremos más adelante) ...
+
+if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
+    // CUANDO LE DAN A "GUARDAR CAMBIOS" SE REALIZA ESTE PROCESO
+
+    $id = $_POST['ID'] ??  null;
+    $nombre = trim($_POST['NOMBRE'] ?? '');
+    $activo = trim($_POST['ACTIVO'] ??'');
+    $receta = isset($_POST['RECETA']);
+    $precio = (float) ($_POST['PRECIO'] ?? 0.00);
+    $stock = (int)($_POST['STOCK_DISPONIBLE'] ?? 0);
+    $marca_id = (int)($_POST['MARCA_ID'] ?? 0);
+
+    // VALIDACIONES PRODUCTOS
+
+    // VALIDACION DATOS METIDOS
+
+    if (empty($nombre)) {
+        $errores[] = "El nombre es obligatorio.";
+    }
+
+    if (empty($marca_id)) {
+        $errores[] = "Debe seleccionar una marca.";
+    }
+
+    if ($precio < 0) {
+        $errores[] = "El precio no puede ser negativo.";
+    }
+
+    if ($stock < 0) {
+        $errores[] = "El stock no puede ser negativo.";
+    }
+
+    // SE GUARDA SI NO HAY ERROR
+
+    if (empty($errores)) {
+        try {
+            if ($id) {
+
+            // MODO UPDATE 
+            // ACTUALIZAR SI HAY ID
+
+                actualizarProducto($pdo, $id, $nombre, $activo, $receta, $precio, $stock, $marca_id); //
+
+            } else {
+
+            // MODO CREATE 
+            // CREAR PRODUCTO SI NO HAY ID
+
+              crearProducto($pdo, $nombre, $activo, $receta, $precio, $stock, $marca_id);
+            }
+
+            // RECARGA PAG (PRG)
+            header('Location: items_list.php?exito=guardado');
+            exit;
+            
+        } catch (PDOException $e) {
+            $errores[] = "Error al guardar en la base de datos: " . $e->getMessage();
+        }
+
+    }
+
+}
+
+
+    // VALIDACION ERROR PRODUCTO
+    // SI ERROR PRODUCTO ENTONCES NO SE ENVIA
+
+    $producto = [
+        'ID' => $id,
+        'NOMBRE' => $nombre,
+        'ACTIVO' => $activo,
+        'RECETA' => $receta,
+        'PRECIO' => $precio,
+        'STOCK_DISPONIBLE' => $stock,
+        'MARCA_ID' => $marca_id
+    ];
+
 
 // 5. MOSTRAR LA VISTA
 // El título cambia si estamos editando o creando
