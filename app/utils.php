@@ -197,13 +197,39 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             .pagination strong { font-weight: bold; }
             form p { margin-bottom: 15px; }
             label { display: block; margin-bottom: 5px; font-weight: 500; }
-            input[type=text], input[type=number], input[type=password], select { width: 100%; padding: 8px 10px; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); box-sizing: border-box; }
+            input[type=text], input[type=number], input[type=password], select { width: 100%; padding: 8px 10px; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); box-sizing: border-box; 
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+            input[type=text]:focus, 
+            input[type=number]:focus, 
+            input[type=password]:focus, 
+            select:focus {
+                border-color: var(--color-primario);
+                box-shadow: 0 0 10px rgba(0,123,255, 0.6); /* Resplandor azul */
+                outline: none; /* Quita el borde feo por defecto */
+            }
             button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease; }
             button:hover { background-color: var(--color-primario-hover); }
             button.danger { background-color: var(--color-peligro); padding: 4px 8px; font-size: 0.9rem; }
             button.danger:hover { background-color: var(--color-peligro-hover); }
             .error { color: var(--color-peligro); background-color: #fdd; border: 1px solid var(--color-peligro); padding: 10px; border-radius: var(--radio-borde); margin-bottom: 15px; }
-          </style>";
+            /* --- Animación de Keyframes --- */
+            @keyframes fadeIn {
+                from { 
+                    opacity: 0; 
+                    transform: translateY(10px); /* Sube 10px */
+                }
+                to { 
+                    opacity: 1; 
+                    transform: translateY(0); 
+                }
+            }
+            
+            /* Aplicamos la animación a los elementos principales */
+            h1, h2, p, table, form {
+                animation: fadeIn 0.5s ease-out forwards;
+            }
+        </style>";
     // 1. Leemos la cookie que guardamos en preferencias.php
     $tema_cookie = $_COOKIE['user_theme'] ?? 'claro'; // 'claro' u 'oscuro'
 
