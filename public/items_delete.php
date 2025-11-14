@@ -19,12 +19,25 @@ $producto_id = $producto_id_get ?: $producto_id_post;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
+$simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
+
+
+
     if ($producto_id_post) {
         
         // INICIO DE LA TRANSACCIÓN
-        $pdo->beginTransaction(); // <-- AÑADIDO
+        $pdo->beginTransaction(); 
 
         try {
+
+
+            // BLOQUE PARA SIMULAR FALLO
+           
+            if ($simular_fallo) {
+               
+                throw new Exception("¡FALLO SIMULADO! El borrado no se ejecutará.");
+            }
+
             // BORRAR PRODUCTO
             borrarProducto($pdo, $producto_id_post);
             
