@@ -18,25 +18,26 @@ $producto_id = $producto_id_get ?: $producto_id_post;
 // 2. LÓGICA DE BORRADO (POST)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CONFIRMA BORRAR
     
     if ($producto_id_post) {
-        try {
-          
         
+        // INICIO DE LA TRANSACCIÓN
+        $pdo->beginTransaction(); // <-- AÑADIDO
+
+        try {
+            // BORRAR PRODUCTO
             borrarProducto($pdo, $producto_id_post);
             
-           
-            //MUESTRA MENSAJE EN LA PAGINA
+            // CONFIRMAMOS (COMMIT) 
+            $pdo->commit(); 
             
             $titulo_pagina = "Producto Borrado";
-            headerHtml($titulo_pagina); // Carga el <head> y el CSS
+            headerHtml($titulo_pagina); 
 
-            
+            // ESPERA 10 SEGUNDOS PARA BORRAR
             echo '<meta http-equiv="refresh" content="10;url=items_list.php">';
 
-            // MENSAJE EXITO
-            
+            // Mensaje de éxito
             echo "<div class='success' style='text-align: center; padding: 20px;'>";
             echo "<h2><i class='fa-solid fa-check-circle'></i> ¡Borrado con éxito!</h2>";
             echo "<p>El producto ha sido eliminado permanentemente.</p>";
@@ -45,21 +46,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<a href='items_list.php'>Volver al listado ahora</a>";
             echo "</div>";
 
-            footerHtml();
-            exit; 
-        
+            footerHtml(); 
+            exit;
 
-        } catch (PDOException $e) {
-            // MENSAJE ERROR PRODUCTO ESTA
-            $errores[] = "Error al borrar el producto. Es posible que esté asociado a otros registros. (" . $e->getMessage() . ")";
-
+        } catch (Exception $e) {
+            
+            // ROLLBACK CON EXCEPCION
+            $pdo->rollBack(); 
+            
+            // GUARDAR ERROR
+            $errores[] = "Error al borrar el producto: " . $e->getMessage();
+           
         }
     } else {
-        // REDIRIGE SI NO HAY ID
+        // SI NO HAY ID EN EL POST, REDIRIGIR
         header('Location: items_list.php?error=generico');
         exit;
     }
 }
+
 
 // 3. LÓGICA DE CARGA (GET o si hay error POST)
 
