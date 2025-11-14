@@ -124,6 +124,8 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 --color-primario-hover: #0056b3;
                 --color-peligro: #dc3545;
                 --color-peligro-hover: #a00;
+                --color-secundario: #56ac47ff; 
+                --color-secundario-hover: #438a36ff;
                 --color-fondo: #f4f7f6;
                 --color-borde: #ccc;
                 --color-texto: #000000ff;
@@ -167,9 +169,30 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             body.tema-oscuro tbody tr:hover {
                 background-color: #505050; /* Un gris más claro */
             }
-            table { border-collapse: collapse; width: 100%; margin-top: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-            th, td { border: 1px solid var(--color-borde); padding: 10px 12px; text-align: left; }
-            th { background: #eee; font-weight: 600; }
+            table { 
+            width: 100%; 
+            margin-top: 1.5rem; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+            border-spacing: 0;
+            border-radius: var(--radio-borde); /* Redondea las esquinas */
+            overflow: hidden; 
+            }
+            th, td { 
+            padding: 14px 16px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--color-borde);
+            }
+            body.tema-oscuro th, body.tema-oscuro td {
+            border-bottom: 1px solid var(--color-borde);
+            }
+            th { 
+            background: var(--color-primario); 
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase; /* Estilo profesional */
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            }
             .topnav { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid var(--color-borde); margin-bottom: 20px; }
             .topnav-left a { 
             margin-right: 0.5rem; /* Reducimos el margen para compensar el padding */
@@ -229,13 +252,13 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
               font-size: 0.9rem;
               font-weight: 500;
               color: white;
-              background-color: #28a745; 
+              background-color: var(--color-secundario); 
               border-radius: var(--radio-borde);
               text-decoration: none;
               transition: background-color 0.3s ease, transform 0.2s ease;
             }
             a.btn-buy:hover {
-              background-color: #218838;
+              background-color: var(--color-secundario-hover);
               text-decoration: none;
               color: white;
             }
@@ -278,9 +301,9 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 animation: fadeIn 0.5s ease-out forwards; /* Reutiliza tu anim. */
             }
             .alert.success {
-                color: #155724; 
-                background-color: #d4edda;
-                border: 1px solid #c3e6cb;
+                color: #fff; 
+                background-color: var(--color-secundario); /* Tu verde principal */
+                border: 2px solid var(--color-secundario-hover); /* Borde más oscuro */
             }
             .alert.error {
                 color: var(--color-peligro);
