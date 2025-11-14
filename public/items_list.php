@@ -55,76 +55,62 @@ $total_pages = ($total > 0 && $limit > 0)
 
     <h2>Listado de productos</h2>
 
-    <!-- Buscador -->
+  <!-- Buscador -->
 <form method="get" style="margin-bottom:1rem;">
-    <label>Buscar por nombre:</label>
-    <input type="text" name="q" value="<?= h($q) ?>">
-    <br><br>
-    <button type="submit">Buscar</button>
+  <label>Buscar por nombre:</label>
+  <input type="text" name="q" value="<?= h($q) ?>">
+  <br><br>
+  <button type="submit">Buscar</button>
 </form>
+
 
 <!-- Tabla productos -->
 <table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Activo</th>
-            <th>Receta</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Marca</th>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Activo</th>
+          <th>Receta</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Marca</th>
+          <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
+          <th>Acciones</th>
+          <?php endif; ?>
+          <?php if ($_SESSION['user_rol'] != 'Administrador'): ?>
+              <th>Compra</th>
+          <?php endif; ?>
+      </tr>
+  </thead>
+  <tbody>
+  <?php if (empty($productos)): ?>
+      <tr>
+          <td colspan="7">No se han encontrado productos.</td>
+      </tr>
+  <?php else: ?>
+      <?php foreach ($productos as $p): ?>
+          <tr>
+              <td><?= h($p['ID']) ?></td>
+              <td><?= h($p['NOMBRE']) ?></td>
+              <td><?= h($p['ACTIVO']) ?></td>
+              <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
+              <td><?= h($p['PRECIO']) ?></td>
+              <td><?= h($p['STOCK_DISPONIBLE']) ?></td>
+              <td><?= h($p['MARCA_ID']) ?></td>
+              <td>
+                <!-- Solo los Admins pueden ver los botones de Acción -->
+                <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
+                <!-- Enlace de Editar | Redirige a items_form.php con la referencia de ID-->
+                <a href="items_form.php?ID=<?php echo h($p['ID']); ?>" class="btn-edit">Editar</a>
 
-
-            <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
-                <th>Acciones</th>
-            <?php endif; ?>
-
-            <?php if ($_SESSION['user_rol'] !== 'Administrador'): ?>
-                <th>Compra</th>
-            <?php endif; ?>
-
-        </tr>
-    </thead>
-    <tbody>
-    <?php if (empty($productos)): ?>
-        <tr>
-            <td colspan="7">No se han encontrado productos.</td>
-        </tr>
-    <?php else: ?>
-        <?php foreach ($productos as $p): ?>
-            <tr>
-                <td><?= h($p['ID']) ?></td>
-                <td><?= h($p['NOMBRE']) ?></td>
-                <td><?= h($p['ACTIVO']) ?></td>
-                <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
-                <td><?= h($p['PRECIO']) ?></td>
-                <td><?= h($p['STOCK_DISPONIBLE']) ?></td>
-                <td><?= h($p['MARCA_ID']) ?></td>
-
-
-                  <!-- Acciones solo para admin -->
-                    <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
-                        <td>
-                            <!-- Editar -->
-                            <a href="items_form.php?ID=<?= h($p['ID']) ?>" class="btn-edit">Editar</a>
-                            &nbsp;|&nbsp;
-
-                            <!-- Borrar -->
-                            <form class="inline" method="post" action="items_delete.php"
-                                  onsubmit="return confirm('¿Estás seguro de que quieres borrar este producto?');">
-                                <input type="hidden" name="ID" value="<?= h($p['ID']) ?>">
-                                <button class="danger" type="submit">Borrar</button>
-                            </form>
-                        </td>
-                    <?php endif; ?>
-
-                     <!-- Si NO es admin → columna "Compra" -->
-                    <?php if ($_SESSION['user_rol'] !== 'Administrador'): ?>
-                        <td>
-                            <button>Comprar</button>
-                        </td>
-                    <?php endif; ?>
+                &nbsp;|&nbsp;
+                <!-- Formulario de Borrar -->
+                <form class='inline' method='' action='items_delete.php' onsubmit='return confirm("¿Estás seguro de que quieres borrar este producto?");'>
+                    <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
+                    <button class='danger' type='submit'>Borrar</button>
+                </form>
+                  <?php endif; ?>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>

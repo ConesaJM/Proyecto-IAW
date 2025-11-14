@@ -199,12 +199,12 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
               border-radius: var(--radio-borde);
               text-decoration: none;
               transition: background-color 0.3s ease;
-          }
-        
-          a.btn-edit:hover {
+            }
+            a.btn-edit:hover {
               background-color: var(--color-primario-hover);
               text-decoration: none;
               color: white;
+            }
             .topnav a:not(.logout-link):hover i, .topnav span i:hover {
                 transform: scale(1.15); 
             }
