@@ -23,11 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($producto_id_post) {
         try {
           
+        
             borrarProducto($pdo, $producto_id_post);
             
-            // REDIRIGIR PRG
-            header('Location: items_list.php?exito=borrado');
-            exit;
+           
+            //MUESTRA MENSAJE EN LA PAGINA
+            
+            $titulo_pagina = "Producto Borrado";
+            headerHtml($titulo_pagina); // Carga el <head> y el CSS
+
+            
+            echo '<meta http-equiv="refresh" content="3;url=items_list.php">';
+
+            // MENSAJE EXITO
+            
+            echo "<div class='success' style='text-align: center; padding: 20px;'>";
+            echo "<h2><i class='fa-solid fa-check-circle'></i> ¡Borrado con éxito!</h2>";
+            echo "<p>El producto ha sido eliminado permanentemente.</p>";
+            echo "<p>Serás redirigido al listado en 3 segundos...</p>";
+            echo "<hr>";
+            echo "<a href='items_list.php'>Volver al listado ahora</a>";
+            echo "</div>";
+
+            footerHtml();
+            exit; 
+        
 
         } catch (PDOException $e) {
             // MENSAJE ERROR PRODUCTO ESTA
