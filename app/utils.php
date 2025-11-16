@@ -256,6 +256,7 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
               border-radius: var(--radio-borde);
               text-decoration: none;
               transition: background-color 0.3s ease, transform 0.2s ease;
+              animation: pulse 2s infinite;
             }
             a.btn-buy:hover {
               background-color: var(--color-secundario-hover);
@@ -266,8 +267,28 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 transform: scale(1.15); 
             }
             form.inline { display:inline; margin:0; padding:0; }
-            .pagination a, .pagination strong { margin-right:8px; text-decoration: none; }
-            .pagination strong { font-weight: bold; }
+            .pagination a, .pagination strong {
+                padding: 6px 12px;
+                border: 1px solid var(--color-borde);
+                border-radius: var(--radio-borde);
+                text-decoration: none;
+                margin-right: 5px;
+            }
+            .pagination a {
+                color: var(--color-primario);
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+            .pagination a:hover {
+                background-color: var(--color-primario-hover);
+                color: white;
+                border-color: var(--color-primario-hover);
+            }
+            .pagination strong {
+                background-color: var(--color-primario);
+                color: white;
+                border-color: var(--color-primario);
+                font-weight: 600;
+            }
             form p { margin-bottom: 15px; }
             label { display: block; margin-bottom: 5px; font-weight: 500; }
             input[type=text], input[type=number], input[type=password], select { width: 100%; padding: 8px 10px; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); box-sizing: border-box; 
@@ -312,15 +333,15 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             }
             /* Iconos para las alertas */
             .alert.success::before {
-                font-family: Font Awesome 6 Free;
+                font-family: 'Font Awesome 6 Free';
                 font-weight: 900;
-                content: \f00c; /* Icono: fa-check */
+                content: '\f00c'; /* Icono: fa-check */
                 margin-right: 10px;
             }
             .alert.error::before {
-                font-family: Font Awesome 6 Free;
+                font-family: 'Font Awesome 6 Free';
                 font-weight: 900;
-                content: \f071; /* Icono: fa-exclamation-triangle */
+                content: '\f071'; /* Icono: fa-exclamation-triangle */
                 margin-right: 10px;
             }
             /* --- Animación de Keyframes --- */
@@ -332,6 +353,20 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 to { 
                     opacity: 1; 
                     transform: translateY(0); 
+                }
+            }
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+                }
+                70% {
+                    transform: scale(1.05);
+                    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+                }
+                100% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
                 }
             }
             
