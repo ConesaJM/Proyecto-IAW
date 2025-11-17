@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
 require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
 require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/csrf.php'; // (4º: CSRF PROTECCION POR TOKEN)
 
 // 2. PROTECCIÓN DE LA PÁGINA 
 // Esta función de auth.php comprobará si hay una sesión iniciada.
@@ -120,8 +121,9 @@ $total_pages = ($total > 0 && $limit > 0)
 
                 &nbsp;|&nbsp;
                 <!-- Formulario de Borrar -->
+                <!-- Protección CSRF añadida -->
                 <form class='inline' method='' action='items_delete.php' onsubmit='return confirm("¿Estás seguro de que quieres borrar este producto?");'>
-                    <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
+                    <?php csrf_input(); ?> <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
                     <button class='danger' type='submit'>Borrar</button>
                 </form>
 
