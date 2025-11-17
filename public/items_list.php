@@ -112,7 +112,7 @@ $total_pages = ($total > 0 && $limit > 0)
               <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
               <td><?= h($p['PRECIO']) ?></td>
               <td><?= h($p['STOCK_DISPONIBLE']) ?></td>
-              <td><?= h($p['MARCA_ID']) ?></td>
+              <td><?= h($p['MARCA_NOMBRE']) ?></td>
               <td>
                 <!-- Solo los Admins pueden ver los botones de Acción -->
                 <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>

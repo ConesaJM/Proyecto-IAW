@@ -52,12 +52,24 @@ function leerProductoPorId(PDO $pdo, int $id): ?array {
 
 // READ-N: Listar los productos con búsqueda y paginación
 function listarProductos(PDO $pdo, ?string $buscar = null, int $limit = 10, int $offset = 0): array {
+    // Seleccionamos todo de PRODUCTO (P.*) y el NOMBRE de MARCA (M.NOMBRE)
+    $campos = "P.*, M.NOMBRE AS MARCA_NOMBRE";
+    
     if ($buscar) {
-        $sql = "SELECT * FROM PRODUCTO WHERE NOMBRE LIKE ? ORDER BY ID DESC LIMIT ? OFFSET ?";
+        $sql = "SELECT $campos 
+                FROM PRODUCTO P
+                LEFT JOIN MARCA M ON P.MARCA_ID = M.ID
+                WHERE P.NOMBRE LIKE ? 
+                ORDER BY P.ID DESC 
+                LIMIT ? OFFSET ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(["%{$buscar}%", $limit, $offset]);
     } else {
-        $sql = "SELECT * FROM PRODUCTO ORDER BY ID DESC LIMIT ? OFFSET ?";
+        $sql = "SELECT $campos 
+                FROM PRODUCTO P
+                LEFT JOIN MARCA M ON P.MARCA_ID = M.ID
+                ORDER BY P.ID DESC 
+                LIMIT ? OFFSET ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$limit, $offset]);
     }
