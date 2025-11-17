@@ -26,8 +26,9 @@ if ($accion === 'auditoria') {
     headerHtml($titulo_pagina); //
     
     // TABLA
+
     echo "<table>";
-    echo "<thead><tr><th>ID</th><th>Acción (Nombre)</th><th>Fecha</th><th>Detalle (JSON)</th></tr></thead>";
+    echo "<thead><tr><th>ID</th><th>Acción Registrada</th><th>Fecha</th><th>Motivo del Borrado</th></tr></thead>";
     echo "<tbody>";
 
     if (empty($auditorias)) {
@@ -35,13 +36,27 @@ if ($accion === 'auditoria') {
     } else {
         foreach ($auditorias as $evento) {
             echo "<tr>";
-            echo "<td>" . h($evento['ID']) . "</td>"; //
-            echo "<td><strong>" . h($evento['NOMBRE']) . "</strong></td>"; //
-            echo "<td>" . h($evento['FECHA']) . "</td>"; //
-            echo "<td><small>" . h($evento['DETALLE']) . "</small></td>"; //
+            echo "<td>" . h($evento['ID']) . "</td>"; 
+            echo "<td><strong>" . h($evento['NOMBRE']) . "</strong></td>"; 
+            echo "<td>" . h($evento['FECHA']) . "</td>"; 
+
+            // [NUEVO] BLOQUE PARA MOSTRAR SÓLO EL MOTIVO
+     
+            
+            // SE DECODIFICA EL JSON
+            $detalle_array = json_decode($evento['DETALLE'], true);
+            
+            // EXTRAEMOS MOTIVOS
+            $motivo = $detalle_array['AUDITORIA_MOTIVO'] ?? 'N/A';
+
+            // MOTIVO
+            echo "<td><small>" . h($motivo) . "</small></td>"; //
+            
+           
             echo "</tr>";
         }
     }
+
 
     echo "</tbody></table>";
 
@@ -86,7 +101,16 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
                 throw new Exception("¡FALLO SIMULADO! El borrado no se ejecutará.");
             }
 
-            // 1. RECUPERAR PRODUCTOS ANTES DE BORRARSE
+            // MOTIVO FORMULARIO
+            $motivo_borrado = filter_input(INPUT_POST, 'motivo_borrado', FILTER_UNSAFE_RAW);
+            
+            // VALIDACION NO PUEDE ESTAR VACIO
+ 
+            if (empty(trim($motivo_borrado))) {
+                throw new Exception("Debe proporcionar un motivo para el borrado. La operación ha sido cancelada.");
+            }
+
+            // RECUPERAR PRODUCTOS ANTES DE BORRARSE
             $producto_para_auditoria = leerProductoPorId($pdo, $producto_id_post); 
 
 
@@ -94,21 +118,33 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
                  throw new Exception("El producto (ID: $producto_id_post) no existe o ya fue borrado.");
             }
 
-            // VARIABLE AUDITORIA
+          
+            // MODIFICACIÓN DEL DETALLE DE AUDITORÍA
 
-            $nombre_auditoria = "BORRADO: " . $producto_para_auditoria['NOMBRE'];
             
-            // DETALLE AUDITORIA
-            
+            // NOMBRE USUARIO OBTENIDO
+            $nombre_usuario_auditoria = $_SESSION['user_nombre_usuario'] ?? 'UsuarioDesconocido';
+
+            // SE AÑADE MOTIVO + USUARIO
+            $producto_para_auditoria['AUDITORIA_MOTIVO'] = trim($motivo_borrado);
+            $producto_para_auditoria['AUDITORIA_USUARIO'] = $nombre_usuario_auditoria;
+
+            // MOTIVO ESCRITO EN JSON
             $detalle_auditoria = json_encode($producto_para_auditoria);
-
+            
+            // VARIABLE AUDITORIAS
+            $nombre_auditoria = sprintf(
+                "Usuario '%s' borró: %s",
+                $nombre_usuario_auditoria,
+                $producto_para_auditoria['NOMBRE']
+            );
+           
             // BORRAR PRODUCTO
             borrarProducto($pdo, $producto_id_post);
             
             //  REGISTRAR EN AUDITORÍA
-            
+        
             registrarAuditoria($pdo, $nombre_auditoria, $detalle_auditoria); //
-
 
             // CONFIRMAMOS (COMMIT) 
             $pdo->commit(); 
@@ -137,9 +173,11 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
             $pdo->rollBack(); 
             
             // GUARDAR ERROR
+            // GUARDAR ERROR
             $errores[] = "Error al borrar el producto: " . $e->getMessage();
-           
+        
         }
+
     } else {
         // SI NO HAY ID EN EL POST, REDIRIGIR
         header('Location: items_list.php?error=generico');
@@ -193,6 +231,7 @@ endif;
         <strong>¡¡Esta acción no se puede deshacer!!.</strong></p>
     <p>¿Estás seguro de que quieres continuar?</p>
 </div>
+
 
 
 <form method="post" action="items_delete.php?<?php echo h($_SERVER['QUERY_STRING']); ?>">
@@ -251,6 +290,10 @@ endif;
         </label>
     </p>
 
+    <p>
+        <label for="motivo_borrado">Motivo del Borrado (Obligatorio):</label>
+        <textarea id="motivo_borrado" name="motivo_borrado" rows="3" style="width: 100%; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); padding: 8px 10px;" required></textarea>
+    </p>
     <p>
         <button type='submit' class="danger">Sí, Borrar Permanentemente</button>
         <a href='items_list.php'>Cancelar</a>
