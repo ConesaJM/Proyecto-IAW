@@ -9,6 +9,53 @@ require_once __DIR__ . '/../app/csrf.php'; // (4º: CSRF PROTECCION POR TOKEN)
 // SOLO EL ADMIN ACCEDE
 require_admin();
 
+
+// [INICIO] GESTOR DE ACCIÓN DE AUDITORÍA
+
+
+// Comprobar si se está pidiendo ver la auditoría
+$accion = filter_input(INPUT_GET, 'action');
+
+if ($accion === 'auditoria') {
+    
+    // FUNCION AUDITORIA
+    $auditorias = auditoria_list($pdo); //
+
+    // VISTA AUDITORIA
+    $titulo_pagina = "Registro de Auditoría";
+    headerHtml($titulo_pagina); //
+    
+    // TABLA
+    echo "<table>";
+    echo "<thead><tr><th>ID</th><th>Acción (Nombre)</th><th>Fecha</th><th>Detalle (JSON)</th></tr></thead>";
+    echo "<tbody>";
+
+    if (empty($auditorias)) {
+        echo "<tr><td colspan='4'>No hay registros de auditoría.</td></tr>";
+    } else {
+        foreach ($auditorias as $evento) {
+            echo "<tr>";
+            echo "<td>" . h($evento['ID']) . "</td>"; //
+            echo "<td><strong>" . h($evento['NOMBRE']) . "</strong></td>"; //
+            echo "<td>" . h($evento['FECHA']) . "</td>"; //
+            echo "<td><small>" . h($evento['DETALLE']) . "</small></td>"; //
+            echo "</tr>";
+        }
+    }
+
+    echo "</tbody></table>";
+
+    footerHtml(); //
+    
+    // MUY IMPORTANTE: Detener la ejecución para no continuar con la lógica de borrado.
+    exit; 
+}
+
+
+// [FIN] GESTOR DE ACCIÓN DE AUDITORÍA
+
+
+
 // VARIABLES NECESARIAS 
 $errores = [];
 $producto_id_get = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
@@ -32,7 +79,6 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
 
         try {
 
-
             // BLOQUE PARA SIMULAR FALLO
            
             if ($simular_fallo) {
@@ -40,9 +86,30 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
                 throw new Exception("¡FALLO SIMULADO! El borrado no se ejecutará.");
             }
 
+            // 1. RECUPERAR PRODUCTOS ANTES DE BORRARSE
+            $producto_para_auditoria = leerProductoPorId($pdo, $producto_id_post); 
+
+
+            if (!$producto_para_auditoria) {
+                 throw new Exception("El producto (ID: $producto_id_post) no existe o ya fue borrado.");
+            }
+
+            // VARIABLE AUDITORIA
+
+            $nombre_auditoria = "BORRADO: " . $producto_para_auditoria['NOMBRE'];
+            
+            // DETALLE AUDITORIA
+            
+            $detalle_auditoria = json_encode($producto_para_auditoria);
+
             // BORRAR PRODUCTO
             borrarProducto($pdo, $producto_id_post);
             
+            //  REGISTRAR EN AUDITORÍA
+            
+            registrarAuditoria($pdo, $nombre_auditoria, $detalle_auditoria); //
+
+
             // CONFIRMAMOS (COMMIT) 
             $pdo->commit(); 
             
@@ -130,7 +197,7 @@ endif;
 
 <form method="post" action="items_delete.php?<?php echo h($_SERVER['QUERY_STRING']); ?>">
     
-    <?php csrf_input(); ?> <!-- Proteccion CSRF -->
+    <?php csrf_input(); ?> 
 
     <input type='hidden' name='ID' value='<?php echo h($producto['ID']); ?>'>
 

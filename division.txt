@@ -9,7 +9,7 @@ mark
 javi
 -index
 -logout
--item_list
+-item_list 
 
 ale
 
