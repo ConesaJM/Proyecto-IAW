@@ -4,6 +4,7 @@
 require_once __DIR__ . '/../app/auth.php'; // (1º:  INICIA SESION)
 require_once __DIR__ . '/../app/pdo.php';   // (2º: CONEXION DB)
 require_once __DIR__ . '/../app/utils.php'; // (3º: CARGAR FUNCIONES)
+require_once __DIR__ . '/../app/csrf.php'; // (4º: CSRF PROTECCION POR TOKEN)
 
 //FUNCION DE auth.php QUE PROTEGE LA PÁG
 // ONLY EL ADMIN ACCEDE
@@ -49,6 +50,8 @@ if ($producto_id) {
 
 if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
     // CUANDO LE DAN A "GUARDAR CAMBIOS" SE REALIZA ESTE PROCESO
+
+    require_csrf(); // VERIFICAR TOKEN CSRF, SI FALLA SE DETIENE LA EJECUCIÓN
 
     $id = $_POST['ID'] ??  null;
     $nombre = trim($_POST['NOMBRE'] ?? '');
@@ -133,6 +136,8 @@ headerHtml($titulo_pagina);
 ?>
 
 <form method="post" action="">
+
+    <?php csrf_input(); ?> <!-- INCLUIR TOKEN CSRF EN EL FORMULARIO -->
     
     <?php if ($modo_edicion): ?>
         <input type='hidden' name='ID' value='<?php echo h($producto['ID']); ?>'>
