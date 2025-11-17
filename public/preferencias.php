@@ -3,6 +3,8 @@
 // No necesitamos pdo.php si no hacemos consultas SQL
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/utils.php';
+require_once __DIR__ . '/../app/csrf.php'; // (CSRF PROTECCION POR TOKEN)
+
 
 // 2. PROTECCIÓN DE LA PÁGINA 
 require_login(); // Un usuario debe estar logueado para guardar sus preferencias
@@ -11,7 +13,7 @@ require_login(); // Un usuario debe estar logueado para guardar sus preferencias
 // Esto se ejecuta en el momento de que el usuario envía el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // (Aquí iría validación CSRF en un futuro)
+    require_csrf(); // VERIFICAR TOKEN CSRF, SI FALLA SE DETIENE LA EJECUCIÓN
     
     // 3.1 Primero de todo crearemos una variable para el tema
     $tema = $_POST['tema'] ?? 'claro'; // 'claro' por defecto
@@ -49,6 +51,7 @@ headerHtml('');
 <p>Aquí puedes cambiar el tema visual de la aplicación Pharmasphere.</p>
 
 <form action="preferencias.php" method="POST">
+    <?php csrf_input(); ?> <!-- Proteccion CSRF dentro del formulario -->
     <p>
         <label for="tema">Tema de la interfaz:</label>
         <select name="tema" id="tema">
