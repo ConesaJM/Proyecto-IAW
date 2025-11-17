@@ -104,28 +104,45 @@ $total_pages = ($total > 0 && $limit > 0)
           <td colspan="7">No se han encontrado productos.</td>
       </tr>
   <?php else: ?>
-      <?php foreach ($productos as $p): ?>
-          <tr>
-              <td><?= h($p['ID']) ?></td>
-              <td><?= h($p['NOMBRE']) ?></td>
-              <td><?= h($p['ACTIVO']) ?></td>
-              <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
-              <td><?= h($p['PRECIO']) ?></td>
-              <td><?= h($p['STOCK_DISPONIBLE']) ?></td>
-              <td><?= h($p['MARCA_NOMBRE']) ?></td>
-              <td>
-                <!-- Solo los Admins pueden ver los botones de Acción -->
-                <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
-                <!-- Enlace de Editar | Redirige a items_form.php con la referencia de ID-->
-                <a href="items_form.php?ID=<?php echo h($p['ID']); ?>" class="btn-edit">Editar</a>
+      <?php foreach ($productos as $p): 
+            $stock = (int)$p['STOCK_DISPONIBLE'];
+            $stockClass = '';
+            $stockIcon = 'fa-circle'; // Círculo relleno
 
-                &nbsp;|&nbsp;
-                <!-- Formulario de Borrar -->
-                <!-- Protección CSRF añadida -->
-                <form class='inline' method='' action='items_delete.php' onsubmit='return confirm("¿Estás seguro de que quieres borrar este producto?");'>
-                    <?php csrf_input(); ?> <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
-                    <button class='danger' type='submit'>Borrar</button>
-                </form>
+            if ($stock <= 50) {
+                $stockClass = 'stock-low'; // Rojo
+            } elseif ($stock <= 150) {
+                $stockClass = 'stock-med'; // Naranja
+            } else {
+                $stockClass = 'stock-high'; // Verde
+            }
+        ?>
+            <tr>
+                <td><?= h($p['ID']) ?></td>
+                <td><?= h($p['NOMBRE']) ?></td>
+                <td><?= h($p['ACTIVO']) ?></td>
+                <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
+                <td><?= h($p['PRECIO']) ?> €</td>
+                
+                <td>
+                    <span class="<?= $stockClass ?>">
+                        <i class="fa-solid <?= $stockIcon ?> stock-indicator"></i>
+                    </span>
+                </td>
+
+                <td>
+                    <?= h($p['MARCA_NOMBRE'] ?? 'Sin Marca') ?> 
+                </td>
+                
+                <td>
+                <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
+                
+                    <a href="items_form.php?ID=<?php echo h($p['ID']); ?>" class="btn-edit">Editar</a>
+                    &nbsp;|&nbsp;
+                    <form class='inline' method='' action='items_delete.php' onsubmit='return confirm("¿Estás seguro de que quieres borrar este producto?");'>
+                        <?php csrf_input(); ?> <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
+                        <button class='danger' type='submit'>Borrar</button>
+                    </form>
 
                 <?php else: ?>
                 

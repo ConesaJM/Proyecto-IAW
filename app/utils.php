@@ -99,6 +99,12 @@ function borrarProducto(PDO $pdo, int $id): bool {
     return $stmt->rowCount() > 0;
 }
 
+// Auditoría: Listar todas las acciones de auditoría (futura implementación)
+function auditoria_list(PDO $pdo) {
+
+}
+
+
 /* ========= 3. FUNCION DE FILTRADO POR MARCA =========== */
 
 // Listar todas las marcas.
@@ -356,6 +362,13 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 content: '\f071'; /* Icono: fa-exclamation-triangle */
                 margin-right: 10px;
             }
+            .stock-high { color: var(--color-secundario); font-weight: 600; } /* Verde (Alto) */
+            .stock-med  { color: #fd7e14; font-weight: 600; } /* Naranja (Medio) */
+            .stock-low  { color: var(--color-peligro); font-weight: 600; } /* Rojo (Bajo) */
+            
+            /* Círculo indicador */
+            .stock-indicator { margin-left: 15px; font-size: 0.8em; vertical-align: middle; }
+
             /* --- Animación de Keyframes --- */
             @keyframes fadeIn {
                 from { 
@@ -432,6 +445,24 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
 function footerHtml()
 {
     echo "<hr><small>Proyecto IAW - Pharmasphere</small>"; 
+
+    // --- INICIO DEL WIDGET DE TAWK.TO ---
+    ?>
+    
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/691af7ebccfc7c195b6c49fc/1ja8lgs42';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <?php
+    // --- FIN DEL WIDGET ---
+
     echo "</body></html>";
 }
 ?>
