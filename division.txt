@@ -2,10 +2,9 @@ mark
 -readme
 -seed ---------------> OK
 - schema.sql --------> OK
-- item_delete
+- item_delete 
 -item_form ----------> OK
 -item_show
-
 
 javi
 -index
