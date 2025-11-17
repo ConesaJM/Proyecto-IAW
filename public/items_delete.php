@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
 require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
 require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/csrf.php'; // (4º: CSRF PROTECCION POR TOKEN)
 
 
 // SOLO EL ADMIN ACCEDE
@@ -18,7 +19,8 @@ $producto_id = $producto_id_get ?: $producto_id_post;
 // 2. LÓGICA DE BORRADO (POST)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+    require_csrf(); // VERIFICAR TOKEN CSRF, SI FALLA SE DETIENE LA EJECUCIÓN
+
 $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
 
 
@@ -128,6 +130,8 @@ endif;
 
 <form method="post" action="items_delete.php?<?php echo h($_SERVER['QUERY_STRING']); ?>">
     
+    <?php csrf_input(); ?> <!-- Proteccion CSRF -->
+
     <input type='hidden' name='ID' value='<?php echo h($producto['ID']); ?>'>
 
     <p>
