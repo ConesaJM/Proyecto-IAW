@@ -418,7 +418,7 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
         if ($is_admin) {
             echo "<a href='items_form.php'>Nuevo producto</a>";
             echo "<a href='user_form.php'>Crear Usuario</a>"; // Nuevo enlace para crear usuarios, para el futuro implementar o reconsiderar.
-            // echo "<a href='auditoria_list.php'>Auditoría</a>"; | Para el futuro
+            echo "<a href='items_delete.php?action=auditoria'>Auditoría</a>";
         }
         echo "<a href='preferencias.php'>Preferencias</a>";
     }
