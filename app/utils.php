@@ -99,12 +99,6 @@ function borrarProducto(PDO $pdo, int $id): bool {
     return $stmt->rowCount() > 0;
 }
 
-// Auditoría: Listar todas las acciones de auditoría (futura implementación)
-function auditoria_list(PDO $pdo) {
-
-}
-
-
 /* ========= 3. FUNCION DE FILTRADO POR MARCA =========== */
 
 // Listar todas las marcas.
@@ -115,8 +109,31 @@ function listarMarcas(PDO $pdo): array {
     return $stmt->fetchAll();
 }
 
+/* ========= 4. FUNCIONES DE AUDITORÍA =========== */
+
+// REGISTRAR: Guarda un evento en la tabla AUDITORIA
+// Se usará dentro de items_delete.php
+
+// Registra los datos del producto borrado dentro de la tabla AUDITORIA
+function registrarAuditoria(PDO $pdo, string $accion, string $detalle): bool {
+    $sql = "INSERT INTO AUDITORIA (NOMBRE, DETALLE) VALUES (?, ?)";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([$accion, $detalle]);
+}
+
+// LISTAR: Devuelve todo el historial de cambios
+function auditoria_list(PDO $pdo): array {
+    try {
+        $sql = "SELECT * FROM AUDITORIA ORDER BY FECHA DESC";
+        $stmt = $pdo->query($sql);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        return []; // Si falla, devolvemos array vacío
+    }
+}
+
 // ---------------------------------------------------------------------------------------------------------------\\
-/* ========= 4. HELPERS DE VISTA =========== */
+/* ========= 5. HELPERS DE VISTA =========== */
 
 // Escapa el HTML para prevenir ataques XSS.
 function h($str)
