@@ -386,6 +386,50 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             /* Círculo indicador */
             .stock-indicator { margin-left: 15px; font-size: 0.8em; vertical-align: middle; }
 
+            /* --- Estilos para Textarea de Motivo --- */
+            .form-textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid var(--color-borde);
+                border-radius: var(--radio-borde);
+                font-family: inherit;
+                font-size: 0.95rem;
+                resize: vertical; /* Permite redimensionar solo verticalmente */
+                transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+                background-color: #fff; 
+                color: var(--color-texto);
+                min-height: 80px;
+            }
+
+            body.tema-oscuro .form-textarea {
+                background-color: #333; /* Gris oscuro */
+                border-color: #555;     /* Borde más sutil */
+                color: #eee;            /* Texto claro */
+            }
+            
+            body.tema-oscuro .form-textarea:focus {
+                border-color: var(--color-peligro); /* Mantiene el rojo al enfocar */
+                background-color: #3a3a3a; /* Un poco más claro al enfocar */
+            }
+            
+            .form-textarea:focus {
+                border-color: var(--color-peligro); /* Rojo al enfocar (porque es borrado) */
+                box-shadow: 0 0 8px rgba(220, 53, 69, 0.3); /* Resplandor rojo suave */
+                outline: none;
+            }
+
+            /* Etiqueta destacada para el motivo */
+            .label-required {
+                font-weight: 600;
+                color: var(--color-peligro); /* Texto rojo para indicar importancia */
+                margin-bottom: 8px;
+                display: block;
+            }
+            .label-required::after {
+                content: *;
+                color: var(--color-peligro);
+            }
+
             /* --- Animación de Keyframes --- */
             @keyframes fadeIn {
                 from { 

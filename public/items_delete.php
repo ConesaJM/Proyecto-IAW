@@ -290,9 +290,14 @@ endif;
         </label>
     </p>
 
-    <p>
-        <label for="motivo_borrado">Motivo del Borrado (Obligatorio):</label>
-        <textarea id="motivo_borrado" name="motivo_borrado" rows="3" style="width: 100%; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); padding: 8px 10px;" required></textarea>
+    <p style="margin-top: 20px;">
+        <label for="motivo_borrado" class="label-required">Motivo del Borrado (Obligatorio):</label>
+        <textarea 
+            id="motivo_borrado" 
+            name="motivo_borrado" 
+            class="form-textarea" 
+            placeholder="Explica brevemente por qué eliminas este producto..." 
+            required></textarea>
     </p>
     <p>
         <button type='submit' class="danger">Sí, Borrar Permanentemente</button>
