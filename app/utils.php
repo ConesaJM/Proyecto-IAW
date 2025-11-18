@@ -176,18 +176,40 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 color: var(--color-texto);
                 padding: 0 15px;
             }
+            /* --- MODO OSCURO (Verde) --- */
             body.tema-oscuro { 
                 background-color: #222; color: #eee; 
-                --color-fondo: #222; --color-borde: #555; --color-texto: #eee;
+                --color-fondo: #222; 
+                --color-borde: #444; 
+                --color-texto: #eee;
+                /* Cambiamos el color primario a VERDE solo en modo oscuro */
+                --color-primario: #7ecd6a; 
+                --color-primario-hover: #5fb34b; /* Verde más oscuro para hover */
             }
-            body.tema-oscuro table { background-color: #333; }
-            body.tema-oscuro th { background-color: #7ecd6a; }
-            body.tema-oscuro input, body.tema-oscuro select { 
-                background-color: #555; color: #eee; border-color: #777; 
+            
+            body.tema-oscuro th { 
+                background-color: var(--color-primario-hover); /* Encabezado verde oscuro */
+                color: #fff;
             }
-            body.tema-oscuro .topnav-left a { color: #8af; }
+            
+            body.tema-oscuro .topnav-left a { 
+                color: var(--color-primario); 
+            }
+            
             body.tema-oscuro .topnav-left a:hover {
-            color: white; 
+                background-color: var(--color-primario);
+                color: #222; /* Texto oscuro sobre verde para contraste */
+            }
+            
+            /* Ajustes de inputs en oscuro */
+            body.tema-oscuro input, body.tema-oscuro select, body.tema-oscuro textarea { 
+                background-color: #333; 
+                color: #eee; 
+                border-color: #555; 
+            }
+            body.tema-oscuro input:focus, body.tema-oscuro select:focus {
+                border-color: var(--color-primario);
+                box-shadow: 0 0 10px rgba(126, 205, 106, 0.4); /* Resplandor verde */
             }
             tbody tr:nth-child(even) {
                 background-color: #f2f2f2;
@@ -255,6 +277,22 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             }
             .topnav i[class*=fa-circle-user] {
                 margin-left: 6px; 
+            }
+            /* --- Estilo para el Logo del Menú --- */
+            .topnav-logo img {
+                height: 40px; /* Tamaño del logo */
+                width: auto;
+                vertical-align: middle;
+                margin-right: 10px;
+                transition: transform 0.3s ease;
+            }
+            .topnav-logo:hover img {
+                transform: scale(1.1); /* Pequeño zoom al pasar el ratón */
+            }
+            /* Quitamos estilos de botón al logo para que se vea limpio */
+            .topnav-left a.topnav-logo {
+                padding: 0;
+                background-color: transparent !important;
             }
             a.logout-link {
                 color: var(--color-primario); 
@@ -492,6 +530,7 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
     // Barra izquierda
     echo "<div class='topnav-left'>";
     if ($is_logged_in) {
+        echo "<a href='index.php' class='topnav-logo'><img src='media/pharmasphere_sinfondo.png' alt='Logo'></a>";
         echo "<a href='index.php'>Panel</a>";
         echo "<a href='items_list.php'>Productos</a>"; 
         
