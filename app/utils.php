@@ -164,7 +164,7 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 --color-fondo: #f4f7f6;
                 --color-borde: #ccc;
                 --color-texto: #000000ff;
-                --ancho-max: 900px;
+                --ancho-max: 1200px;
                 --radio-borde: 5px;
             }
             body { 
