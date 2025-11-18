@@ -1,9 +1,10 @@
 <?php
 
 // llamadas a auth, pdo y utils
- require_once __DIR__ . '/../app/auth.php';
- require_once __DIR__ . '/../app/pdo.php';
- require_once __DIR__ . '/../app/utils.php';
+require_once __DIR__ . '/../app/auth.php';
+require_once __DIR__ . '/../app/pdo.php';
+require_once __DIR__ . '/../app/utils.php';
+
 
 $error = '';
 
@@ -14,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user === '' || $password === '') {
         $error = 'Por favor, rellene todos los campos.';
     } else {
-
         $u = buscarUsuarioPorNombre($pdo, $user);
       
         // validar contraseña
@@ -28,52 +28,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_nombre_usuario'] = $u['NOMBRE'];
 
             //redirección a index
-            header('Location: ./index.php');
+            header('Location: index.php');
             exit;
         } else {
             $error = 'Usuario o contraseña incorrectos.';
         }
-        
     }
 }
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-      <link rel="stylesheet" href="style.css">
-      <link rel="icon" href="media/pharmasphere.png" type="image/png" sizes="512x512">
-      <title>Inicio de sesión</title> 
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaSphere - Inicio de Sesión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="media/pharmasphere_sinfondo.png" type="image/png" sizes="512x512">
+</head>
+<body>
 
-  <!--Formulario -->
-  <body>
-      <h1>Bienvenido a</h1> 
-      
-      <img src="media/pharmasphere.png">
+    <div class="login-wrapper">
+        <div class="brand-section">
+            <div class="logo-container">
+                <img src="media/pharmasphere_sinfondo.png" alt="Logo PharmaSphere">
+            </div>
+            <h1 class="brand-title">PharmaSphere</h1>
+            <p class="brand-subtitle">Sistema de Gestión Farmacéutica</p>
+        </div>
 
-      <h2>Introduzca sus credenciales</h2><br><br>
+        <div class="login-card">
+            <div class="card-header">
+                <h2 class="card-title">Iniciar Sesión</h2>
+                <p class="card-subtitle">Accede a tu cuenta</p>
+            </div>
 
-      <form action="" method="post">
-        <?php if (!empty($error)): ?>
-          <div class="error"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+            <?php if (!empty($error)): ?>
+                <div class="error-banner">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span><?= htmlspecialchars($error) ?></span>
+                </div>
+            <?php endif; ?>
 
-        <label for="user">Usuario</label>
-        <input type="text" id="user" name="user"
-          value="<?= htmlspecialchars($_POST['user'] ?? '') ?>" required><br><br>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="user">Usuario</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user input-icon-left"></i>
+                        <input type="text" id="user" name="user" class="form-input" 
+                               value="<?= htmlspecialchars($_POST['user'] ?? '') ?>" 
+                               placeholder="Ej. admin" required>
+                    </div>
+                </div>
 
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" value="" required autocomplete="current-password">
-        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i><br><br>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock input-icon-left"></i>
+                        <input type="password" id="password" name="password" class="form-input" 
+                               placeholder="••••••••" required>
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
 
-        <button type="submit">Iniciar sesión</button>
-    </form>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
 
         <!-- Script para ver/ocultar contraseña -->
       <script> 
@@ -89,6 +113,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         togglePassword.classList.toggle('fa-eye-slash');
       });
     </script>
-
-  </body>
+</body>
 </html>

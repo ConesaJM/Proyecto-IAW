@@ -12,7 +12,6 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
-    echo "Conexión admin OK<br>";
 } catch (PDOException $e) {
     die("Error de conexión BD (admin): " . $e->getMessage());
 }
