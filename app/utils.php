@@ -181,7 +181,7 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 --color-fondo: #222; --color-borde: #555; --color-texto: #eee;
             }
             body.tema-oscuro table { background-color: #333; }
-            body.tema-oscuro th { background-color: #444; }
+            body.tema-oscuro th { background-color: #7ecd6a; }
             body.tema-oscuro input, body.tema-oscuro select { 
                 background-color: #555; color: #eee; border-color: #777; 
             }
