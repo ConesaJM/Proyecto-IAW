@@ -139,10 +139,11 @@ $total_pages = ($total > 0 && $limit > 0)
                 
                     <a href="items_form.php?ID=<?php echo h($p['ID']); ?>" class="btn-edit">Editar</a>
                     &nbsp;|&nbsp;
-                    <form class='inline' method='' action='items_delete.php' onsubmit='return confirm("¿Estás seguro de que quieres borrar este producto?");'>
-                        <?php csrf_input(); ?> <input type='hidden' name='ID' value='<?php echo h($p['ID']); ?>'>
-                        <button class='danger' type='submit'>Borrar</button>
-                    </form>
+                    <a href="items_delete.php?ID=<?php echo h($p['ID']); ?>" 
+                       class="btn-delete"
+                       onclick="return confirm('¿Estás seguro de que quieres iniciar el borrado de este producto?');">
+                       Borrar
+                    </a>
 
                 <?php else: ?>
                 

@@ -343,6 +343,25 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 transform: scale(0.97); /* Ligeramente más pequeño */
                 filter: brightness(0.9); /* Ligeramente más oscuro */
             }
+            a.btn-delete {
+              display: inline-block;
+              padding: 4px 8px;
+              font-size: 0.9rem;
+              font-weight: 500;
+              color: white;
+              background-color: var(--color-peligro); /* Rojo */
+              border-radius: var(--radio-borde);
+              text-decoration: none;
+              transition: background-color 0.3s ease, transform 0.1s ease;
+            }
+            a.btn-delete:hover {
+              background-color: var(--color-peligro-hover);
+              color: white;
+              text-decoration: none;
+            }
+            a.btn-delete:active {
+                transform: scale(0.97);
+            }
             button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease, transform 0.2s ease; }
             button:hover { background-color: var(--color-primario-hover); }
             button.danger { background-color: var(--color-peligro); padding: 4px 8px; font-size: 0.9rem; }
