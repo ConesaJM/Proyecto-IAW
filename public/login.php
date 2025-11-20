@@ -106,6 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
                 </button>
             </form>
+            <br>
+            <a href="registro.php" style="display:block; margin-top:10px; text-align: center;">Crear cuenta</a>
         </div>
     </div>
 
