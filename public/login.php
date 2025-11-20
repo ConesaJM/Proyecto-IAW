@@ -12,11 +12,14 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $error = '';
+$last_user = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['user'] ?? '');
     $password = trim($_POST['password'] ?? '');
     
+    $last_user = $user;
+
     if ($user === '' || $password === '') {
         $error = 'Por favor, rellene todos los campos.';
     } else {
