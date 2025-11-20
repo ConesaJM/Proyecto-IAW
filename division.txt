@@ -11,6 +11,7 @@ javi
 -logout ----------> OK
 -index ----------> OK
 -item_list ----------> OK
+-registro
 
 ale
 
