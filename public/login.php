@@ -23,7 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $u = buscarUsuarioPorNombre($pdo, $user);
       
         // validar contraseña
-        if ($u && (
+        if ($u && 
+            $user === $u['NOMBRE'] &&
+        (
             password_verify($password, $u['CONTRASENHIA']) || 
             $password === $u['CONTRASENHIA']                  
         )) {
