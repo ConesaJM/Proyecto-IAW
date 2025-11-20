@@ -5,6 +5,11 @@ require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/pdo.php';
 require_once __DIR__ . '/../app/utils.php';
 
+//Si el usuario ya hizo login, redirige a index
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit;
+}
 
 $error = '';
 
