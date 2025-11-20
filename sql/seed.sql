@@ -104,8 +104,8 @@ INSERT INTO PROVEEDOR
 ('Milagrito', 'Juan de Dios', '+34 611 111 411', 'diosmilagroso@milagrito.com', 'Maria de la Ó 27, Nave 3, Madrid'),
 ('XuxesPro', 'Armando Puerta', '+34 610 987 654', 'apu@xuxespro.com', 'Av. de la Innovación 45, Barcelona'),
 ('Curabien', 'Roberto Garcia', '+34 600 555 888', 'Robien@curabien.es', 'Calle del Comercio 12, Valencia'),
-('ShampúNántene', 'Ana Vaquerizo', '+34 763 222 122', 'vaquerizate@shampunantene.com', 'Campoamor km 4, Sevilla');
-('MenosxMenos', 'Xi jinping Geronimo', 'jipitin@menosxmenos', 'Paseo de la flor 4, Girona') 
+('ShampúNántene', 'Ana Vaquerizo', '+34 763 222 122', 'vaquerizate@shampunantene.com', 'Campoamor km 4, Sevilla'),
+('MenosxMenos', 'Xi jinping Geronimo', '+34 546 564 546', 'jipitin@menosxmenos', 'Paseo de la flor 4, Girona');
 
 
 -- ---------------------------------------------------------------
