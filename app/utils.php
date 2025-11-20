@@ -265,7 +265,23 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             color: white; 
             }
             .topnav-right { text-align: right; font-size: 0.9rem; }
-            .topnav-right a { color: var(--color-peligro); }
+            /* 1. Regla general para enlaces a la derecha (Preferencias, Usuario...) */
+            .topnav-right a { 
+                color: var(--color-texto); /* Color normal del texto (negro/gris) */
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+            .topnav-right a:hover {
+                color: var(--color-primario); /* Azul al pasar el ratón */
+            }
+
+            /* 2. Regla ESPECÍFICA para Logout (Mantiene el rojo solo aquí) */
+            .topnav-right a.logout-link { 
+                color: var(--color-peligro); 
+            }
+            .topnav-right a.logout-link:hover {
+                color: var(--color-peligro-hover);
+            }
             .topnav i[class*=fa-] {
                 font-size: 1.80em;
                 vertical-align: middle; 
@@ -539,7 +555,6 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
             echo "<a href='user_form.php'>Crear Usuario</a>"; // Nuevo enlace para crear usuarios, para el futuro implementar o reconsiderar.
             echo "<a href='items_delete.php?action=auditoria'>Auditoría</a>"; // Seccion auditoria creada
         }
-        echo "<a href='preferencias.php'>Preferencias</a>";
     }
     echo "</div>";
 
@@ -548,7 +563,7 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
     if ($is_logged_in) {
         $nombre_usuario = h($_SESSION['user_nombre_usuario'] ?? 'Usuario');
     // Muestra el nombre y el icono de usuario
-    echo "<span><strong>" . $nombre_usuario . "</strong> <i class=\"fa-solid fa-circle-user fa-xl\"></i></span>"; 
+    echo "<span><strong>" . $nombre_usuario . "</strong> <a href='preferencias.php'><i class=\"fa-solid fa-circle-user fa-xl\"></i></a></span>"; 
     
     echo "&nbsp; <a href='logout.php' class='logout-link'><i class=\"fa-solid fa-right-from-bracket fa-xl\"></i></a>";
     } else {
