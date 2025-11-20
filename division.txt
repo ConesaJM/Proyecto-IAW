@@ -7,8 +7,9 @@ mark
 -item_show
 
 javi
--index ----------> OK
+-login ----------> OK
 -logout ----------> OK
+-index ----------> OK
 -item_list ----------> OK
 
 ale
