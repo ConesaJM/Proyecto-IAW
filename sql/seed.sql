@@ -95,3 +95,44 @@ INSERT INTO CARRITO (ID_USUARIO, ID_PRODUCTO, TOTAL_COMPRA) VALUES
 (3, 12, 11.50); 
 
 
+-- -----------------------------------------------------------------
+-- INSERTAR PROVEEDOR
+-- -----------------------------------------------------------------
+INSERT INTO PROVEEDOR
+ (NOMBRE, CONTACTO_NOMBRE, TELEFONO, EMAIL, DIRECCION) 
+ VALUES
+('Milagrito', 'Juan de Dios', '+34 611 111 411', 'diosmilagroso@milagrito.com', 'Maria de la Ó 27, Nave 3, Madrid'),
+('XuxesPro', 'Armando Puerta', '+34 610 987 654', 'apu@xuxespro.com', 'Av. de la Innovación 45, Barcelona'),
+('Curabien', 'Roberto Garcia', '+34 600 555 888', 'Robien@curabien.es', 'Calle del Comercio 12, Valencia'),
+('ShampúNántene', 'Ana Vaquerizo', '+34 763 222 122', 'vaquerizate@shampunantene.com', 'Campoamor km 4, Sevilla');
+('MenosxMenos', 'Xi jinping Geronimo', '') 
+
+
+-- ---------------------------------------------------------------
+-- INSERTAR PRODUCTO_PROVEEDOR
+-- ---------------------------------------------------------------
+
+INSERT INTO PRODUCTO_PROVEEDOR 
+(ID_PRODUCTO, ID_PROVEEDOR, PRECIO_COMPRA, FECHA_ULTIMA_COMPRA) 
+VALUES
+
+(1, 1, 3.50, '2023-10-01'),  
+(2, 1, 1.80, '2023-10-05'), 
+(3, 1, 3.50, '2023-10-10'),  
+(4, 1, 5.00, '2023-09-20'), 
+(5, 1, 7.50, '2023-09-25'),  
+(6, 3, 4.00, '2023-11-01'),  
+(7, 3, 5.50, '2023-11-02'),  
+(8, 3, 9.00, '2023-08-15'),  
+(16, 3, 3.00, '2023-11-10'), 
+(19, 3, 12.00, '2023-10-30'), 
+(9, 2, 6.00, '2023-09-15'),  
+(10, 2, 7.00, '2023-09-18'), 
+(11, 2, 8.50, '2023-09-20'), 
+(12, 2, 14.00, '2023-10-05'), 
+(33, 2, 18.00, '2023-10-12'), 
+(23, 4, 15.00, '2023-07-20'), 
+(24, 4, 2.50, '2023-10-01'), 
+(34, 4, 28.00, '2023-06-15'), 
+(45, 4, 120.00, '2023-05-10'),
+(55, 4, 50.00, '2023-08-22');
