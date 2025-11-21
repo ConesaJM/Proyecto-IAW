@@ -10,6 +10,43 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
+$error = '';
+$msg   = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recogemos lo que ha escrito el usuario
+    $nombre   = trim($_POST['nombre'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    // Comprobar campos vacíos
+    if ($nombre === '' || $password === '') {
+        $error = 'Por favor, rellene todos los campos.';
+    } else {
+        // Comprobar si ya existe un usuario con ese nombre
+        $stmt = $pdo->prepare("SELECT ID FROM USUARIO WHERE NOMBRE = ?");
+        $stmt->execute([$nombre]);
+        $existe = $stmt->fetch();
+
+        if ($existe) {
+            $error = 'Ese nombre de usuario ya existe.';
+        } else {
+            // Guardar contraseña cifrada en la BD
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = $pdo->prepare(
+                "INSERT INTO USUARIO (NOMBRE, CONTRASENHIA) VALUES (?, ?)"
+            );
+            $stmt->execute([$nombre, $hash]);
+
+            // Mensaje de éxito
+            $msg = 'Usuario creado correctamente. Ya puede iniciar sesión.';
+
+            // Opcional: vaciar los campos del formulario
+            $nombre = '';
+        }
+    }
+}
+
 ?>
 
 
