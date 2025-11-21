@@ -41,8 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Mensaje de éxito
             $msg = 'Usuario creado correctamente. Ya puede iniciar sesión.';
 
-            // Opcional: vaciar los campos del formulario
-            $nombre = '';
+            // Después de insertar
+            $stmt->execute([$nombre, $hash]);
+
+            header('Location: login.php?registro=ok');
+            exit;
         }
     }
 }
