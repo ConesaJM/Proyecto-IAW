@@ -67,57 +67,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <div class="login-wrapper">
+        <!-- Zona del logo y título, igual que en el login -->
         <div class="brand-section">
             <div class="logo-container">
                 <img src="media/pharmasphere_sinfondo.png" alt="Logo PharmaSphere">
             </div>
             <h1 class="brand-title">PharmaSphere</h1>
-            <p class="brand-subtitle">Sistema de Gestión Farmacéutica</p><br><br>
-        <div class="form-section">
-             <h2>Crear cuenta</h2>
+            <p class="brand-subtitle">Sistema de Gestión Farmacéutica</p>
+        </div>
 
-             <?php if ($error): ?>
-                 <div class="error"><?= h($error) ?></div>
+        <!-- Tarjeta del formulario (usa .login-card) -->
+        <div class="login-card">
+            <div class="card-header">
+                <h2 class="card-title">Crear cuenta</h2>
+                <p class="card-subtitle">Regístrese para acceder al panel</p>
+            </div>
+
+            <!-- Mensajes de error / éxito -->
+            <?php if ($error): ?>
+                <div class="error-banner">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span><?= h($error) ?></span>
+                </div>
             <?php endif; ?>
 
             <?php if ($msg): ?>
-                <div class="ok"><?= h($msg) ?></div>
+                <div class="error-banner" style="background:#dcfce7;border-color:#bbf7d0;color:#166534;">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span><?= h($msg) ?></span>
+                </div>
             <?php endif; ?>
 
             <form method="post">
-                <label for="nombre">Nombre de usuario</label><br>
-                <input type="text" id="nombre" name="nombre" value="<?= h($nombre ?? '') ?>"><br><br>
-
-                <label for="password">Contraseña</label><br>
-                <div style="position:relative; display:inline-block;">
-                    <input type="password" id="password" name="password">
-                    <i class="fa-solid fa-eye" id="togglePassword"
-                       style="position:absolute; right:8px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
+                <!-- Nombre de usuario -->
+                <div class="form-group">
+                    <label for="nombre">Nombre de usuario</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user input-icon-left"></i>
+                        <input type="text" id="nombre" name="nombre" class="form-input" value="<?= h($nombre ?? '') ?>">
+                    </div>
                 </div>
-                <br><br>
 
-                <button type="submit">Crear usuario</button>
+                <!-- Contraseña -->
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock input-icon-left"></i>
+                        <input type="password" id="password" name="password" class="form-input">
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <!-- Botón crear usuario -->
+                <button type="submit" class="btn-submit">
+                    <span>Crear usuario</span>
+                </button>
             </form>
 
-            <br>
-            <a href="login.php">Volver al login</a>
+            <p style="margin-top:1rem; font-size:0.9rem; text-align:center;">
+                ¿Ya tiene cuenta?
+                <a href="login.php">Iniciar sesión</a>
+            </p>
         </div>
-
     </div>
 
-        <!-- Script para ver/ocultar contraseña -->
-      <script> 
-      const togglePassword = document.getElementById('togglePassword');
-      const passwordInput = document.getElementById('password');
+    <!-- Script ver/ocultar contraseña -->
+    <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput  = document.getElementById('password');
 
-      togglePassword.addEventListener('click', () => {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        
-        // Cambia el icono
-        togglePassword.classList.toggle('fa-eye');
-        togglePassword.classList.toggle('fa-eye-slash');
-      });
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password'
+                ? 'text'
+                : 'password';
+            passwordInput.setAttribute('type', type);
+
+            togglePassword.classList.toggle('fa-eye');
+            togglePassword.classList.toggle('fa-eye-slash');
+        });
+    }
     </script>
 </body>
 </html>
