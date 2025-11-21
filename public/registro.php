@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>harmaSphere - Registro</title>
+    <title>PharmaSphere - Registro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -69,15 +69,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="media/pharmasphere_sinfondo.png" alt="Logo PharmaSphere">
             </div>
             <h1 class="brand-title">PharmaSphere</h1>
-            <p class="brand-subtitle">Sistema de Gestión Farmacéutica</p>
-        </div>
+            <p class="brand-subtitle">Sistema de Gestión Farmacéutica</p><br><br>
+        <div class="form-section">
+             <h2>Crear cuenta</h2>
 
-         <div class="form-section">
-            <h2>Crear cuenta</h2>
+             <?php if ($error): ?>
+                 <div class="error"><?= h($error) ?></div>
+            <?php endif; ?>
+
+            <?php if ($msg): ?>
+                <div class="ok"><?= h($msg) ?></div>
+            <?php endif; ?>
 
             <form method="post">
                 <label for="nombre">Nombre de usuario</label><br>
-                <input type="text" id="nombre" name="nombre"><br><br>
+                <input type="text" id="nombre" name="nombre" value="<?= h($nombre ?? '') ?>"><br><br>
 
                 <label for="password">Contraseña</label><br>
                 <div style="position:relative; display:inline-block;">
