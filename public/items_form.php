@@ -16,7 +16,7 @@ $modo_edicion = false;
 $producto = [
     'ID' => null,
     'NOMBRE' => '',
-    'ACTIVO' => '',
+    'CATEGORIA' => '',
     'RECETA' => false,
     'PRECIO' => 0.0,
     'STOCK_DISPONIBLE' => 0,
@@ -55,7 +55,7 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
 
     $id = $_POST['ID'] ??  null;
     $nombre = trim($_POST['NOMBRE'] ?? '');
-    $activo = trim($_POST['ACTIVO'] ??'');
+    $categoria = trim($_POST['CATEGORIA'] ??'');
     $receta = isset($_POST['RECETA']);
     $precio = (float) ($_POST['PRECIO'] ?? 0.00);
     $stock = (int)($_POST['STOCK_DISPONIBLE'] ?? 0);
@@ -92,14 +92,14 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
             // MODO UPDATE 
             // ACTUALIZAR SI HAY ID
 
-                actualizarProducto($pdo, $id, $nombre, $activo, $receta, $precio, $stock, $marca_id); //
+                actualizarProducto($pdo, $id, $nombre, $categoriao, $receta, $precio, $stock, $marca_id); //
 
-            } else {
+            } else { 
 
             // MODO CREATE 
             // CREAR PRODUCTO SI NO HAY ID
 
-              crearProducto($pdo, $nombre, $activo, $receta, $precio, $stock, $marca_id);
+              crearProducto($pdo, $nombre, $categoria, $receta, $precio, $stock, $marca_id);
             }
 
             // RECARGA PAG (PRG)
@@ -121,7 +121,7 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
     $producto = [
         'ID' => $id,
         'NOMBRE' => $nombre,
-        'ACTIVO' => $activo,
+        'CATEGORIA' => $categoria,
         'RECETA' => $receta,
         'PRECIO' => $precio,
         'STOCK_DISPONIBLE' => $stock,
@@ -149,14 +149,15 @@ headerHtml($titulo_pagina);
     </p>
 
     <p>
-        <label>Categoría (Activo):</label>
-        <select name="ACTIVO">
+        <label>Categoría:</label>
+        <select name="CATEGORIA">
             <?php 
             // Lista de categorías de tu ENUM
-            $categorias = ['Medicamento', 'Antibiótico','Cuidado personal','Vitaminas','Otros'];
+            $categorias = ['Medicamento', 'Antibiótico','Cuidado personal', 
+    'Primeros auxilios', 'Nutricion', 'Vitaminas','Otros'];
             foreach ($categorias as $cat):
                 // Marcamos como 'selected' la categoría del producto
-                $selected = ($cat === $producto['ACTIVO']) ? 'selected' : '';
+                $selected = ($cat === $producto['CATEGORIA']) ? 'selected' : '';
                 echo "<option value='" . h($cat) . "' $selected>" . h($cat) . "</option>";
             endforeach;
             ?>

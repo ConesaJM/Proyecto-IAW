@@ -62,7 +62,6 @@ if ($accion === 'auditoria') {
 
     footerHtml(); //
     
-    // MUY IMPORTANTE: Detener la ejecución para no continuar con la lógica de borrado.
     exit; 
 }
 
@@ -250,10 +249,11 @@ endif;
         <select disabled>
             <?php
             //  ENUM
-            $categorias = ['Medicamento', 'Antibiótico','Cuidado personal','Vitaminas','Otros'];
+            $categorias = ['Medicamento', 'Antibiótico','Cuidado personal', 
+    'Primeros auxilios', 'Nutricion', 'Vitaminas','Otros'];
             foreach ($categorias as $cat):
-                // SELECCION ACTIVO
-                $selected = ($cat === $producto['ACTIVO']) ? 'selected' : '';
+                // SELECCION CATEGORIA
+                $selected = ($cat === $producto['CATEGORIA']) ? 'selected' : '';
                 echo "<option value='" . h($cat) . "' $selected>" . h($cat) . "</option>";
             endforeach;
             ?>

@@ -12,7 +12,7 @@ INSERT INTO MARCA (NOMBRE) VALUES
 -- INSERTAR PRODUCTO
 -- -----------------------------------------------------------------
 
-INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
+INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
 ('Aspirina', 'Medicamento', TRUE, 5.50, 100, 1),
 ('Paracetamol', 'Medicamento', TRUE, 3.20, 150, 1),
 ('Ibuprofeno', 'Medicamento', TRUE, 6.00, 120, 1),
@@ -81,7 +81,7 @@ INSERT INTO USUARIO (NOMBRE, CONTRASENHIA, ROL) VALUES
 -- ---------------------------------------------------------------
 -- INSERTAR CARRITO
 -- ---------------------------------------------------------------
-
+-- DATOS PRUEBA
 INSERT INTO CARRITO (ID_USUARIO, ID_PRODUCTO, TOTAL_COMPRA) VALUES
 (1, 1, 5.50),  
 (1, 3, 6.00),  

@@ -85,7 +85,7 @@ $total_pages = ($total > 0 && $limit > 0)
       <tr>
           <th>ID</th>
           <th>Nombre</th>
-          <th>Activo</th>
+          <th>Categoria</th>
           <th>Receta</th>
           <th>Precio</th>
           <th>Stock</th>
@@ -120,7 +120,7 @@ $total_pages = ($total > 0 && $limit > 0)
             <tr>
                 <td><?= h($p['ID']) ?></td>
                 <td><?= h($p['NOMBRE']) ?></td>
-                <td><?= h($p['ACTIVO']) ?></td>
+                <td><?= h($p['CATEGORIA']) ?></td>
                 <td><?= $p['RECETA'] ? 'Sí' : 'No' ?></td>
                 <td><?= h($p['PRECIO']) ?> €</td>
                 
@@ -180,10 +180,6 @@ $total_pages = ($total > 0 && $limit > 0)
 
 
 
-<?php
-// 5. CIERRE DE LA PÁGINA
-// Llamamos a la otra función para cerrar </body></html>
-// También dentro de utils.php
-// 
+<?php 
 footerHtml(); 
 ?>

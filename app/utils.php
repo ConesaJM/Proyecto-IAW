@@ -29,13 +29,13 @@ function crearUsuario(PDO $pdo, string $nombre_usuario, string $password_hash, s
 /* ========= 2. FUNCIONES DE PRODUCTO =========== */
 
 // Crea un nuevo producto 
-function crearProducto(PDO $pdo, string $nombre, string $activo, int $receta, float $precio, int $stock, int $marca_id): int {
+function crearProducto(PDO $pdo, string $nombre, string $categoria, int $receta, float $precio, int $stock, int $marca_id): int {
     // Tabla y columnas actualizadas
 
-        $sql = "INSERT INTO PRODUCTO (NOMBRE, ACTIVO, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) 
+        $sql = "INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) 
             VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nombre, $activo, $receta, $precio, $stock, $marca_id]);
+    $stmt->execute([$nombre, $categoria, $receta, $precio, $stock, $marca_id]);
     return (int)$pdo->lastInsertId();
 
     
@@ -77,17 +77,17 @@ function listarProductos(PDO $pdo, ?string $buscar = null, int $limit = 10, int 
 }
 
 // UPDATE: Para actualizar un producto ya existente
-function actualizarProducto(PDO $pdo, int $id, string $nombre, string $activo, int $receta, float $precio, int $stock, int $marca_id): bool {
+function actualizarProducto(PDO $pdo, int $id, string $nombre, string $categoria, int $receta, float $precio, int $stock, int $marca_id): bool {
     $sql = "UPDATE PRODUCTO SET 
                 NOMBRE = ?, 
-                ACTIVO = ?, 
+                CATEGORIA = ?, 
                 RECETA = ?, 
                 PRECIO = ?, 
                 STOCK_DISPONIBLE = ?, 
                 MARCA_ID = ? 
             WHERE ID = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nombre, $activo, $receta, $precio, $stock, $marca_id, $id]);
+    $stmt->execute([$nombre, $categoria, $receta, $precio, $stock, $marca_id, $id]);
     return $stmt->rowCount() > 0;
 }
 
