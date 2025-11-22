@@ -9,6 +9,10 @@ require_once __DIR__ . '/../app/csrf.php'; // (CSRF PROTECCION POR TOKEN)
 // 2. PROTECCIÓN DE LA PÁGINA 
 require_login(); // Un usuario debe estar logueado para guardar sus preferencias
 
+// Definimos un nombre de cookie unico para el usuario.
+// Ejemplo: Si el usuario es ID 5, la cookie se llamará 'user_theme_5'
+$cookie_name = 'user_theme_' . $_SESSION['user_id'];
+
 // 3. LÓGICA DE GUARDAR (POST)
 // Esto se ejecuta en el momento de que el usuario envía el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -20,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 3.2 Guardamos la cookie
     setcookie(
-        name: 'user_theme',       // Nombre de la cookie
+        name: $cookie_name,       // Nombre de la cookie
         value: $tema,              // Valor de la cookie, por defecto es 'claro'
         expires_or_options: time() + (60*60*24*30), // Expiración de la cookie (30 días)
         path: '/'                 // Path, disponible en toda la web
@@ -38,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Creamos una nueva variable donde almacenaremos el valor de la cookie
 // Para posteriormente, leer la cookie actual para saber qué opción marcar
-$tema_actual = $_COOKIE['user_theme'] ?? 'claro'; 
+$tema_actual = $_COOKIE[$cookie_name] ?? 'claro'; 
 
 // 5. MOSTRAR LA PAGINA A TRAVÉS DE FUNCION HTML DE UTILS.PHP:
 headerHtml(''); 

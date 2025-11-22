@@ -534,10 +534,16 @@ function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphe
                 animation: fadeIn 0.5s ease-out forwards;
             }
         </style>";
-    // 1. Leemos la cookie que guardamos en preferencias.php
-    $tema_cookie = $_COOKIE['user_theme'] ?? 'claro'; // 'claro' u 'oscuro'
+    // --- PREFERENCIAS BASADAS EN EL USUARIO ---
+    $tema_cookie = 'claro'; // Valor por defecto
 
-    // 2. Imprimimos el </head> y el <body> con preferencia del usuario
+    // Solo si hay usuario logueado, buscamos su cookie específica
+    if (isset($_SESSION['user_id'])) {
+        $nombre_cookie_usuario = 'user_theme_' . $_SESSION['user_id'];
+        $tema_cookie = $_COOKIE[$nombre_cookie_usuario] ?? 'claro';
+    }
+
+    // Imprimimos el body con la clase del tema
     echo "</head><body class='tema-" . h($tema_cookie) . "'>";
 
     // --- BARRA DE NAVEGACIÓN ---
