@@ -416,7 +416,11 @@ function headerHtml($title = 'Pharmasphere')
             }
 
             /* STOCKS */
-            .stock-low { color: var(--color-peligro); }
+            .stock-low { 
+                color: var(--color-peligro); 
+                /* Aplicamos la animación solo al stock bajo */
+                animation: pulse-low 1.5s infinite ease-in-out; 
+            }
             .stock-med { color: #fd7e14; }
             .stock-high { color: var(--color-secundario); }
 
@@ -425,6 +429,10 @@ function headerHtml($title = 'Pharmasphere')
                 background-color: var(--color-card); padding: 30px;
                 border-radius: var(--radio-borde); border: 1px solid var(--color-borde);
                 box-shadow: var(--sombra); max-width: 800px; margin: 0 auto;
+            }
+
+            form:not(.inline), .theme-card {
+                transition: all 0.3s ease-out;
             }
 
             /* --- TARJETA DE SELECCIÓN DE TEMA (Alineada a la Izquierda) --- */
@@ -607,6 +615,20 @@ function headerHtml($title = 'Pharmasphere')
                 transition: all 0.3s ease;
             }
 
+            .btn-edit, button, .theme-btn {
+                transition: all 0.2s ease-in-out; 
+            }
+
+            /* Estado al HACER CLICK (Hundimiento) */
+            .btn-edit:active, 
+            button:active, 
+            .nav-link:active,
+            .pagination a:active, 
+            .pagination strong:active {
+                transform: scale(0.95) !important; /* Se hace 5% más pequeño, simulando la presión */
+                filter: brightness(0.9);           /* Se oscurece ligeramente */
+            }
+
             .btn-edit:hover {
                 /* AL HOVER: El fondo se rellena con el color sólido */
                 background-color: var(--color-primario);
@@ -720,7 +742,14 @@ function headerHtml($title = 'Pharmasphere')
             @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
             .main-container { animation: fadeIn 0.5s ease-out; max-width: var(--ancho-max); margin: 0 auto; padding: 0 20px; width: 100%; }
             .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-borde); }
-          </style>";
+
+            /* --- ANIMACIÓN PARA STOCK BAJO (Urgencia) --- */
+            @keyframes pulse-low {
+                0% { transform: scale(0.9); opacity: 1; }
+                50% { transform: scale(1.2); opacity: 0.9; }
+                100% { transform: scale(0.9); opacity: 1; }
+            }
+        </style>";
 
     // Cookie de tema
     // 1. Tema
