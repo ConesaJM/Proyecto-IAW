@@ -92,7 +92,7 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST'){
             // MODO UPDATE 
             // ACTUALIZAR SI HAY ID
 
-                actualizarProducto($pdo, $id, $nombre, $categoriao, $receta, $precio, $stock, $marca_id); //
+                actualizarProducto($pdo, $id, $nombre, $categoria, $receta, $precio, $stock, $marca_id); //
 
             } else { 
 
