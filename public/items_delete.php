@@ -224,11 +224,11 @@ if (!empty($errores)):
 endif;
 ?>
 
-<div class='error' style="background-color: #fdd; border-color: var(--color-peligro);">
-    <h2><i class="fa-solid fa-triangle-exclamation"></i> ¡Atención!</h2>
+<div class="alert error">
+    <h2 style="margin-top: 0;"><i class="fa-solid fa-triangle-exclamation"></i> ¡Atención!</h2>
     <p>Estás a punto de borrar permanentemente el siguiente producto...
         <strong>¡¡Esta acción no se puede deshacer!!.</strong></p>
-    <p>¿Estás seguro de que quieres continuar?</p>
+    <p style="margin-bottom: 0;">¿Estás seguro de que quieres continuar?</p>
 </div>
 
 
@@ -295,13 +295,13 @@ endif;
         <textarea 
             id="motivo_borrado" 
             name="motivo_borrado" 
-            class="form-textarea" 
+            class="form-textarea input-danger" 
             placeholder="Explica brevemente por qué eliminas este producto..." 
             required></textarea>
     </p>
     <p>
-        <button type='submit' class="danger">Sí, Borrar Permanentemente</button>
-        <a href='items_list.php'>Cancelar</a>
+        <button type='submit' class="btn-danger">Sí, Borrar Permanentemente</button>
+        <a href='items_list.php' style="margin-left: 10px;">Cancelar</a>
     </p>
 </form>
 

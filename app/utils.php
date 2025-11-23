@@ -142,445 +142,641 @@ function h($str)
 }
 
 // Imprime el HTML, los estilos CSS y la navegación.
-function headerHtml($title = 'Pharmasphere') // Título actualizado a Pharmasphere
+function headerHtml($title = 'Pharmasphere') 
 {
-    // Lógica de sesión (auth.php)
     $is_logged_in = isset($_SESSION['user_id']);
-    // Comprobación de rol de administrador
     $is_admin = $is_logged_in && isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'Administrador';
+    $current_page = basename($_SERVER['SCRIPT_NAME']);
 
-    echo "<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'><title>" . h($title) . "</title>";
+    echo "<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'>";
+    echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
+    
+    // Fuentes e Iconos
     echo "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\"/>";
+    echo "<link href=\"https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">";
 
-    // CSS 
     echo "<style>
             :root {
                 --color-primario: #007BFF;
                 --color-primario-hover: #0056b3;
+                --color-secundario: #56ac47;
+                --color-secundario-hover: #438a36;
                 --color-peligro: #dc3545;
-                --color-peligro-hover: #a00;
-                --color-secundario: #56ac47ff; 
-                --color-secundario-hover: #438a36ff;
+                --color-peligro-hover: #b02a37;
                 --color-fondo: #f4f7f6;
-                --color-borde: #ccc;
-                --color-texto: #000000ff;
+                --color-card: #ffffff;
+                --color-borde: #e0e0e0;
+                --color-texto: #212529;
+                --color-texto-muted: #6c757d;
                 --ancho-max: 1200px;
-                --radio-borde: 5px;
+                --radio-borde: 12px;
+                --sombra: 0 4px 12px rgba(0, 0, 0, 0.05);
             }
+
+            /* --- MODO OSCURO (Verde Pharmasphere) --- */
+            body.tema-oscuro { 
+                --color-fondo: #121212;
+                --color-card: #1e1e1e;
+                --color-texto: #e0e0e0;
+                --color-texto-muted: #a0a0a0;
+                --color-borde: #333;
+                
+                /* AQUÍ EL CAMBIO: El color principal ahora es VERDE en modo oscuro */
+                --color-primario: #56ac47; 
+                --color-primario-hover: #438a36;
+                
+                /* El secundario (acciones positivas) se mantiene igual o se ajusta */
+                --color-secundario: #56ac47; 
+            }
+
             body { 
-                font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
-                max-width: var(--ancho-max); 
-                margin: 20px auto; 
-                line-height: 1.6;
+                font-family: 'Outfit', sans-serif; 
                 background-color: var(--color-fondo);
                 color: var(--color-texto);
-                padding: 0 15px;
-            }
-            /* --- MODO OSCURO (Verde) --- */
-            body.tema-oscuro { 
-                background-color: #222; color: #eee; 
-                --color-fondo: #222; 
-                --color-borde: #444; 
-                --color-texto: #eee;
-                /* Cambiamos el color primario a VERDE solo en modo oscuro */
-                --color-primario: #7ecd6a; 
-                --color-primario-hover: #5fb34b; /* Verde más oscuro para hover */
-            }
-            
-            body.tema-oscuro th { 
-                background-color: var(--color-primario-hover); /* Encabezado verde oscuro */
-                color: #fff;
-            }
-            
-            body.tema-oscuro .topnav-left a { 
-                color: var(--color-primario); 
-            }
-            
-            body.tema-oscuro .topnav-left a:hover {
-                background-color: var(--color-primario);
-                color: #222; /* Texto oscuro sobre verde para contraste */
-            }
-            
-            /* Ajustes de inputs en oscuro */
-            body.tema-oscuro input, body.tema-oscuro select, body.tema-oscuro textarea { 
-                background-color: #333; 
-                color: #eee; 
-                border-color: #555; 
-            }
-            body.tema-oscuro input:focus, body.tema-oscuro select:focus {
-                border-color: var(--color-primario);
-                box-shadow: 0 0 10px rgba(126, 205, 106, 0.4); /* Resplandor verde */
-            }
-            tbody tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-            body.tema-oscuro tbody tr:nth-child(even) {
-                background-color: #3f3f3fff; /* Un gris un poco más oscuro */
-            }
-            tbody tr {
-                transition: background-color 0.2s ease;
-            }
-            tbody tr:hover {
-                background-color: #d8ecff; /* Un azul muy claro */
-            }
-            body.tema-oscuro tbody tr:hover {
-                background-color: #505050; /* Un gris más claro */
-            }
-            table { 
-            width: 100%; 
-            margin-top: 1.5rem; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
-            border-spacing: 0;
-            border-radius: var(--radio-borde); /* Redondea las esquinas */
-            overflow: hidden; 
-            }
-            th, td { 
-            padding: 14px 16px; 
-            text-align: left; 
-            border-bottom: 1px solid var(--color-borde);
-            }
-            body.tema-oscuro th, body.tema-oscuro td {
-            border-bottom: 1px solid var(--color-borde);
-            }
-            th { 
-            background: var(--color-primario); 
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase; /* Estilo profesional */
-            font-size: 0.85em;
-            letter-spacing: 0.5px;
-            }
-            .topnav { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid var(--color-borde); margin-bottom: 20px; }
-            .topnav-left a { 
-            margin-right: 0.5rem; /* Reducimos el margen para compensar el padding */
-            text-decoration: none;
-            font-weight: 500;
-            color: var(--color-primario);
-            padding: 8px 12px;
-            border-radius: var(--radio-borde); 
-            transition: background-color 0.3s ease, color 0.3s ease; 
-            }
-            .topnav-left a:hover { 
-            background-color: var(--color-primario); 
-            color: white; 
-            }
-            .topnav-right { text-align: right; font-size: 0.9rem; }
-            /* 1. Regla general para enlaces a la derecha (Preferencias, Usuario...) */
-            .topnav-right a { 
-                color: var(--color-texto); /* Color normal del texto (negro/gris) */
-                text-decoration: none;
-                transition: color 0.3s ease;
-            }
-            .topnav-right a:hover {
-                color: var(--color-primario); /* Azul al pasar el ratón */
+                margin: 0;
+                padding-top: 80px;
+                min-height: 100vh;
+                display: flex; flex-direction: column;
             }
 
-            /* 2. Regla ESPECÍFICA para Logout (Mantiene el rojo solo aquí) */
-            .topnav-right a.logout-link { 
-                color: var(--color-peligro); 
+            /* --- TAMAÑO DE FUENTE --- */
+            body.fuente-grande {
+                font-size: 1.15rem; /* Aumenta el tamaño base un 15% */
             }
-            .topnav-right a.logout-link:hover {
-                color: var(--color-peligro-hover);
+            /* Ajuste para que los iconos no se desmadren */
+            body.fuente-grande i {
+                font-size: 1.1em; 
             }
-            .topnav i[class*=fa-] {
-                font-size: 1.80em;
-                vertical-align: middle; 
-                transition: transform 0.2s ease; 
+
+            /* 1. La clase general para la fuente grande */
+            body.fuente-grande {
+                font-size: 1.15rem; /* Aumenta el tamaño base un 15% */
             }
-            .topnav i[class*=fa-gear], 
-            .topnav i[class*=fa-right-from-bracket] {
-                margin-right: 6px; 
+
+            /* 2. Forzamos la escala de los enlaces de navegación y del texto del usuario */
+            body.fuente-grande .nav-link,
+            body.fuente-grande .nav-right strong {
+                /* Forzamos un tamaño basado en el nuevo font-size del body */
+                font-size: 1.15em !important; 
             }
-            .topnav i[class*=fa-circle-user] {
-                margin-left: 6px; 
+
+            /* 3. Aseguramos que los iconos también se vean grandes, pero controlados */
+            body.fuente-grande .nav-right i {
+                font-size: 1.4em !important; /* Subimos un poco el tamaño de los iconos (fa-xl) */
             }
-            /* --- Estilo para el Logo del Menú --- */
-            .topnav-logo img {
-                height: 40px; /* Tamaño del logo */
-                width: auto;
-                vertical-align: middle;
-                margin-right: 10px;
-                transition: transform 0.3s ease;
-            }
-            .topnav-logo:hover img {
-                transform: scale(1.1); /* Pequeño zoom al pasar el ratón */
-            }
-            /* Quitamos estilos de botón al logo para que se vea limpio */
-            .topnav-left a.topnav-logo {
-                padding: 0;
-                background-color: transparent !important;
-            }
-            a.logout-link {
-                color: var(--color-primario); 
-                text-decoration: none;
-                transition: background-color 0.3s ease;
-            }
-            a.logout-link:hover, a.logout-link:hover i {
-                color: var(--color-peligro); 
-                transform: scale(1.15);
-            }
-            a.btn-edit {
-              display: inline-block;
-              padding: 4px 8px;
-              font-size: 0.9rem;
-              font-weight: 500;
-              color: white;
-              background-color: var(--color-primario);
-              border-radius: var(--radio-borde);
-              text-decoration: none;
-              transition: background-color 0.3s ease, transform 0.2s ease;
-            }
-            a.btn-edit:hover {
-              background-color: var(--color-primario-hover);
-              text-decoration: none;
-              color: white;
-            }
-            a.btn-buy {
-              display: inline-block;
-              padding: 4px 8px;
-              font-size: 0.9rem;
-              font-weight: 500;
-              color: white;
-              background-color: var(--color-secundario); 
-              border-radius: var(--radio-borde);
-              text-decoration: none;
-              transition: background-color 0.3s ease, transform 0.2s ease;
-              animation: pulse 2s infinite;
-            }
-            a.btn-buy:hover {
-              background-color: var(--color-secundario-hover);
-              text-decoration: none;
-              color: white;
-            }
-            .topnav a:not(.logout-link):hover i, .topnav span i:hover {
-                transform: scale(1.15); 
-            }
-            form.inline { display:inline; margin:0; padding:0; }
-            .pagination a, .pagination strong {
-                padding: 6px 12px;
+            
+            a { text-decoration: none; transition: 0.2s; }
+            h1, h2, h3 { font-weight: 700; letter-spacing: -0.5px; margin-bottom: 1rem; }
+
+            /* --- BARRA DE BÚSQUEDA COMPACTA (Izquierda) --- */
+            /* Usamos 'form.search-form' para ganar prioridad sobre la regla general de formularios */
+            form.search-form {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                /* 1. FORZAR POSICIÓN A LA IZQUIERDA */
+                /* 'margin: 0' anula el 'margin: 0 auto' que lo centraba */
+                margin: 0 0 20px 0 !important; 
+                
+                /* 2. TAMAÑO CONTENIDO */
+                max-width: 500px !important;   /* Ancho máximo restringido */
+                width: 100%;
+
+                /* 3. ESTÉTICA MÁS FINA (Menos relleno) */
+                padding: 12px !important;      /* Mucho más fino que los 30px por defecto */
+                background-color: var(--color-card);
+                border-radius: var(--radio-borde);
                 border: 1px solid var(--color-borde);
-                border-radius: var(--radio-borde);
-                text-decoration: none;
-                margin-right: 5px;
+                box-shadow: var(--sombra);
             }
-            .pagination a {
-                color: var(--color-primario);
-                transition: background-color 0.2s ease, color 0.2s ease;
+
+            .search-input-group {
+                flex-grow: 1;
+                position: relative;
             }
-            .pagination a:hover {
-                background-color: var(--color-primario-hover);
-                color: white;
-                border-color: var(--color-primario-hover);
+
+            /* Estilos del input interno */
+            form.search-form input {
+                margin-bottom: 0 !important; 
+                height: 38px;             /* Altura compacta */
+                font-size: 0.95rem;
             }
-            .pagination strong {
-                background-color: var(--color-primario);
-                color: white;
-                border-color: var(--color-primario);
-                font-weight: 600;
+
+            /* Estilos del botón interno */
+            form.search-form button {
+                height: 38px;             /* Misma altura que el input */
+                padding: 0 20px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                white-space: nowrap;
             }
-            form p { margin-bottom: 15px; }
-            label { display: block; margin-bottom: 5px; font-weight: 500; }
-            input[type=text], input[type=number], input[type=password], select { width: 100%; padding: 8px 10px; border: 1px solid var(--color-borde); border-radius: var(--radio-borde); box-sizing: border-box; 
-                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            /* NAVBAR */
+            .navbar {
+                position: fixed; top: 0; left: 0; right: 0; height: 70px;
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid var(--color-borde);
+                display: flex; align-items: center; justify-content: space-between;
+                padding: 0 4%; z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.03);
             }
-            input[type=text]:focus, 
-            input[type=number]:focus, 
-            input[type=password]:focus, 
-            select:focus {
-                border-color: var(--color-primario);
-                box-shadow: 0 0 10px rgba(0,123,255, 0.6); /* Resplandor azul */
-                outline: none; /* Quita el borde feo por defecto */
+
+            /* --- LOGO PRINCIPAL --- */
+            .navbar-logo-img {
+                height: 58px;            /* Mucho más grande (casi llena la barra de 70px) */
+                width: auto;             /* Mantiene la proporción */
+                vertical-align: middle;
+                transition: transform 0.3s ease, filter 0.3s ease; /* Animación suave */
+                
+                /* Opcional: Una sombra suave para que se separe del fondo */
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
             }
-            button:active, 
-            a.btn-edit:active, 
-            a.btn-buy:active {
-                transform: scale(0.97); /* Ligeramente más pequeño */
-                filter: brightness(0.9); /* Ligeramente más oscuro */
+
+            .navbar-logo-img:hover {
+                transform: scale(1.1);   /* Efecto zoom al pasar el ratón */
+                filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); /* Sombra más fuerte */
             }
-            a.btn-delete {
-              display: inline-block;
-              padding: 4px 8px;
-              font-size: 0.9rem;
-              font-weight: 500;
-              color: white;
-              background-color: var(--color-peligro); /* Rojo */
-              border-radius: var(--radio-borde);
-              text-decoration: none;
-              transition: background-color 0.3s ease, transform 0.1s ease;
+
+            body.tema-oscuro .navbar { background: rgba(30, 30, 30, 0.9); }
+            .nav-left, .nav-right { display: flex; align-items: center; gap: 15px; }
+            /* --- ESTILOS GENERALES DE LOS ENLACES DEL MENÚ --- */
+            .nav-link {
+                color: var(--color-texto-muted); 
+                font-weight: 600; 
+                font-size: 1.10rem;
+                padding: 8px 16px; 
+                border-radius: 50px; 
+                
+                /* Transición suave para el tamaño (transform) y el color */
+                transition: all 0.2s ease; 
+                
+                /* Aseguramos que el icono y texto estén alineados */
+                display: inline-flex; 
+                align-items: center;
+                justify-content: center;
             }
-            a.btn-delete:hover {
-              background-color: var(--color-peligro-hover);
-              color: white;
-              text-decoration: none;
+
+            /* --- HOVER GENERAL (Escala + Color del Tema) --- */
+            .nav-link:hover { 
+                color: var(--color-primario); 
+                background-color: color-mix(in srgb, var(--color-primario), transparent 90%);
+                
+                /* AQUÍ EL EFECTO ZOOM QUE PEDÍAS: */
+                transform: scale(1.08); 
             }
-            a.btn-delete:active {
-                transform: scale(0.97);
+
+            /* --- ENLACE ACTIVO (El que indica dónde estás) --- */
+            .nav-link.active {
+                background-color: var(--color-primario); 
+                color: white !important;
+                box-shadow: 0 4px 10px color-mix(in srgb, var(--color-primario), transparent 60%);
             }
-            button { padding: 10px 15px; cursor: pointer; border: none; border-radius: var(--radio-borde); background-color: var(--color-primario); color: white; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease, transform 0.2s ease; }
-            button:hover { background-color: var(--color-primario-hover); }
-            button.danger { background-color: var(--color-peligro); padding: 4px 8px; font-size: 0.9rem; }
-            button.danger:hover { background-color: var(--color-peligro-hover); }
-            .error { color: var(--color-peligro); background-color: #fdd; border: 1px solid var(--color-peligro); padding: 10px; border-radius: var(--radio-borde); margin-bottom: 15px; }
-            /* --- Alertas de Feedback (con Iconos) --- */
-            .alert {
+            /* Al hacer hover sobre el activo, también hacemos zoom */
+            .nav-link.active:hover {
+                transform: scale(1.08);
+            }
+
+            a.nav-link[href='logout.php'] {
+                color: var(--color-peligro) !important;
+                
+                /* AJUSTE VISUAL: Al ser solo un icono, reducimos el padding lateral 
+                   para que el fondo al hacer hover sea más cuadrado/redondo y no un óvalo largo */
+                padding: 15px 8px; 
+            }
+
+            /* HOVER ESPECÍFICO PARA LOGOUT */
+            a.nav-link[href='logout.php']:hover {
+                /* Fondo ROJO: Ajustado a un tono suave (15% de opacidad) */
+                background-color: rgba(220, 53, 69, 0.15) !important;
+                
+                /* Icono rojo intenso */
+                color: var(--color-peligro) !important;
+                
+                /* ZOOM: Mantenemos el escalado, pero QUITAMOS la rotación */
+                transform: scale(1.15); 
+                
+                /* Opcional: Una sombra roja muy suave para darle profundidad */
+                box-shadow: 0 0 10px rgba(220, 53, 69, 0.2);
+            }
+            body.tema-oscuro .nav-link.active { 
+            color: #121212 !important; 
+            box-shadow: 0 4px 10px rgba(86, 172, 71, 0.3);
+            }
+
+            /* TABLAS */
+            table {
+                width: 100%; border-collapse: separate; border-spacing: 0;
+                background-color: var(--color-card); border-radius: var(--radio-borde);
+                overflow: hidden; margin-top: 20px; box-shadow: var(--sombra);
+                border: 1px solid var(--color-borde);
+            }
+            th {
+                background-color: var(--color-primario); /* Azul en Claro, Verde en Oscuro */
+                color: white;  /* Texto blanco para contrastar */
                 padding: 15px;
-                margin-bottom: 20px;
-                border-radius: var(--radio-borde);
-                font-weight: 500;
-                animation: fadeIn 0.5s ease-out forwards; /* Reutiliza tu anim. */
+                text-align: left;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+                letter-spacing: 0.5px;
+                border-bottom: none; /* Quitamos borde inferior porque ya tiene fondo */
+            }
+            td { padding: 15px; border-bottom: 1px solid var(--color-borde); vertical-align: middle; }
+            body.tema-oscuro tbody tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
+
+            /* ALERTAS (CORREGIDAS) */
+            .alert {
+                padding: 15px; margin: 20px auto; max-width: 800px; width: 90%;
+                border-radius: var(--radio-borde); font-weight: 500;
+                animation: fadeIn 0.5s ease-out; border: 1px solid transparent;
             }
             .alert.success {
-                color: #fff; 
-                background-color: var(--color-secundario); /* Tu verde principal */
-                border: 2px solid var(--color-secundario-hover); /* Borde más oscuro */
+                background-color: var(--color-secundario); color: white;
+                border-color: var(--color-secundario-hover);
             }
-            .alert.error {
-                color: var(--color-peligro);
-                background-color: #fdd;
-                border: 1px solid var(--color-peligro);
-            }
-            /* Iconos para las alertas */
             .alert.success::before {
-                font-family: 'Font Awesome 6 Free';
-                font-weight: 900;
-                content: '\f00c'; /* Icono: fa-check */
-                margin-right: 10px;
+                font-family: 'Font Awesome 6 Free'; font-weight: 900; content: '\\f00c'; margin-right: 10px;
             }
-            .alert.error::before {
-                font-family: 'Font Awesome 6 Free';
-                font-weight: 900;
-                content: '\f071'; /* Icono: fa-exclamation-triangle */
-                margin-right: 10px;
-            }
-            .stock-high { color: var(--color-secundario); font-weight: 600; } /* Verde (Alto) */
-            .stock-med  { color: #fd7e14; font-weight: 600; } /* Naranja (Medio) */
-            .stock-low  { color: var(--color-peligro); font-weight: 600; } /* Rojo (Bajo) */
-            
-            /* Círculo indicador */
-            .stock-indicator { margin-left: 15px; font-size: 0.8em; vertical-align: middle; }
 
-            /* --- Estilos para Textarea de Motivo --- */
-            .form-textarea {
-                width: 100%;
-                padding: 12px;
+            /* --- ESTILO DE ERROR (IMPORTANTE) --- */
+            /* Cubrimos tanto .alert.error como .error suelto por si acaso */
+            .alert.error, .error {
+                background-color: #f8d7da;
+                color: #842029; /* Rojo oscuro para modo claro */
+                border-color: #f5c6cb;
+            }
+            /* MODO OSCURO: Forzamos texto rojo brillante para que se lea */
+            body.tema-oscuro .alert.error, body.tema-oscuro .error {
+                background-color: rgba(220, 53, 69, 0.15) !important;
+                color: #ff6b6b !important;
+                border: 1px solid #ff6b6b !important;
+            }
+
+            /* STOCKS */
+            .stock-low { color: var(--color-peligro); }
+            .stock-med { color: #fd7e14; }
+            .stock-high { color: var(--color-secundario); }
+
+            /* FORMULARIOS */
+            form:not(.inline) {
+                background-color: var(--color-card); padding: 30px;
+                border-radius: var(--radio-borde); border: 1px solid var(--color-borde);
+                box-shadow: var(--sombra); max-width: 800px; margin: 0 auto;
+            }
+
+            /* --- TARJETA DE SELECCIÓN DE TEMA (Alineada a la Izquierda) --- */
+            .theme-card {
+                /* Caja contenedora */
+                background-color: var(--color-card);
                 border: 1px solid var(--color-borde);
                 border-radius: var(--radio-borde);
-                font-family: inherit;
-                font-size: 0.95rem;
-                resize: vertical; /* Permite redimensionar solo verticalmente */
-                transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-                background-color: #fff; 
-                color: var(--color-texto);
-                min-height: 80px;
+                box-shadow: var(--sombra);
+                
+                /* Tamaño y Posición */
+                max-width: 500px; /* Ancho limitado para que no sea gigante */
+                width: 100%;
+                margin: 0;        /* Alineado a la izquierda (quita el margin auto) */
+                padding: 30px;
             }
 
-            body.tema-oscuro .form-textarea {
-                background-color: #333; /* Gris oscuro */
-                border-color: #555;     /* Borde más sutil */
-                color: #eee;            /* Texto claro */
+            /* Contenedor flexible para los dos botones */
+            .theme-options {
+                display: flex;
+                gap: 15px; /* Espacio entre los botones */
+                margin-top: 15px;
+            }
+
+            /* Los Botones de Opción (Estilo visual) */
+            .theme-btn {
+                flex: 1; /* Ambos ocupan el mismo ancho */
+                display: flex;
+                flex-direction: column; /* Icono arriba, texto abajo */
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                border: 2px solid var(--color-borde);
+                border-radius: 12px;
+                background-color: var(--color-fondo);
+                color: var(--color-texto-muted);
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-weight: 600;
+            }
+
+            .theme-btn i {
+                font-size: 2rem; /* Icono grande */
+                margin-bottom: 10px;
+            }
+
+            /* Efecto Hover (Al pasar el ratón) */
+            .theme-btn:hover {
+                border-color: var(--color-primario);
+                color: var(--color-primario);
+                /* Fondo muy suave del color del tema */
+                background-color: color-mix(in srgb, var(--color-primario), transparent 95%);
+                transform: translateY(-2px);
+            }
+
+            /* ESTADO SELECCIONADO (Cómo se ve el activo) */
+            /* Cuando el input radio está marcado, cambiamos el estilo del div .theme-btn hermano */
+            input[type='radio']:checked + .theme-btn {
+                border-color: var(--color-primario);
+                background-color: color-mix(in srgb, var(--color-primario), transparent 90%);
+                color: var(--color-primario);
+                box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primario), transparent 80%);
+            }
+
+            /* Ocultamos los circulitos de radio nativos feos */
+            input[type='radio'] {
+                display: none; 
             }
             
-            body.tema-oscuro .form-textarea:focus {
-                border-color: var(--color-peligro); /* Mantiene el rojo al enfocar */
-                background-color: #3a3a3a; /* Un poco más claro al enfocar */
+            /* Ajuste del botón de guardar */
+            .btn-save-prefs {
+                margin-top: 25px;
+                width: 100%;
+                padding: 12px;
+                font-size: 1rem;
             }
             
-            .form-textarea:focus {
-                border-color: var(--color-peligro); /* Rojo al enfocar (porque es borrado) */
-                box-shadow: 0 0 8px rgba(220, 53, 69, 0.3); /* Resplandor rojo suave */
+            /* --- REGLA PARA ETIQUETAS (Estaba faltando) --- */
+            label {
+                display: block; /* Para que nombre, precio, etc. queden encima del input */
+                margin-bottom: 8px;
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+            input, select, textarea {
+                width: 100%; padding: 12px; margin-bottom: 20px; /* Añadido margen inferior */
+                border: 1px solid var(--color-borde); border-radius: 8px;
+                background: var(--color-fondo); color: var(--color-texto);
+                box-sizing: border-box; transition: 0.3s;
+            }
+            /* --- FOCUS EN INPUTS Y SELECTS --- */
+            input:focus, 
+            select:focus, 
+            textarea:focus {
+                /* 1. El borde toma el color fuerte del tema (Verde o Azul) */
+                border-color: var(--color-primario);
+                
+                /* 2. Quitamos el outline nativo del navegador */
+                outline: none;
+                
+                /* 3. AQUÍ EL ARREGLO: */
+                /* Antes tenías un azul fijo rgba(0,123,255...). */
+                /* Ahora usamos el color del tema diluido (85% transparente) para el resplandor */
+                box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primario), transparent 85%);
+            }
+            
+            /* --- FIX PARA CHECKBOX --- */
+            /* Clase especial para agrupar checkbox y texto horizontalmente */
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                background: rgba(0,0,0,0.02);
+                padding: 10px;
+                border-radius: 8px;
+            }
+            /* Hacemos que dentro de este grupo, el label no sea bloque */
+            .checkbox-group label {
+                display: inline-block;
+                margin-bottom: 0;
+                margin-right: 15px;
+                cursor: pointer;
+            }
+            .checkbox-group input[type=checkbox] {
+                width: 20px !important;
+                height: 20px;
+                margin: 0;
+                cursor: pointer;
+            }
+
+            input[type=checkbox] {
+                width: auto !important;   /* Ocupa solo su espacio real */
+                display: inline-block;    
+                vertical-align: middle;   /* Alineado al medio con el texto */
+                margin-left: 10px;        /* Separación con el texto */
+                margin-top: 17px;            
+                transform: scale(1.3);    /* Un poco más grande */
+                cursor: pointer;          /* Manita al pasar el ratón */
+                
+                /* TRUCO VISUAL: Ajuste fino para que quede centrado perfecto */
+                position: relative; 
+                top: -1px; 
+            }
+
+            /* --- ESTO QUITA EL BORDE AZUL AL HACER CLIC --- */
+            input[type=checkbox]:focus {
+                outline: none !important;      /* Quita la línea de contorno */
+                box-shadow: none !important;   /* Quita el resplandor azul */
+                border-color: var(--color-borde); /* Mantiene el borde gris suave */
+            }
+
+            /* Opcional: Asegurar que el label no fuerce saltos raros */
+            label {
+                vertical-align: middle;
+            }
+
+            /* BOTONES */
+            .btn-table {
+                padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+                display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent;
+            }
+            .btn-edit {
+                background-color: color-mix(in srgb, var(--color-primario), transparent 85%);
+                
+                /* 2. TEXTO: Color sólido del tema */
+                color: var(--color-primario);
+                
+                /* 3. Sin bordes */
+                border: none;
+                
+                /* Estructura */
+                padding: 6px 12px;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-edit:hover {
+                /* AL HOVER: El fondo se rellena con el color sólido */
+                background-color: var(--color-primario);
+                
+                /* El texto pasa a blanco para contrastar */
+                color: white;
+                
+                /* Efectos de brillo y zoom */
+                transform: scale(1.05);
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .btn-delete { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; transition: all 0.3s ease;}
+            .btn-delete:hover { background-color: #ef4444; color: white; transform: scale(1.05);}
+            .btn-buy { background: var(--color-secundario); color: white; padding: 6px 12px; border-radius: 8px; }
+            .btn-buy:hover { background: var(--color-secundario-hover); }
+            button[type='submit'] { 
+                padding: 12px 24px; background: var(--color-primario); color: white; 
+                border: none; border-radius: 8px; font-weight: 600; cursor: pointer; 
+            }
+            button[type='submit']:hover { background: var(--color-primario-hover); }
+
+            /* --- ESTILOS DE PELIGRO (Delete) --- */
+
+            /* 1. INPUT/TEXTAREA DE PELIGRO */
+            .input-danger {
+                border-color: var(--color-peligro) !important; /* Borde rojo suave siempre */
+            }
+            .input-danger:focus {
+                /* Borde rojo intenso al hacer clic */
+                border-color: var(--color-peligro) !important; 
+                /* Resplandor rojo (en vez de verde/azul) */
+                box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-peligro), transparent 85%) !important;
                 outline: none;
             }
 
-            /* Etiqueta destacada para el motivo */
-            .label-required {
+            /* 2. BOTÓN DE PELIGRO (Rojo Sólido) */
+            button.btn-danger {
+                background-color: var(--color-peligro) !important; /* Rojo base */
+                color: white !important;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
                 font-weight: 600;
-                color: var(--color-peligro); /* Texto rojo para indicar importancia */
-                margin-bottom: 8px;
-                display: block;
-            }
-            .label-required::after {
-                content: *;
-                color: var(--color-peligro);
-            }
-
-            /* --- Animación de Keyframes --- */
-            @keyframes fadeIn {
-                from { 
-                    opacity: 0; 
-                    transform: translateY(10px); /* Sube 10px */
-                }
-                to { 
-                    opacity: 1; 
-                    transform: translateY(0); 
-                }
-            }
-            @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
-                }
-                70% {
-                    transform: scale(1.05);
-                    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
-                }
-                100% {
-                    transform: scale(1);
-                    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
-                }
+                cursor: pointer;
+                transition: all 0.3s ease;
             }
             
-            /* Aplicamos la animación a los elementos principales */
-            h1, h2, p, table, form {
-                animation: fadeIn 0.5s ease-out forwards;
+            button.btn-danger:hover {
+                /* CAMBIO RADICAL: Mezclamos el rojo con un 40% de NEGRO puro */
+                /* Esto crea un granate muy profundo y serio */
+                background-color: color-mix(in srgb, var(--color-peligro), black 40%) !important;
+                
+                /* Quitamos el filtro de brillo porque el color ya es muy oscuro de por sí */
+                filter: none; 
+                
+                /* Mantenemos el zoom para el feedback táctil */
+                transform: scale(1.05);
+                cursor: pointer;
             }
-        </style>";
-    // --- PREFERENCIAS BASADAS EN EL USUARIO ---
-    $tema_cookie = 'claro'; // Valor por defecto
+            
+            /* --- PAGINACIÓN MODERNA --- */
+            .pagination {
+                display: flex;             /* Pone los números en fila */
+                align-items: center;       /* Centrado vertical */
+                justify-content: center;   /* Centrado horizontal en la página */
+                gap: 8px;                  /* Espacio entre botones */
+                margin-top: 30px;          /* Separación con la tabla */
+                margin-bottom: 20px;
+                flex-wrap: wrap;           /* Si hay muchas páginas, que bajen de línea */
+            }
 
-    // Solo si hay usuario logueado, buscamos su cookie específica
+            /* Estilo para los botones (enlaces y el activo) */
+            .pagination a, 
+            .pagination strong {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 40px;           /* Ancho mínimo para que sean cuadrados */
+                height: 40px;              /* Altura fija */
+                padding: 0 10px;
+                border-radius: 8px;        /* Bordes redondeados */
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: all 0.2s ease;
+                
+                /* Colores por defecto (Inactivos) */
+                background-color: var(--color-card);
+                border: 1px solid var(--color-borde);
+                color: var(--color-texto);
+            }
+
+            /* HOVER: Cuando pasas el ratón por un número */
+            .pagination a:hover {
+                border-color: var(--color-primario);
+                color: var(--color-primario);
+                background-color: color-mix(in srgb, var(--color-primario), transparent 90%);
+                transform: translateY(-2px); /* Pequeño salto hacia arriba */
+            }
+
+            /* ACTIVO: La página actual (strong) */
+            .pagination strong {
+                background-color: var(--color-primario); /* Color del tema (Azul/Verde) */
+                color: white;
+                border-color: var(--color-primario);
+                box-shadow: 0 4px 10px color-mix(in srgb, var(--color-primario), transparent 60%);
+            }
+
+            /* Animación */
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            .main-container { animation: fadeIn 0.5s ease-out; max-width: var(--ancho-max); margin: 0 auto; padding: 0 20px; width: 100%; }
+            .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--color-borde); }
+          </style>";
+
+    // Cookie de tema
+    // 1. Tema
+    $tema_cookie = 'claro';
+    // 2. Fuente
+    $fuente_cookie = 'normal';
+
     if (isset($_SESSION['user_id'])) {
-        $nombre_cookie_usuario = 'user_theme_' . $_SESSION['user_id'];
-        $tema_cookie = $_COOKIE[$nombre_cookie_usuario] ?? 'claro';
+        $nombre_cookie_tema = 'user_theme_' . $_SESSION['user_id'];
+        $tema_cookie = $_COOKIE[$nombre_cookie_tema] ?? 'claro';
+
+        $nombre_cookie_fuente = 'user_font_' . $_SESSION['user_id'];
+        $fuente_cookie = $_COOKIE[$nombre_cookie_fuente] ?? 'normal';
     }
 
-    // Imprimimos el body con la clase del tema
-    echo "</head><body class='tema-" . h($tema_cookie) . "'>";
+    // APLICAMOS AMBAS CLASES AL BODY
+    echo "</head><body class='tema-" . h($tema_cookie) . " fuente-" . h($fuente_cookie) . "'>";
 
-    // --- BARRA DE NAVEGACIÓN ---
-    echo "<div class='topnav'>";
-    
-    // Barra izquierda
-    echo "<div class='topnav-left'>";
+    // Parte izquierda del navbar
+    echo "<nav class='navbar'>
+            <div class='nav-left'>
+                <a href='index.php' style='margin-right: 20px;'>
+                    <img src='media/pharmasphere_sinfondo.png' alt='Logo' class='navbar-logo-img'>
+                </a>";
+                
     if ($is_logged_in) {
-        echo "<a href='index.php' class='topnav-logo'><img src='media/pharmasphere_sinfondo.png' alt='Logo'></a>";
-        echo "<a href='index.php'>Panel</a>";
-        echo "<a href='items_list.php'>Productos</a>"; 
+        echo "<a href='index.php' class='nav-link " . ($current_page == 'index.php' ? 'active' : '') . "'>Panel</a>";
+        echo "<a href='items_list.php' class='nav-link " . ($current_page == 'items_list.php' ? 'active' : '') . "'>Productos</a>";
         
         if ($is_admin) {
-            echo "<a href='items_form.php'>Nuevo producto</a>";
-            echo "<a href='user_form.php'>Crear Usuario</a>"; // Nuevo enlace para crear usuarios, para el futuro implementar o reconsiderar.
-            echo "<a href='items_delete.php?action=auditoria'>Auditoría</a>"; // Seccion auditoria creada
+            echo "<a href='items_form.php' class='nav-link " . ($current_page == 'items_form.php' ? 'active' : '') . "'>Nuevo</a>";
+            echo "<a href='user_form.php' class='nav-link " . ($current_page == 'user_form.php' ? 'active' : '') . "'>Usuarios</a>";
+            echo "<a href='items_delete.php?action=auditoria' class='nav-link " . ($current_page == 'items_delete.php' ? 'active' : '') . "'>Auditoría</a>";
         }
     }
     echo "</div>";
 
-    // Barra derecha
-    echo "<div class='topnav-right'>";
+    // Parte derecha del navbar
+    echo "<div class='nav-right'>";
     if ($is_logged_in) {
         $nombre_usuario = h($_SESSION['user_nombre_usuario'] ?? 'Usuario');
-    // Muestra el nombre y el icono de usuario
-    echo "<span><strong>" . $nombre_usuario . "</strong> <a href='preferencias.php'><i class=\"fa-solid fa-circle-user fa-xl\"></i></a></span>"; 
-    
-    echo "&nbsp; <a href='logout.php' class='logout-link'><i class=\"fa-solid fa-right-from-bracket fa-xl\"></i></a>";
+        // Usuario y Preferencias
+        echo "<a href='preferencias.php' class='nav-link' title='Configuración'><i class='fa-solid fa-circle-user fa-xl' style='margin-right:5px;'></i> <strong>$nombre_usuario</strong></a>";
+        // Logout
+        echo "<a href='logout.php' class='nav-link' style='color:var(--color-peligro);' title='Cerrar Sesión'><i class='fa-solid fa-right-from-bracket fa-xl'></i></a>";
     } else {
-        echo "<a href='login.php'>Login</a>";
+        echo "<a href='login.php' class='nav-link active'>Iniciar Sesión</a>";
     }
-    echo "</div>";
-    
-    echo "</div>";
-    echo "<h1>" . h($title) . "</h1>";
-}
+    echo "</div></nav>";
 
+    echo "<div class='main-container'>";
+
+    if ($title) {
+        echo "<h1>" . h($title) . "</h1>";
+    }
+}
 // Imprime el pie de página y cierra el HTML
 function footerHtml()
 {

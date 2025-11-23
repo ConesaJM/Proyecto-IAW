@@ -27,7 +27,7 @@ if (isset($_GET['exito'])) { // 1. Primero, comprueba si 'exito' existe
 // 3. MOSTRAR LA PÁGINA
 // Si el script llega aquí, el usuario SÍ está logueado.
 // Con la función headerHtml() mostramos el HTML creado dentro de utils.php
-headerHtml('Panel Principal - Pharmasphere');
+headerHtml('');
 ?>
 
 
@@ -68,15 +68,18 @@ $total_pages = ($total > 0 && $limit > 0)
 
 ?>
 
-    <h2>Listado de productos</h2>
+    <h1>Listado de productos</h2>
 
   <!-- Buscador -->
-<form method="get" style="margin-bottom:1rem;">
-  <label>Buscar por nombre:</label>
-  <input type="text" name="q" value="<?= h($q) ?>">
-  <br><br>
-  <button type="submit">Buscar</button>
-</form>
+<form method="get" class="search-form">
+      <div class="search-input-group">
+          <input type="text" name="q" value="<?= h($q) ?>" placeholder="Buscar producto por nombre...">
+      </div>
+      
+      <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i> Buscar
+      </button>
+  </form>
 
 
 <!-- Tabla productos -->
@@ -125,9 +128,9 @@ $total_pages = ($total > 0 && $limit > 0)
                 <td><?= h($p['PRECIO']) ?> €</td>
                 
                 <td>
-                    <span class="<?= $stockClass ?>">
-                        <i class="fa-solid <?= $stockIcon ?> stock-indicator"></i>
-                    </span>
+                    <i class="fa-solid fa-circle <?= $stockClass ?>" 
+                       title="Stock: <?= $stock ?>" 
+                       style="font-size: 1.2em; cursor: help; vertical-align: middle;"></i>
                 </td>
 
                 <td>
@@ -136,21 +139,28 @@ $total_pages = ($total > 0 && $limit > 0)
                 
                 <td>
                 <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
-                
-                    <a href="items_form.php?ID=<?php echo h($p['ID']); ?>" class="btn-edit">Editar</a>
-                    &nbsp;|&nbsp;
-                    <a href="items_delete.php?ID=<?php echo h($p['ID']); ?>" 
-                       class="btn-delete"
-                       onclick="return confirm('¿Estás seguro de que quieres iniciar el borrado de este producto?');">
-                       Borrar
-                    </a>
+                    
+                    <div class="action-buttons">
+                        <a href="items_form.php?ID=<?php echo h($p['ID']); ?>" class="btn-table btn-edit">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </a>
+
+                        <a href="items_delete.php?ID=<?php echo h($p['ID']); ?>" 
+                           class="btn-table btn-delete"
+                           onclick="return confirm('¿Estás seguro de que quieres iniciar el borrado de este producto?');">
+                           <i class="fa-solid fa-trash"></i> Borrar
+                        </a>
+                    </div>
 
                 <?php else: ?>
                 
-                    <a href="carrito_add.php?ID=<?php echo h($p['ID']); ?>" class="btn-buy">
-                        <i class="fa-solid fa-cart-plus fa-lg"></i> Añadir
-                    </a>
-                  <?php endif; ?>
+                    <div class="action-buttons">
+                        <a href="carrito_add.php?ID=<?php echo h($p['ID']); ?>" class="btn-table btn-buy">
+                            <i class="fa-solid fa-cart-plus"></i> Añadir
+                        </a>
+                    </div>
+
+                <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -160,19 +170,21 @@ $total_pages = ($total > 0 && $limit > 0)
 
 <!-- Paginación -->
 
-<div class="pagination" style="margin-top:1rem;">
+<div class="pagination">
     <?php
-    echo "Páginas: ";
-    for ($i = 1; $i <= $total_pages; $i++) {
-        $isCurrent = ($i === $page);
 
- 
+    for ($i = 1; $i <= $total_pages; $i++) {
+        // Mostramos la página actual
+        $isCurrent = ($i === $page);
+        
+        // Construimos el link
         $link = "items_list.php?page=$i&q=" . urlencode($q);
 
         if ($isCurrent) {
-            echo "<strong>[$i]</strong> ";
+            echo "<strong>$i</strong>"; 
         } else {
-            echo "<a href='$link'>$i</a> ";
+            // Otras páginas
+            echo "<a href='$link'>$i</a>";
         }
     }
     ?>

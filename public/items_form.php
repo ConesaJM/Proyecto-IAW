@@ -188,9 +188,9 @@ headerHtml($titulo_pagina);
     </p>
 
     <p>
-       <label>
-            <input type="checkbox" name="RECETA" value='' <?php if ($producto['RECETA']) echo 'checked'; ?>>
+        <label>
             ¿Necesita receta?
+            <input type="checkbox" name="RECETA" value='' <?php if ($producto['RECETA']) echo 'checked'; ?>>
         </label>
     </p>
 
