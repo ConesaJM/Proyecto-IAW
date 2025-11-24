@@ -1,13 +1,13 @@
 <?php
-// 1. INCLUIR LOS CEREBROS
-// No necesitamos pdo.php si no hacemos consultas SQL
+// 1. INCLUIR ARCHIVOS NECESARIOS
 require_once __DIR__ . '/../app/auth.php';
+require_once __DIR__ . '/../app/pdo.php';
 require_once __DIR__ . '/../app/utils.php';
-require_once __DIR__ . '/../app/csrf.php'; // (CSRF PROTECCION POR TOKEN)
+require_once __DIR__ . '/../app/csrf.php';
 
 require_login();
 
-// VALIDAR ID
+// 2. OBTENER ID DEL PRODUCTO
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($id <= 0) {
@@ -15,7 +15,7 @@ if ($id <= 0) {
     exit;
 }
 
-// DATOA PRODUCTO + MARCA
+// 3. BUSCAR PRODUCTO EN BD
 $sql = "SELECT P.*, M.NOMBRE AS MARCA_NOMBRE 
         FROM PRODUCTO P 
         LEFT JOIN MARCA M ON P.MARCA_ID = M.ID 
@@ -24,178 +24,82 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([$id]);
 $producto = $stmt->fetch();
 
-// SI PRODUCTO NO EXISTE, REDIRIGIR
 if (!$producto) {
-    headerHtml("Producto no encontrado");
-    echo "<div class='alert error'>El producto solicitado no existe o ha sido eliminado.</div>";
-    echo "<a href='items_list.php'>Volver al listado</a>";
+    headerHtml("Error");
+    echo "<div class='alert error'>Producto no encontrado.</div>";
+    echo "<a href='items_list.php'>Volver</a>";
     footerHtml();
     exit;
 }
 
+// 4. GENERAR LA DESCRIPCIÓN (TEXTO)
+// Como en seed.sql no hay campo descripción, lo construimos nosotros.
+$nombre = h($producto['NOMBRE']);
+$categoria = h($producto['CATEGORIA']);
+$marca = h($producto['MARCA_NOMBRE'] ?? 'Generico');
+$precio = number_format($producto['PRECIO'], 2);
+$stock = $producto['STOCK_DISPONIBLE'];
+$receta = $producto['RECETA'] ? "SÍ requiere receta médica para su venta." : "NO requiere receta médica, es de venta libre.";
 
-$is_admin = isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'Administrador';
+// Creamos el bloque de texto narrativo
+$texto_descripcion = "
+FICHA TÉCNICA DEL PRODUCTO
+--------------------------
+Producto: $nombre
+Marca: $marca
+Categoría: $categoria
 
-// LOGICA STOCK
-$stock_class = 'stock-high';
-$stock_text  = 'Alto';
-if ($producto['STOCK_DISPONIBLE'] < 20) {
-    $stock_class = 'stock-low';
-    $stock_text  = 'Bajo';
-} elseif ($producto['STOCK_DISPONIBLE'] < 50) {
-    $stock_class = 'stock-med';
-    $stock_text  = 'Medio';
-}
+Descripción Detallada:
+El artículo '$nombre' es un producto farmacéutico clasificado dentro de la categoría de $categoria. Es distribuido oficialmente por la marca $marca.
 
-// Inicio del HTML
-headerHtml("Detalle del Producto: " . $producto['NOMBRE']);
+Condiciones de Venta:
+Actualmente, este producto tiene un precio de mercado de $precio €. 
+Respecto a su regulación, este artículo $receta
+
+Disponibilidad:
+Contamos con $stock unidades disponibles en nuestros almacenes centrales.
+";
+
+// 5. MOSTRAR HTML
+headerHtml("Detalle de " . $nombre);
 ?>
 
-<div style="margin-bottom: 20px;">
-    <a href="items_list.php" class="btn-edit" style="background-color: #6c757d;">
-        <i class="fa-solid fa-arrow-left"></i> Volver al listado
+<div style="max-width: 800px; margin: 0 auto;">
+
+    <a href="items_list.php" class="btn-edit" style="margin-bottom: 20px; display:inline-block;">
+        <i class="fa-solid fa-arrow-left"></i> Volver
     </a>
-</div>
 
-<div class="product-card">
-    
-    <div class="card-header">
-        <h2>
-            <?php if ($producto['CATEGORIA'] == 'Medicamento' || $producto['CATEGORIA'] == 'Antibiótico'): ?>
-                <i class="fa-solid fa-pills" style="color: var(--color-primario);"></i>
-            <?php elseif ($producto['CATEGORIA'] == 'Vitaminas'): ?>
-                <i class="fa-solid fa-apple-whole" style="color: var(--color-secundario);"></i>
-            <?php else: ?>
-                <i class="fa-solid fa-box-open" style="color: #666;"></i>
-            <?php endif; ?>
-            
-            <?= h($producto['NOMBRE']) ?>
-        </h2>
-        <span class="badge-cat"><?= h($producto['CATEGORIA']) ?></span>
+    <h1><?= $nombre ?></h1>
+
+    <div class="form-group">
+        <label for="desc-box" style="font-size: 1.1rem; margin-bottom: 10px;">Información del producto:</label>
+        
+        <textarea id="desc-box" readonly style="
+            width: 100%;
+            height: 300px;
+            padding: 20px;
+            font-family: 'Courier New', monospace; /* Fuente tipo máquina de escribir */
+            font-size: 1rem;
+            line-height: 1.6;
+            border: 2px solid var(--color-borde);
+            border-radius: 8px;
+            background-color: #fff;
+            resize: none; /* Evita que se cambie el tamaño */
+            color: #333;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        "><?= h($texto_descripcion) ?></textarea>
     </div>
 
-    <div class="card-body">
-        <div class="detail-row">
-            <strong>Marca:</strong> 
-            <span><?= h($producto['MARCA_NOMBRE'] ?? 'Sin marca') ?></span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Precio:</strong> 
-            <span class="price-tag"><?= number_format($producto['PRECIO'], 2) ?> €</span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Requiere Receta:</strong>
-            <?php if ($producto['RECETA']): ?>
-                <span style="color: var(--color-peligro); font-weight: bold;">
-                    <i class="fa-solid fa-file-prescription"></i> SÍ
-                </span>
-            <?php else: ?>
-                <span style="color: var(--color-secundario); font-weight: bold;">NO</span>
-            <?php endif; ?>
-        </div>
-
-        <div class="detail-row">
-            <strong>Stock Disponible:</strong>
-            <span class="<?= $stock_class ?>">
-                <?= $producto['STOCK_DISPONIBLE'] ?> u. 
-                <i class="fa-solid fa-circle stock-indicator"></i> 
-                <small>(<?= $stock_text ?>)</small>
-            </span>
-        </div>
-
-        <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--color-borde);">
-
-        <div class="action-buttons">
-            <a href="#" class="btn-buy" style="padding: 10px 20px; font-size: 1rem;">
-                <i class="fa-solid fa-cart-shopping"></i> Añadir al carrito
+    <?php if ($_SESSION['user_rol'] != 'Administrador'): ?>
+        <div style="margin-top: 20px; text-align: right;">
+            <a href="carrito_add.php?ID=<?= $producto['ID'] ?>" class="btn-buy" style="font-size: 1.2rem; padding: 12px 24px;">
+                <i class="fa-solid fa-cart-plus"></i> Añadir al carrito (<?= $precio ?> €)
             </a>
-
-            <?php if ($is_admin): ?>
-                <div style="margin-top: 10px; display:inline-block; margin-left: 10px;">
-                    <a href="items_form.php?id=<?= $producto['ID'] ?>" class="btn-edit" style="padding: 10px 15px;">
-                        <i class="fa-solid fa-pen-to-square"></i> Editar
-                    </a>
-                    <a href="items_delete.php?id=<?= $producto['ID'] ?>" class="btn-delete" style="padding: 10px 15px;">
-                        <i class="fa-solid fa-trash"></i> Borrar
-                    </a>
-                </div>
-            <?php endif; ?>
         </div>
-    </div>
+    <?php endif; ?>
+
 </div>
-
-<style>
-    .product-card {
-        background-color: white;
-        border: 1px solid var(--color-borde);
-        border-radius: var(--radio-borde);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        max-width: 800px;
-        margin: 0 auto;
-        overflow: hidden;
-    }
-    
-    /* Soporte modo oscuro */
-    body.tema-oscuro .product-card {
-        background-color: #333;
-        border-color: #444;
-    }
-
-    .card-header {
-        background-color: var(--color-primario); /* Azul del tema */
-        color: white;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    /* En modo oscuro, el header se mantiene o se ajusta */
-    body.tema-oscuro .card-header {
-        background-color: var(--color-primario-hover);
-    }
-
-    .card-header h2 {
-        margin: 0;
-        font-size: 1.8rem;
-    }
-
-    .badge-cat {
-        background-color: rgba(255, 255, 255, 0.2);
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-size: 0.9rem;
-        border: 1px solid rgba(255,255,255,0.4);
-    }
-
-    .card-body {
-        padding: 30px;
-        font-size: 1.1rem;
-    }
-
-    .detail-row {
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-    }
-
-    .detail-row strong {
-        width: 180px;
-        color: #555;
-    }
-    
-    body.tema-oscuro .detail-row strong {
-        color: #bbb;
-    }
-
-    .price-tag {
-        font-size: 1.5rem;
-        color: var(--color-primario);
-        font-weight: bold;
-    }
-</style>
 
 <?php
 footerHtml();
