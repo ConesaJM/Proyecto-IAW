@@ -1,74 +1,79 @@
 
--- -----------------------------------------------------------------
--- INSERTAR MARCA
--- -----------------------------------------------------------------
-INSERT INTO MARCA (NOMBRE) VALUES
-('Medicinis forte'),
-('Vitaminic pro'),
-('Abiotic'),
-('Cuidate');
+-- --------------------------------------------------------
+-- PASO PREVIO: Insertar Marcas (Necesario por la Foreign Key)
+-- --------------------------------------------------------
+INSERT INTO MARCA (NOMBRE) VALUES 
+('Bayer'), ('Pfizer'), ('Cinfa'), ('Johnson & Johnson'), ('Nestlé Health'), 
+('Roche'), ('GSK'), ('Sanofi'), ('Nivea'), ('Isdin');
 
--- -----------------------------------------------------------------
--- INSERTAR PRODUCTO
--- -----------------------------------------------------------------
+-- --------------------------------------------------------
+-- INSERTS DE PRODUCTOS (50 Registros)
+-- --------------------------------------------------------
 
+-- 1. Medicamentos Generales (Sin Receta)
 INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
-('Aspirina', 'Medicamento', TRUE, 5.50, 100, 1),
-('Paracetamol', 'Medicamento', TRUE, 3.20, 150, 1),
-('Ibuprofeno', 'Medicamento', TRUE, 6.00, 120, 1),
-('Antibiótico Amoxicilina', 'Antibiótico', TRUE, 8.30, 80, 3),
-('Antibiótico Ciprofloxacino', 'Antibiótico', TRUE, 12.50, 60, 3),
-('Shampoo Anti Caspa', 'Cuidado personal', FALSE, 7.00, 200, 4),
-('Crema Hidratante', 'Cuidado personal', FALSE, 9.99, 250, 4),
-('Protector Solar', 'Cuidado personal', FALSE, 15.50, 90, 4),
-('Vitaminas A', 'Vitaminas', FALSE, 10.00, 300, 2),
-('Vitaminas C', 'Vitaminas', FALSE, 11.50, 400, 2),
-('Multivitamínico', 'Vitaminas', FALSE, 14.00, 110, 2),
-('Suplemento Omega 3', 'Vitaminas', FALSE, 22.00, 75, 2),
-('Vitamina D', 'Vitaminas', FALSE, 6.50, 50, 2),
-('Gel Antibacterial', 'Otros', FALSE, 4.00, 500, 4),
-('Alcohol en Gel', 'Otros', FALSE, 3.50, 450, 4),
-('Mascarilla Facial', 'Cuidado personal', FALSE, 5.50, 180, 4),
-('Cepillo de Dientes', 'Cuidado personal', FALSE, 2.99, 300, 4),
-('Pasta Dental', 'Cuidado personal', FALSE, 3.20, 350, 4),
-('Colonia Hombre', 'Cuidado personal', FALSE, 20.00, 150, 4),
-('Colonia Mujer', 'Cuidado personal', FALSE, 18.50, 140, 4),
-('Bálsamo Labial', 'Cuidado personal', FALSE, 2.80, 200, 4),
-('Banda elástica para ejercicios', 'Otros', FALSE, 12.00, 100, 4),
-('Termómetro digital', 'Otros', FALSE, 25.00, 60, 4),
-('Guantes de Látex', 'Otros', FALSE, 5.00, 500, 4),
-('Medicamento Antigripal', 'Medicamento', TRUE, 7.80, 110, 1),
-('Jarabe para la tos', 'Medicamento', TRUE, 9.90, 95, 1),
-('Parche Transdérmico', 'Medicamento', TRUE, 19.99, 85, 1),
-('Lentes de Sol', 'Otros', FALSE, 35.00, 45, 4),
-('Spray Nasal', 'Medicamento', TRUE, 8.00, 100, 1),
-('Manta Eléctrica', 'Otros', FALSE, 40.00, 25, 4),
-('Pastillas para la digestión', 'Medicamento', TRUE, 10.50, 200, 1),
-('Pomada para el dolor', 'Medicamento', TRUE, 13.00, 95, 1),
-('Crema para quemaduras', 'Medicamento', TRUE, 7.90, 120, 1),
-('Suplemento Proteína', 'Vitaminas', FALSE, 29.99, 60, 2),
-('Báscula Digital', 'Otros', FALSE, 45.00, 80, 4),
-('Desodorante', 'Cuidado personal', FALSE, 3.60, 220, 4),
-('Aceite Esencial', 'Cuidado personal', FALSE, 9.99, 140, 4),
-('Pañuelos de Papel', 'Otros', FALSE, 1.50, 500, 4),
-('Papel Higiénico', 'Otros', FALSE, 2.20, 1000, 4),
-('Enjuague Bucal', 'Cuidado personal', FALSE, 4.50, 180, 4),
-('Pasta Dental Sensible', 'Cuidado personal', FALSE, 4.20, 120, 4),
-('Toallitas Húmedas', 'Cuidado personal', FALSE, 2.90, 250, 4),
-('Crema Antiinflamatoria', 'Medicamento', TRUE, 14.50, 80, 1),
-('Jabón Líquido', 'Cuidado personal', FALSE, 5.80, 300, 4),
-('Cámara Termográfica', 'Otros', FALSE, 200.00, 10, 4),
-('Termómetro de Mercurio', 'Otros', FALSE, 8.00, 40, 4),
-('Cinta Métrica', 'Otros', FALSE, 1.99, 100, 4),
-('Spray Desinfectante', 'Otros', FALSE, 3.00, 400, 4),
-('Aceite de Oliva', 'Otros', FALSE, 7.50, 300, 4),
-('Gel para Quemaduras', 'Medicamento', TRUE, 12.90, 70, 1),
-('Vaselina', 'Cuidado personal', FALSE, 4.50, 150, 4),
-('Lentes de Contacto', 'Cuidado personal', FALSE, 25.00, 30, 4),
-('Jabón Antibacterial', 'Cuidado personal', FALSE, 2.60, 500, 4),
-('Báscula de Cocina', 'Otros', FALSE, 20.00, 50, 4),
-('Monitor de Presión Arterial', 'Otros', FALSE, 80.00, 20, 4);
+('Aspirina C Efervescente 10 comp', 'Medicamento', FALSE, 8.50, 100, 1),
+('Paracetamol 500mg 20 comp', 'Medicamento', FALSE, 2.50, 200, 3),
+('Ibuprofeno 400mg 20 comp', 'Medicamento', FALSE, 3.10, 180, 3),
+('Almax Forte 24 sobres', 'Medicamento', FALSE, 9.80, 50, 3),
+('Gaviscon Forte Suspensión', 'Medicamento', FALSE, 11.20, 45, 7),
+('Frenadol Complex 10 sobres', 'Medicamento', FALSE, 8.95, 120, 4),
+('Bisolvon Antitusivo Jarabe', 'Medicamento', FALSE, 7.40, 60, 1),
+('Dormidina 25mg 14 comp', 'Medicamento', FALSE, 6.50, 30, 3),
+('Thrombocid Pomada 60g', 'Medicamento', FALSE, 5.75, 40, 8),
+('Reflex Spray 130ml', 'Medicamento', FALSE, 12.30, 25, 7);
 
+-- 2. Antibióticos y Medicamentos con Receta
+INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
+('Amoxicilina 500mg 24 caps', 'Antibiótico', TRUE, 4.20, 80, 3),
+('Augmentine 875/125mg 30 sobres', 'Antibiótico', TRUE, 6.50, 60, 7),
+('Azitromicina 500mg 3 comp', 'Antibiótico', TRUE, 5.10, 40, 3),
+('Ciprofloxacino 500mg 10 comp', 'Antibiótico', TRUE, 3.90, 30, 2),
+('Monurol 3g 2 sobres', 'Antibiótico', TRUE, 9.10, 50, 5),
+('Nolotil Ampollas 5u', 'Medicamento', TRUE, 3.50, 90, 8),
+('Enantyum 25mg 20 comp', 'Medicamento', TRUE, 4.80, 100, 6),
+('Ventolin Inhalador 100mcg', 'Medicamento', TRUE, 5.60, 70, 7),
+('Orfidal 1mg 50 comp', 'Medicamento', TRUE, 2.80, 60, 2),
+('Lexatin 1.5mg 30 caps', 'Medicamento', TRUE, 3.20, 55, 6);
+
+-- 3. Cuidado Personal
+INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
+('Gel de Baño pH Neutro 750ml', 'Cuidado personal', FALSE, 4.50, 50, 9),
+('Champú Anticaída 400ml', 'Cuidado personal', FALSE, 15.90, 30, 10),
+('Desodorante Roll-On 24h', 'Cuidado personal', FALSE, 2.99, 80, 9),
+('Crema Hidratante Lata Azul', 'Cuidado personal', FALSE, 5.50, 65, 9),
+('Fotoprotector Fusion Water SPF50', 'Cuidado personal', FALSE, 24.95, 40, 10),
+('Pasta de Dientes Blanqueadora', 'Cuidado personal', FALSE, 3.80, 90, 7),
+('Enjuague Bucal Menta Fresca', 'Cuidado personal', FALSE, 6.20, 45, 4),
+('Bálsamo Labial Reparador', 'Cuidado personal', FALSE, 4.10, 100, 10),
+('Crema de Manos Reparadora', 'Cuidado personal', FALSE, 3.50, 60, 9),
+('Loción Corporal Aloe Vera', 'Cuidado personal', FALSE, 7.99, 35, 9);
+
+-- 4. Primeros Auxilios
+INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
+('Alcohol 96º 250ml', 'Primeros auxilios', FALSE, 1.50, 150, 3),
+('Agua Oxigenada 250ml', 'Primeros auxilios', FALSE, 1.20, 140, 3),
+('Povidona Yodada 50ml', 'Primeros auxilios', FALSE, 3.50, 80, 3),
+('Tiritas Resistentes al Agua 20u', 'Primeros auxilios', FALSE, 2.90, 200, 4),
+('Gasas Estériles 100u', 'Primeros auxilios', FALSE, 4.50, 90, 3),
+('Venda Elástica 5m x 5cm', 'Primeros auxilios', FALSE, 1.80, 60, 3),
+('Esparadrapo de Tela 5m', 'Primeros auxilios', FALSE, 2.10, 75, 3),
+('Termómetro Digital Rápido', 'Primeros auxilios', FALSE, 8.90, 40, 1),
+('Tijeras de Botiquín Acero', 'Primeros auxilios', FALSE, 5.50, 30, 3),
+('Guantes de Látex Caja 100u', 'Primeros auxilios', FALSE, 7.90, 50, 3);
+
+-- 5. Vitaminas y Nutrición
+INSERT INTO PRODUCTO (NOMBRE, CATEGORIA, RECETA, PRECIO, STOCK_DISPONIBLE, MARCA_ID) VALUES
+('Supradyn Activo 30 comp', 'Vitaminas', FALSE, 12.50, 40, 1),
+('Vitamina C 1000mg Efervescente', 'Vitaminas', FALSE, 6.90, 60, 3),
+('Multicentrum Mujer 30 comp', 'Vitaminas', FALSE, 14.20, 35, 2),
+('Magnesio Total 5 100 comp', 'Vitaminas', FALSE, 8.80, 50, 5),
+('Colágeno con Magnesio 300g', 'Vitaminas', FALSE, 16.50, 25, 5),
+('Leche Infantil Inicio 1 800g', 'Nutricion', FALSE, 18.90, 40, 5),
+('Papilla Cereales Sin Gluten', 'Nutricion', FALSE, 5.60, 50, 5),
+('Ensure NutriVigor Chocolate', 'Nutricion', FALSE, 19.90, 20, 8),
+('Batido Proteico Vainilla', 'Nutricion', FALSE, 2.50, 80, 5),
+('Pedialyte Suero Oral 500ml', 'Nutricion', FALSE, 4.90, 60, 8);
 -- -------------------------------------------------------------
 -- INSERTAR USUARIO
 -- -------------------------------------------------------------
