@@ -1,34 +1,27 @@
 <?php 
-
 // 1. INCLUIR LAS VALIDACIONES Y CONEXIONES A BD
-require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
-require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
-require_once __DIR__ . '/../app/style.php'; // (3º: Carga los estilos CSS)
-require_once __DIR__ . '/../app/utils.php'; // (4º: Carga nuestras funciones)
-require_once __DIR__ . '/../app/csrf.php'; // (5º: CSRF PROTECCION POR TOKEN)
-
+require_once __DIR__ . '/../app/auth.php'; 
+require_once __DIR__ . '/../app/pdo.php';   
+require_once __DIR__ . '/../app/style.php'; 
+require_once __DIR__ . '/../app/utils.php'; 
+require_once __DIR__ . '/../app/csrf.php'; 
 
 // SOLO EL ADMIN ACCEDE
 require_admin();
 
-
 // [INICIO] GESTOR DE ACCIÓN DE AUDITORÍA
-
-
-// Comprobar si se está pidiendo ver la auditoría
 $accion = filter_input(INPUT_GET, 'action');
 
 if ($accion === 'auditoria') {
     
     // FUNCION AUDITORIA
-    $auditorias = auditoria_list($pdo); //
+    $auditorias = auditoria_list($pdo);
 
     // VISTA AUDITORIA
     $titulo_pagina = "Registro de Auditoría";
-    headerHtml($titulo_pagina); //
+    headerHtml($titulo_pagina); 
     
     // TABLA
-
     echo "<table>";
     echo "<thead><tr><th>ID</th><th>Acción Registrada</th><th>Fecha</th><th>Motivo del Borrado</th></tr></thead>";
     echo "<tbody>";
@@ -42,34 +35,20 @@ if ($accion === 'auditoria') {
             echo "<td><strong>" . h($evento['NOMBRE']) . "</strong></td>"; 
             echo "<td>" . h($evento['FECHA']) . "</td>"; 
 
-            // [NUEVO] BLOQUE PARA MOSTRAR SÓLO EL MOTIVO
-     
-            
-            // SE DECODIFICA EL JSON
+            // BLOQUE PARA MOSTRAR SÓLO EL MOTIVO
             $detalle_array = json_decode($evento['DETALLE'], true);
-            
-            // EXTRAEMOS MOTIVOS
             $motivo = $detalle_array['AUDITORIA_MOTIVO'] ?? 'N/A';
 
-            // MOTIVO
-            echo "<td><small>" . h($motivo) . "</small></td>"; //
-            
-           
+            echo "<td><small>" . h($motivo) . "</small></td>"; 
             echo "</tr>";
         }
     }
-
-
     echo "</tbody></table>";
 
-    footerHtml(); //
-    
+    footerHtml(); 
     exit; 
 }
-
-
 // [FIN] GESTOR DE ACCIÓN DE AUDITORÍA
-
 
 
 // VARIABLES NECESARIAS 
@@ -82,11 +61,9 @@ $producto_id = $producto_id_get ?: $producto_id_post;
 // 2. LÓGICA DE BORRADO (POST)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_csrf(); // VERIFICAR TOKEN CSRF, SI FALLA SE DETIENE LA EJECUCIÓN
+    require_csrf(); // VERIFICAR TOKEN CSRF
 
-$simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
-
-
+    $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
 
     if ($producto_id_post) {
         
@@ -96,9 +73,7 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
         try {
 
             // BLOQUE PARA SIMULAR FALLO
-           
             if ($simular_fallo) {
-               
                 throw new Exception("¡FALLO SIMULADO! El borrado no se ejecutará.");
             }
 
@@ -106,7 +81,6 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
             $motivo_borrado = filter_input(INPUT_POST, 'motivo_borrado', FILTER_UNSAFE_RAW);
             
             // VALIDACION NO PUEDE ESTAR VACIO
- 
             if (empty(trim($motivo_borrado))) {
                 throw new Exception("Debe proporcionar un motivo para el borrado. La operación ha sido cancelada.");
             }
@@ -114,16 +88,11 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
             // RECUPERAR PRODUCTOS ANTES DE BORRARSE
             $producto_para_auditoria = leerProductoPorId($pdo, $producto_id_post); 
 
-
             if (!$producto_para_auditoria) {
                  throw new Exception("El producto (ID: $producto_id_post) no existe o ya fue borrado.");
             }
-
           
             // MODIFICACIÓN DEL DETALLE DE AUDITORÍA
-
-            
-            // NOMBRE USUARIO OBTENIDO
             $nombre_usuario_auditoria = $_SESSION['user_nombre_usuario'] ?? 'UsuarioDesconocido';
 
             // SE AÑADE MOTIVO + USUARIO
@@ -143,40 +112,124 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
             // BORRAR PRODUCTO
             borrarProducto($pdo, $producto_id_post);
             
-            //  REGISTRAR EN AUDITORÍA
-        
-            registrarAuditoria($pdo, $nombre_auditoria, $detalle_auditoria); //
+            // REGISTRAR EN AUDITORÍA
+            registrarAuditoria($pdo, $nombre_auditoria, $detalle_auditoria); 
 
             // CONFIRMAMOS (COMMIT) 
             $pdo->commit(); 
             
-            $titulo_pagina = "Producto Borrado";
-            headerHtml($titulo_pagina); 
+            // 1. Redirección automática nativa del navegador (5 segundos)
+            echo '<meta http-equiv="refresh" content="5;url=items_list.php?exito=borrado">';
+            
+            headerHtml("Producto Borrado"); 
+            ?>
 
-            // ESPERA 10 SEGUNDOS PARA BORRAR
-            echo '<meta http-equiv="refresh" content="10;url=items_list.php?exito=borrado">';
+            <style>
+                .success-wrapper {
+                    display: flex; flex-direction: column; align-items: center;
+                    justify-content: center; padding: 40px 20px; text-align: center;
+                    animation: fadeIn 0.8s ease-out;
+                }
 
-            // Mensaje de éxito
-            echo "<div class='success' style='text-align: center; padding: 20px;'>";
-            echo "<h2><i class='fa-solid fa-check-circle'></i> ¡Borrado con éxito!</h2>";
-            echo "<p>El producto ha sido eliminado permanentemente.</p>";
-            echo "<p>Serás redirigido al listado en 10 segundos...</p>";
-            echo "<hr>";
-            echo "<a href='items_list.php?exito=borrado'>Volver al listado ahora</a>";
-            echo "</div>";
+                .icon-circle {
+                    width: 100px; height: 100px; background-color: #d4edda;
+                    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                    margin-bottom: 25px; box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
+                    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+                }
+                .icon-circle i { color: #28a745; font-size: 3.5rem; }
 
+                .success-title { font-size: 2rem; color: #28a745; margin-bottom: 10px; font-weight: 700; }
+                .success-desc { font-size: 1.1rem; color: var(--color-texto-muted); margin-bottom: 30px; }
+
+
+                .countdown-text {
+                    font-size: 1.2rem; font-weight: 600; color: var(--color-texto); margin: 20px 0;
+                }
+                
+
+                .css-timer::after {
+                    content: "5"; 
+                    font-size: 1.5rem; color: var(--color-primario); font-weight: 800;
+                    padding: 0 5px;
+                    animation: countdown-change 5s step-end forwards;
+                }
+
+
+                .progress-bar-bg {
+                    width: 100%; max-width: 400px; height: 8px;
+                    background-color: #e9ecef; border-radius: 10px;
+                    overflow: hidden; margin-bottom: 30px;
+                }
+
+                .progress-bar-fill {
+                    height: 100%;
+                    background-color: var(--color-primario);
+                    width: 100%; 
+                    border-radius: 10px;
+                    /* La barra se encoge en 5 segundos de forma lineal */
+                    animation: shrink-bar 5s linear forwards;
+                }
+
+                /* ANIMACIONES KEYFRAMES */
+                @keyframes popIn {
+                    0% { transform: scale(0); opacity: 0; }
+                    80% { transform: scale(1.1); opacity: 1; }
+                    100% { transform: scale(1); }
+                }
+
+                @keyframes shrink-bar {
+                    from { width: 100%; }
+                    to { width: 0%; }
+                }
+
+                /* Animación paso a paso para cambiar el número 5,4,3,2,1,0 */
+                @keyframes countdown-change {
+                    0% { content: "5"; }
+                    20% { content: "4"; }
+                    40% { content: "3"; }
+                    60% { content: "2"; }
+                    80% { content: "1"; }
+                    100% { content: "0"; }
+                }
+            </style>
+
+            <div class="success-wrapper">
+                
+                <div class="icon-circle">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <h1 class="success-title">¡Borrado Exitoso!</h1>
+                
+                <p class="success-desc">
+                    El producto ha sido eliminado permanentemente.<br>
+                    El registro de auditoría ha sido actualizado.
+                </p>
+
+                <div class="countdown-text">
+                    Redirigiendo en <span class="css-timer"></span> segundos...
+                </div>
+
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill"></div>
+                </div>
+
+                <a href="items_list.php?exito=borrado" class="btn-buy" style="background-color: var(--color-texto); text-decoration: none; padding: 12px 25px;">
+                    <i class="fa-solid fa-arrow-right"></i> Volver ahora mismo
+                </a>
+
+            </div>
+
+            <?php
             footerHtml(); 
-            exit;
+            exit; 
 
         } catch (Exception $e) {
             
             // ROLLBACK CON EXCEPCION
             $pdo->rollBack(); 
-            
-            // GUARDAR ERROR
-            // GUARDAR ERROR
             $errores[] = "Error al borrar el producto: " . $e->getMessage();
-        
         }
 
     } else {
@@ -187,11 +240,9 @@ $simular_fallo = filter_input(INPUT_GET, 'fallo', FILTER_VALIDATE_INT);
 }
 
 
-// 3. LÓGICA DE CARGA (GET o si hay error POST)
-
+// 3. LÓGICA DE CARGA DE FORMULARIO (GET o si hay error POST)
 
 if (!$producto_id) {
-    // SI NO HAY ID
     header('Location: items_list.php?error=no_id');
     exit;
 }
@@ -200,25 +251,22 @@ if (!$producto_id) {
 $producto = leerProductoPorId($pdo, $producto_id);
 
 if (!$producto) {
-    // REDIRIGIR ID INVALIDO
     header('Location: items_list.php?error=no_existe');
     exit;
 }
 
-
 $marcas = listarMarcas($pdo);
 
 
-// 4. MOSTRAR LA VISTA
+// 4. MOSTRAR LA VISTA DE CONFIRMACIÓN
 $titulo_pagina = "Confirmar Borrado: " . h($producto['NOMBRE']);
 headerHtml($titulo_pagina);
 ?>
 
-
 <?php
 // MOSTRAR ERROR
 if (!empty($errores)):
-    echo "<div class'error'><ul>";
+    echo "<div class='alert error'><ul>";
     foreach ($errores as $error) {
         echo "<li>" . h($error) . "</li>";
     }
@@ -232,8 +280,6 @@ endif;
         <strong>¡¡Esta acción no se puede deshacer!!.</strong></p>
     <p style="margin-bottom: 0;">¿Estás seguro de que quieres continuar?</p>
 </div>
-
-
 
 <form method="post" action="items_delete.php?<?php echo h($_SERVER['QUERY_STRING']); ?>">
     
@@ -254,7 +300,6 @@ endif;
             $categorias = ['Medicamento', 'Antibiótico','Cuidado personal', 
     'Primeros auxilios', 'Nutricion', 'Vitaminas','Otros'];
             foreach ($categorias as $cat):
-                // SELECCION CATEGORIA
                 $selected = ($cat === $producto['CATEGORIA']) ? 'selected' : '';
                 echo "<option value='" . h($cat) . "' $selected>" . h($cat) . "</option>";
             endforeach;
@@ -267,7 +312,6 @@ endif;
         <select disabled>
             <option value="">-- Seleccione una marca --</option>
             <?php foreach ($marcas as $marca):
-                // SELECT MARCA
                 $selected = ($marca['ID'] == $producto['MARCA_ID']) ? 'selected' : '';
                 echo "<option value='" . h($marca['ID']) . "' $selected>" . h($marca['NOMBRE']) . "</option>";
             endforeach;
@@ -310,6 +354,3 @@ endif;
 <?php
 footerHtml();
 ?>
-
-<?php
-
