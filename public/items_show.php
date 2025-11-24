@@ -55,7 +55,7 @@ Información Adicional:
 - Receta: Este producto $receta
 ";
 
-headerHtml("Detalle del producto:");
+headerHtml("");
 ?>
 
 <div style="max-width: 800px; margin: 0 auto;">
