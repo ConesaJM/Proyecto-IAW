@@ -120,7 +120,7 @@ $total_pages = ($total > 0 && $limit > 0)
                 $stockClass = 'stock-high'; // Verde
             }
         ?>
-            <tr>
+            <tr class="clickable-row" onclick="window.location.href='items_show.php?ID=<?= h($p['ID']) ?>';">
                 <td><?= h($p['ID']) ?></td>
                 <td><?= h($p['NOMBRE']) ?></td>
                 <td><?= h($p['CATEGORIA']) ?></td>
@@ -137,7 +137,7 @@ $total_pages = ($total > 0 && $limit > 0)
                     <?= h($p['MARCA_NOMBRE'] ?? 'Sin Marca') ?> 
                 </td>
                 
-                <td>
+                <td onclick="event.stopPropagation();">
                 <?php if ($_SESSION['user_rol'] === 'Administrador'): ?>
                     
                     <div class="action-buttons">

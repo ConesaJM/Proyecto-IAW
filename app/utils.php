@@ -738,6 +738,23 @@ function headerHtml($title = 'Pharmasphere')
                 box-shadow: 0 4px 10px color-mix(in srgb, var(--color-primario), transparent 60%);
             }
 
+            /* --- FILAS CLICABLES --- */
+            tr.clickable-row {
+                cursor: pointer; /* Manita al pasar el ratón */
+                transition: background-color 0.2s ease;
+            }
+            
+            /* Efecto hover más notorio para indicar interactividad */
+            tr.clickable-row:hover {
+                background-color: color-mix(in srgb, var(--color-primario), transparent 90%) !important;
+            }
+            
+            /* IMPORTANTE: Que los botones de acción estén por encima */
+            tr.clickable-row .btn-table {
+                position: relative;
+                z-index: 2;
+            }
+
             /* Animación */
             @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
             .main-container { animation: fadeIn 0.5s ease-out; max-width: var(--ancho-max); margin: 0 auto; padding: 0 20px; width: 100%; }
