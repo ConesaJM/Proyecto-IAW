@@ -20,7 +20,10 @@ $mensaje = '';
 
 // 3. PROCESAR FORMULARIO
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
+
+// COMPROBACIÓN CSRF CORRECT
+    require_csrf();
+
     // Recoger datos del formulario
     $nombre = trim($_POST['nombre'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -79,6 +82,9 @@ headerHtml("");
 
     <form method="post" action="">
         
+        <!-- INCLUYE CSRF TOKEN -->
+        <?php csrf_input(); ?>
+
         <label for="nombre">Nombre de Usuario:</label>
         <input type="text" 
                id="nombre" 
