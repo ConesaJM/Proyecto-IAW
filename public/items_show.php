@@ -55,7 +55,7 @@ Información Adicional:
 - Receta: Este producto $receta
 ";
 
-headerHtml("Detalle de " . $nombre);
+headerHtml("Detalle del producto:");
 ?>
 
 <div style="max-width: 800px; margin: 0 auto;">
@@ -63,15 +63,7 @@ headerHtml("Detalle de " . $nombre);
         <i class="fa-solid fa-arrow-left"></i> Volver
     </a>
 
-    <h1><?= $nombre ?></h1>
-
    <div class="show-container">
-    
-    <div style="margin-bottom: 20px;">
-        <a href="items_list.php" class="btn-edit" style="background-color: #6c757d; color: white;">
-            <i class="fa-solid fa-arrow-left"></i> Volver
-        </a>
-    </div>
 
     <div class="ficha-card">
         
@@ -103,10 +95,14 @@ headerHtml("Detalle de " . $nombre);
                         <span class="text-danger">Actualmente sin stock.</span>
                     <?php endif; ?>
                 </li>
+
+
+                <!--PARA EL FUTURO, PORQUE YA LO ESTABAMOS PENSADO 
                 <li>
-                    <strong>Condiciones de dispensación:</strong><br>
+                    <strong>Foto</strong><br>
                     <?= $icono_receta ?> <?= $texto_receta ?>
                 </li>
+                -->
             </ul>
 
             <div class="extra-note">
@@ -146,7 +142,7 @@ headerHtml("Detalle de " . $nombre);
     /* Encabezado */
     .ficha-header {
         background: linear-gradient(to right, #f8f9fa, #ffffff);
-        padding: 30px 40px;
+        padding: 20px 40px;
         border-bottom: 1px solid var(--color-borde);
     }
     
@@ -176,20 +172,20 @@ headerHtml("Detalle de " . $nombre);
     /* Cuerpo del texto */
     .ficha-body {
         padding: 40px;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         line-height: 1.8; /* Espaciado entre líneas para leer mejor */
         color: var(--color-texto);
     }
 
     .intro-text {
-        margin-bottom: 30px;
-        font-size: 1.15rem;
+        margin-bottom: 0px;
+        font-size: 1.2rem;
     }
 
     .divider {
         border: 0;
         border-top: 1px solid var(--color-borde);
-        margin: 30px 0;
+        margin: 20px 0;
     }
 
     h3 {
