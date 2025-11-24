@@ -130,8 +130,7 @@ $total_pages = ($total > 0 && $limit > 0)
                 
                 <td>
                     <i class="fa-solid fa-circle <?= $stockClass ?>" 
-                       title="Stock: <?= $stock ?>" 
-                       style="font-size: 1.2em; cursor: help; vertical-align: middle;"></i>
+                       style="font-size: 1.2em; vertical-align: middle;"></i>
                 </td>
 
                 <td>
