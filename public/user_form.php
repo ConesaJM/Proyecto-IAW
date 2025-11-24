@@ -1,9 +1,10 @@
 <?php
-// 1. INCLUIR ARCHIVOS (Respetando la estructura de tu items_list.php)
-require_once __DIR__ . '/../app/auth.php';
-require_once __DIR__ . '/../app/pdo.php';   // Importante: Crea la variable $pdo
-require_once __DIR__ . '/../app/utils.php'; // Contiene la función crearUsuario()
-require_once __DIR__ . '/../app/csrf.php'; 
+// 1. INCLUIR LAS VALIDACIONES Y CONEXIONES A BD
+require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
+require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
+require_once __DIR__ . '/../app/style.php'; // (3º: Carga los estilos CSS)
+require_once __DIR__ . '/../app/utils.php'; // (4º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/csrf.php'; // (5º CSRF PROTECCION POR TOKEN)
 
 // 2. SEGURIDAD
 require_login();

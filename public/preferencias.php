@@ -1,9 +1,10 @@
 <?php
 // 1. INCLUIR LOS CEREBROS
 // No necesitamos pdo.php si no hacemos consultas SQL
-require_once __DIR__ . '/../app/auth.php';
-require_once __DIR__ . '/../app/utils.php';
-require_once __DIR__ . '/../app/csrf.php'; // (CSRF PROTECCION POR TOKEN)
+require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
+require_once __DIR__ . '/../app/style.php'; // (2º: Carga los estilos CSS)
+require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/csrf.php'; // (4º CSRF PROTECCION POR TOKEN)
 
 
 // 2. PROTECCIÓN DE LA PÁGINA 

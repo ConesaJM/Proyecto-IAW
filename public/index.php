@@ -2,7 +2,8 @@
 // 1. INCLUIR LAS VALIDACIONES Y CONEXIONES A BD
 require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
 require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
-require_once __DIR__ . '/../app/utils.php'; // (3º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/style.php'; // (3º: Carga los estilos CSS)
+require_once __DIR__ . '/../app/utils.php'; // (4º: Carga nuestras funciones)
 
 // 2. PROTECCIÓN DE LA PÁGINA 
 // Esta función de auth.php comprobará si hay una sesión iniciada.

@@ -1,10 +1,11 @@
 <?php 
 
 // 1. INCLUIR LAS VALIDACIONES Y CONEXIONES A BD
-require_once __DIR__ . '/../app/auth.php'; // (1º:  INICIA SESION)
-require_once __DIR__ . '/../app/pdo.php';   // (2º: CONEXION DB)
-require_once __DIR__ . '/../app/utils.php'; // (3º: CARGAR FUNCIONES)
-require_once __DIR__ . '/../app/csrf.php'; // (4º: CSRF PROTECCION POR TOKEN)
+require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
+require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
+require_once __DIR__ . '/../app/style.php'; // (3º: Carga los estilos CSS)
+require_once __DIR__ . '/../app/utils.php'; // (4º: Carga nuestras funciones)
+require_once __DIR__ . '/../app/csrf.php'; // (5º: CSRF PROTECCION POR TOKEN)
 
 //FUNCION DE auth.php QUE PROTEGE LA PÁG
 // ONLY EL ADMIN ACCEDE

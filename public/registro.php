@@ -1,8 +1,9 @@
 <?php
-// llamadas a auth, pdo y utils
-require_once __DIR__ . '/../app/auth.php';
-require_once __DIR__ . '/../app/pdo.php';
-require_once __DIR__ . '/../app/utils.php';
+// 1. INCLUIR LAS VALIDACIONES Y CONEXIONES A BD
+require_once __DIR__ . '/../app/auth.php'; // (1º: Inicia la sesión)
+require_once __DIR__ . '/../app/pdo.php';   // (2º: Conecta a la BD)
+require_once __DIR__ . '/../app/style.php'; // (3º: Carga los estilos CSS)
+require_once __DIR__ . '/../app/utils.php'; // (4º: Carga nuestras funciones)
 
 //Si el usuario ya hizo login, redirige a index
 if (isset($_SESSION['user_id'])) {
