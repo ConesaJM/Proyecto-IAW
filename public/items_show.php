@@ -37,7 +37,28 @@ $categoria = h($producto['CATEGORIA']);
 $marca = h($producto['MARCA_NOMBRE'] ?? 'Genérico');
 $precio = number_format($producto['PRECIO'], 2);
 $stock = $producto['STOCK_DISPONIBLE'];
-$receta = $producto['RECETA'] ? "SÍ requiere receta médica." : "NO requiere receta médica.";
+
+// Lógica de Receta (Iconos y texto)
+if ($producto['RECETA']) {
+    $texto_receta = "<span class='text-danger'>Este medicamento <strong>requiere receta médica</strong>.</span>";
+    $icono_receta = "<i class='fa-solid fa-file-prescription' style='color:var(--color-peligro);'></i>";
+} else {
+    $texto_receta = "<span class='text-success'>Este producto es de <strong>venta libre</strong>.</span>";
+    $icono_receta = "<i class='fa-solid fa-circle-check' style='color:var(--color-secundario);'></i>";
+}
+
+// --- LÓGICA DE LA BARRA DE PROGRESO (STOCK) ---
+$max_stock_ref = 250; // El tope visual es 250
+$porcentaje = ($stock / $max_stock_ref) * 100;
+if ($porcentaje > 100) $porcentaje = 100; // Que no se salga si hay más de 250
+
+// Determinar color de la barra (Misma lógica que items_list)
+$bar_color = 'var(--color-secundario)'; // Verde (High)
+if ($stock <= 50) {
+    $bar_color = 'var(--color-peligro)'; // Rojo (Low)
+} elseif ($stock <= 150) {
+    $bar_color = '#fd7e14'; // Naranja (Med)
+}
 
 $texto_descripcion = "
 FICHA TÉCNICA
@@ -59,17 +80,21 @@ headerHtml("");
 ?>
 
 <div style="max-width: 800px; margin: 0 auto;">
-    <a href="items_list.php" class="btn-edit" style="margin-bottom: 20px; display:inline-block;">
-        <i class="fa-solid fa-arrow-left"></i> Volver
-    </a>
-
-   <div class="show-container">
+    <div class="show-container">
 
     <div class="ficha-card">
         
         <div class="ficha-header">
-            <h1 class="ficha-title"><?= $nombre ?></h1>
-            <span class="ficha-category"><?= $categoria ?></span>
+            <div>
+                <h1 class="ficha-title"><?= $nombre ?></h1>
+                <span class="ficha-category"><?= $categoria ?></span>
+            </div>
+
+            <div>
+                <a href="items_list.php" class="btn-edit" style="padding: 8px 15px; font-size: 1rem; margin-bottom: 38px;">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+            </div>
         </div>
 
         <div class="ficha-body">
@@ -88,26 +113,22 @@ headerHtml("");
                     <strong>Precio actual:</strong> <span class="price-highlight"><?= $precio ?> €</span>
                 </li>
                 <li>
-                    <strong>Disponibilidad:</strong> 
-                    <?php if($stock > 0): ?>
-                        Contamos con <strong><?= $stock ?> unidades</strong> en nuestros almacenes listas para envío inmediato.
-                    <?php else: ?>
-                        <span class="text-danger">Actualmente sin stock.</span>
-                    <?php endif; ?>
-                </li>
-
-
-                <!--PARA EL FUTURO, PORQUE YA LO ESTABAMOS PENSADO 
+                    <strong>Disponibilidad: </strong>
+                    <div class="stock-container">
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: <?= $porcentaje ?>%; background-color: <?= $bar_color ?>;"></div>
+                        </div>
+                        <div class="stock-info">
+                            <span style="font-weight:bold; color:<?= $bar_color ?>">
+                            </span>
+                        </div>
+                    </div>
+                </li> 
                 <li>
-                    <strong>Foto</strong><br>
+                    <strong>Receta</strong><br>
                     <?= $icono_receta ?> <?= $texto_receta ?>
                 </li>
-                -->
             </ul>
-
-            <div class="extra-note">
-                <small>Nota: Los precios pueden variar sin previo aviso. Consulte con su farmacéutico si tiene dudas sobre el uso de este producto.</small>
-            </div>
 
         </div>
 
@@ -132,21 +153,25 @@ headerHtml("");
 
     /* Tarjeta estilo papel */
     .ficha-card {
-        background-color: var(--color-card); /* Blanco en modo claro */
+        background-color: var(--color-card);
         border: 1px solid var(--color-borde);
         border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Sombra suave */
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         overflow: hidden;
     }
 
     /* Encabezado */
     .ficha-header {
         background: linear-gradient(to right, #f8f9fa, #ffffff);
-        padding: 20px 40px;
+        padding: 15px 30px;
         border-bottom: 1px solid var(--color-borde);
+        
+        /* FLEXBOX PARA ALINEACIÓN */
+        display: flex;                  
+        justify-content: space-between; 
+        align-items: center;            
     }
-    
-    /* Modo oscuro ajuste header */
+   
     body.tema-oscuro .ficha-header {
         background: linear-gradient(to right, #2c2c2c, #1e1e1e);
     }
@@ -171,9 +196,9 @@ headerHtml("");
 
     /* Cuerpo del texto */
     .ficha-body {
-        padding: 40px;
+        padding: 5px 30px;
         font-size: 1.2rem;
-        line-height: 1.8; /* Espaciado entre líneas para leer mejor */
+        line-height: 1.8;
         color: var(--color-texto);
     }
 
@@ -194,7 +219,7 @@ headerHtml("");
         margin-bottom: 20px;
     }
 
-    /* Lista de detalles limpia */
+    /* Lista de detalles */
     .details-list {
         list-style: none;
         padding: 0;
@@ -202,10 +227,43 @@ headerHtml("");
     }
 
     .details-list li {
-        margin-bottom: 15px;
+        margin-bottom: 20px; 
         padding-left: 15px;
-        border-left: 3px solid var(--color-primario); /* Línea de color a la izquierda */
+        border-left: 3px solid var(--color-primario);
     }
+
+    /* ESTILOS PARA LA BARRA DE PROGRESO */
+    .stock-container {
+        margin-top: 8px;
+        max-width: 400px; 
+    }
+   
+    .progress-track {
+        width: 100%;
+        height: 10px;
+        background-color: #e9ecef; 
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 5px;
+    }
+   
+    /* Modo oscuro para el fondo de la barra */
+    body.tema-oscuro .progress-track {
+        background-color: #333;
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.6s ease-in-out; /* Animación suave al cargar */
+    }
+
+    .stock-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.95rem;
+    }
+    /* ----------------------------------------------- */
 
     .price-highlight {
         font-size: 1.4rem;
@@ -228,7 +286,7 @@ headerHtml("");
     /* Footer con botón */
     .ficha-footer {
         padding: 20px 40px;
-        background-color: var(--color-fondo);
+        background-color: #1a1919ff;
         border-top: 1px solid var(--color-borde);
         text-align: right;
     }
