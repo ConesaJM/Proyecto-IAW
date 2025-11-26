@@ -18,9 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Recogemos lo que ha escrito el usuario
     $nombre   = trim($_POST['nombre'] ?? '');
     $password = trim($_POST['password'] ?? '');
+    $correo   = trim($_POST['correo'] ?? '');
 
     // Comprobar campos vacíos
-    if ($nombre === '' || $password === '') {
+    if ($nombre === '' || $password === '' || $correo === '') {
         $error = 'Por favor, rellene todos los campos.';
     } else {
         // Comprobar si ya existe un usuario con ese nombre
@@ -34,22 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Guardar contraseña cifrada en la BD
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
+            // Insertar usuario con nombre, contraseña y correo
             $stmt = $pdo->prepare(
-                "INSERT INTO USUARIO (NOMBRE, CONTRASENHIA) VALUES (?, ?)"
+                "INSERT INTO USUARIO (NOMBRE, CONTRASENHIA, CORREO) VALUES (?, ?, ?)"
             );
-            $stmt->execute([$nombre, $hash]);
+            $stmt->execute([$nombre, $hash, $correo]);
 
-            // Mensaje de éxito
-            $msg = 'Usuario creado correctamente. Ya puede iniciar sesión.';
-
-            // Después de insertar
-            $stmt->execute([$nombre, $hash]);
-
+            // Redirigimos al login indicando que el registro fue OK
             header('Location: login.php?registro=ok');
             exit;
         }
     }
 }
+
 
 ?>
 
@@ -106,6 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="input-group">
                         <i class="fa-solid fa-user input-icon-left"></i>
                         <input type="text" id="nombre" name="nombre" class="form-input" value="<?= h($nombre ?? '') ?>">
+                    </div>
+                </div>
+
+                <!-- Correo -->
+                <div class="form-group">
+                    <label for="correo">Correo electrónico</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope input-icon-left"></i>
+                        <input
+                            type="email"
+                            id="correo"
+                            name="correo"
+                            class="form-input"
+                            value="<?= h($correo ?? '') ?>"
+                        >
                     </div>
                 </div>
 
