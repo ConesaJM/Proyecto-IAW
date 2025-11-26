@@ -16,12 +16,61 @@ require_login();
 headerHtml('Panel Principal - Pharmasphere');
 
 ?>
-<!-- 4. CONTENIDO DE LA PÁGINA -->
- <!-- Saludamos al usuario usando php echo -->
 
-<h2>¡Bienvenido, <?php echo h($_SESSION['user_nombre_usuario']); ?>!</h2>
-<p>Este es tu panel de gestión de Pharmasphere.</p>
-<p>Usa el menú de arriba para navegar por la aplicación.</p>
+<!-- 4. CONTENIDO DE LA PÁGINA -->
+
+<h2>¡Bienvenido, <?= h($_SESSION['user_nombre_usuario']); ?>!</h2>
+<p>Este es tu panel de gestión de <strong>Pharmasphere</strong>. Desde aquí podrás acceder a los módulos de productos, marcas y carrito.</p>
+
+<hr>
+
+<!-- Bloque de resumen -->
+<section>
+    <h3>Resumen rápido</h3>
+    <p>Usa el menú superior para moverte por la aplicación. Algunas cosas que puedes hacer:</p>
+    <ul>
+        <li>Ver el <strong>listado de productos</strong> disponibles.</li>
+        <li>Crear o editar productos (si eres Administrador).</li>
+        <li>Revisar las marcas registradas.</li>
+        <li>Gestionar el carrito de compra.</li>
+    </ul>
+</section>
+
+<hr>
+
+<!-- Acciones rápidas -->
+<section>
+    <h3>Accesos rápidos</h3>
+    <p>Elige una opción para empezar a trabajar:</p>
+    <ul>
+        <li><a href="items_list.php">Ir al listado de productos</a></li>
+        <li><a href="tienda.php">Abrir vista de tienda</a></li>
+        <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'Administrador'): ?>
+            <li><a href="items_form.php">Crear nuevo producto</a></li>
+        <?php endif; ?>
+    </ul>
+</section>
+
+<hr>
+
+<!-- Pequeño panel de “estado” (simple relleno visual) -->
+<section>
+    <h3>Estado del sistema</h3>
+    <table>
+        <tr>
+            <th>Usuario actual</th>
+            <td><?= h($_SESSION['user_nombre_usuario']); ?></td>
+        </tr>
+        <tr>
+            <th>Rol</th>
+            <td><?= h($_SESSION['user_rol'] ?? 'Usuario'); ?></td>
+        </tr>
+        <tr>
+            <th>Fecha de acceso</th>
+            <td><?= date('d/m/Y H:i'); ?></td>
+        </tr>
+    </table>
+</section>
 
 <?php
 // 5. CIERRE DE LA PÁGINA

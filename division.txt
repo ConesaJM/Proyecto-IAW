@@ -7,11 +7,11 @@ mark
 -item_show ----------> OK
 
 javi
--login ----------> OK
+-login -----------> OK
 -logout ----------> OK
--index ----------> OK
--item_list ----------> OK
--registro
+-index -----------> OK
+-item_list -------> OK
+-registro --------> OK
 
 ale
 
