@@ -11,7 +11,7 @@ javi
 -logout ----------> OK
 -index -----------> OK
 -item_list -------> OK
--registro --------> OK
+-registro --------> OK (Mejoras a futuro campo de confirmación contraseña y restrigir contraseña con número de caracteres, caracter especiales, etc..)
 
 ale
 

@@ -30,7 +30,6 @@ headerHtml('Panel Principal - Pharmasphere');
     <p>Usa el menú superior para moverte por la aplicación. Algunas cosas que puedes hacer:</p>
     <ul>
         <li>Ver el <strong>listado de productos</strong> disponibles.</li>
-        <li>Crear o editar productos (si eres Administrador).</li>
         <li>Revisar las marcas registradas.</li>
         <li>Gestionar el carrito de compra.</li>
     </ul>
@@ -44,7 +43,6 @@ headerHtml('Panel Principal - Pharmasphere');
     <p>Elige una opción para empezar a trabajar:</p>
     <ul>
         <li><a href="items_list.php">Ir al listado de productos</a></li>
-        <li><a href="tienda.php">Abrir vista de tienda</a></li>
         <?php if (isset($_SESSION['user_rol']) && $_SESSION['user_rol'] === 'Administrador'): ?>
             <li><a href="items_form.php">Crear nuevo producto</a></li>
         <?php endif; ?>
@@ -60,10 +58,6 @@ headerHtml('Panel Principal - Pharmasphere');
         <tr>
             <th>Usuario actual</th>
             <td><?= h($_SESSION['user_nombre_usuario']); ?></td>
-        </tr>
-        <tr>
-            <th>Rol</th>
-            <td><?= h($_SESSION['user_rol'] ?? 'Usuario'); ?></td>
         </tr>
         <tr>
             <th>Fecha de acceso</th>
