@@ -1,5 +1,5 @@
 mark
--readme
+-readme -------------> OK
 -seed ---------------> OK
 -schema.sql ---------> OK
 -item_delete --------> OK
