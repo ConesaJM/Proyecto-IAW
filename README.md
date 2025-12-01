@@ -53,7 +53,7 @@ El sistema protege todas las rutas internas utilizando `require_login()` en `aut
 - **Gestión de Usuarios (Admin):** Los administradores pueden gestionar usuarios y roles desde el panel interno
 
 **Pantalla de Inicio de Sesión:**  
-![Login Screen][captura]
+![Login Screen](public/media/login.png)
 
 **Prueba de Redirección:** Al intentar entrar directamente a `index.php` o `items_list.php` sin loguearse, el sistema redirige forzosamente al login.  
 ![Redirect Logic][captura]
